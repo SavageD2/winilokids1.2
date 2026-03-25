@@ -129,6 +129,57 @@ async function main() {
     },
   ];
 
+  const faqEntries = [
+    {
+      question: 'Comment choisir un atelier selon l age de mon enfant ?',
+      answer:
+        'Chaque atelier indique une tranche d age recommandee sur sa fiche. Si ton enfant se situe entre deux tranches, la FAQ peut t aider a comparer et le formulaire de contact permet de demander une confirmation plus fine.',
+      category: 'Choisir un atelier',
+      displayOrder: 10,
+      isPublished: true,
+    },
+    {
+      question: 'Faut-il creer un compte parent pour reserver ?',
+      answer:
+        'Oui. Le compte parent permet de reserver un atelier, retrouver les inscriptions en cours, annuler une demande autorisee et garder des informations de contact coherentes.',
+      category: 'Inscription',
+      displayOrder: 20,
+      isPublished: true,
+    },
+    {
+      question: 'Que se passe-t-il apres une reservation ?',
+      answer:
+        'Une fois la reservation enregistree, elle apparait dans ton espace parent avec son statut. Selon l organisation de l atelier, elle peut ensuite rester en attente, etre confirmee, annulee ou marquee comme presence.',
+      category: 'Inscription',
+      displayOrder: 30,
+      isPublished: true,
+    },
+    {
+      question: 'Comment savoir s il reste des places ?',
+      answer:
+        'Lorsqu une capacite est definie pour un atelier publie, le site affiche le nombre de places restantes. Si tu as un doute ou un besoin particulier, le formulaire de contact reste la meilleure option.',
+      category: 'Organisation',
+      displayOrder: 40,
+      isPublished: true,
+    },
+    {
+      question: 'Puis-je poser une question avant de reserver ?',
+      answer:
+        'Oui. Le formulaire de contact est prevu pour ca. Il est utile si tu hesites entre plusieurs ateliers, si tu veux verifier l adequation a l age de ton enfant ou si tu as besoin d une precision organisationnelle.',
+      category: 'Organisation',
+      displayOrder: 50,
+      isPublished: true,
+    },
+    {
+      question: 'Proposez-vous un accompagnement pour des besoins tres specifiques ?',
+      answer:
+        'Certaines situations necessitent une reponse humaine plus precise. Cette question reste volontairement en brouillon pour preparer de futures variantes de contenu dans l admin.',
+      category: 'Cas particuliers',
+      displayOrder: 60,
+      isPublished: false,
+    },
+  ];
+
   const demoPasswordHash = await bcrypt.hash(DEMO_PARENT_PASSWORD, 10);
 
   for (const workshop of workshops) {
@@ -254,10 +305,23 @@ async function main() {
     data: demoContacts,
   });
 
+  await prisma.faqEntry.deleteMany({
+    where: {
+      question: {
+        in: faqEntries.map((entry) => entry.question),
+      },
+    },
+  });
+
+  await prisma.faqEntry.createMany({
+    data: faqEntries,
+  });
+
   console.log(`Demo workshops ready: ${workshops.length}`);
   console.log(`Demo parent accounts ready: ${demoParents.length}`);
   console.log(`Demo registrations ready: ${registrations.length}`);
   console.log(`Demo contacts ready: ${demoContacts.length}`);
+  console.log(`Demo FAQ entries ready: ${faqEntries.length}`);
   console.log(`Demo parent password: ${DEMO_PARENT_PASSWORD}`);
 }
 

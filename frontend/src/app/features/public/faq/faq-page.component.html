@@ -1,0 +1,48 @@
+<section class="page-hero">
+  <p class="eyebrow">FAQ</p>
+  <h1>Des reponses simples pour aider les parents a choisir et reserver sereinement.</h1>
+  <p>
+    Cette FAQ rassemble les informations les plus utiles sur les ateliers, l inscription et
+    l organisation generale. Si ta question sort de ce cadre, le formulaire de contact prend le
+    relais.
+  </p>
+</section>
+
+@if (loading()) {
+  <p class="panel">Chargement de la FAQ...</p>
+} @else if (error()) {
+  <p class="panel panel-error">{{ error() }}</p>
+} @else if (groups().length === 0) {
+  <p class="panel">La FAQ publique sera disponible des qu une premiere reponse sera publiee.</p>
+} @else {
+  <section class="faq-layout">
+    <div class="faq-list">
+      @for (group of groups(); track group.name) {
+        <section class="faq-group">
+          <div class="group-heading">
+            <p class="eyebrow">Theme</p>
+            <h2>{{ group.name }}</h2>
+          </div>
+
+          <div class="faq-items">
+            @for (entry of group.entries; track entry.id) {
+              <details class="faq-item">
+                <summary>{{ entry.question }}</summary>
+                <p>{{ entry.answer }}</p>
+              </details>
+            }
+          </div>
+        </section>
+      }
+    </div>
+
+    <aside class="faq-side">
+      <h2>Tu n as pas trouve ta reponse ?</h2>
+      <p>
+        Certaines demandes meritent une reponse plus humaine, surtout si elles concernent un besoin
+        particulier, une hesitation forte entre plusieurs ateliers ou un contexte familial specifique.
+      </p>
+      <a class="button button-primary" routerLink="/contact">Poser une question</a>
+    </aside>
+  </section>
+}

@@ -102,6 +102,7 @@ Ce seed charge un jeu de donnees de demonstration complet :
 - 3 comptes parents de test
 - 4 reservations avec plusieurs statuts
 - 3 messages de contact
+- 6 entrees FAQ dont 5 publiees
 
 ### 5. Lancer le backend
 
@@ -140,6 +141,7 @@ Frontend disponible sur :
 ### Parent
 
 - URL : `http://127.0.0.1:4200/inscription`
+- FAQ publique : `http://127.0.0.1:4200/faq`
 
 Le parent peut :
 
@@ -166,9 +168,10 @@ Mot de passe commun :
 
 1. Ouvrir `http://127.0.0.1:4200`
 2. Aller dans `Ateliers`
-3. Creer un compte parent via `Inscription / Connexion`
-4. Reserver un atelier
-5. Revenir dans `Mon compte` pour verifier la reservation
+3. Consulter `FAQ`
+4. Creer un compte parent via `Inscription / Connexion`
+5. Reserver un atelier
+6. Revenir dans `Mon compte` pour verifier la reservation
 
 ### Cote admin
 
@@ -179,6 +182,7 @@ Mot de passe commun :
    - gestion des ateliers
    - gestion des inscriptions
    - messages de contact
+   - gestion de la FAQ
 
 ## Commandes utiles
 
@@ -209,6 +213,7 @@ Le projet est fonctionnel en local avec :
 - compte parent
 - reservation d'atelier conditionnee a la connexion
 - annulation parent
+- FAQ dynamique cote public et cote admin
 - espace admin complet pour le MVP
 
 ## Notes

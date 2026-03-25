@@ -13,6 +13,7 @@
         Accueil
       </a>
       <a routerLink="/ateliers" routerLinkActive="active">Ateliers</a>
+      <a routerLink="/faq" routerLinkActive="active">FAQ</a>
       <a routerLink="/inscription" routerLinkActive="active">
         {{ isParentAuthenticated() ? 'Mon compte' : 'Inscription / Connexion' }}
       </a>
@@ -34,6 +35,7 @@
     </div>
     <div class="footer-links">
       <a routerLink="/ateliers">Voir les ateliers</a>
+      <a routerLink="/faq">FAQ</a>
       <a routerLink="/inscription">{{ isParentAuthenticated() ? 'Mon compte' : 'Inscription / Connexion' }}</a>
       <a routerLink="/contact">Contact</a>
     </div>

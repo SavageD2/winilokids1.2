@@ -89,3 +89,18 @@ model Contact {
   @@index([email])
   @@index([createdAt])
 }
+
+model FaqEntry {
+  id           Int      @id @default(autoincrement())
+  question     String
+  answer       String
+  category     String?
+  displayOrder Int      @default(0)
+  isPublished  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([category])
+  @@index([displayOrder])
+  @@index([isPublished])
+}

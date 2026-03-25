@@ -5,12 +5,14 @@ import { adminAuthGuard } from './core/guards/admin-auth.guard';
 import { adminLoginGuard } from './core/guards/admin-login.guard';
 import { AdminLoginPageComponent } from './features/admin/auth/admin-login-page.component';
 import { AdminDashboardPageComponent } from './features/admin/dashboard/admin-dashboard-page.component';
+import { AdminFaqPageComponent } from './features/admin/faq/admin-faq-page.component';
 import { AdminContactsPageComponent } from './features/admin/contacts/admin-contacts-page.component';
 import { AdminRegistrationsPageComponent } from './features/admin/registrations/admin-registrations-page.component';
 import { AdminWorkshopsPageComponent } from './features/admin/workshops/admin-workshops-page.component';
 import { parentAuthGuard } from './core/guards/parent-auth.guard';
 import { AccountPageComponent } from './features/public/account/account-page.component';
 import { ContactPageComponent } from './features/public/contact/contact-page.component';
+import { FaqPageComponent } from './features/public/faq/faq-page.component';
 import { HomePageComponent } from './features/public/home/home-page.component';
 import { RegistrationPageComponent } from './features/public/registration/registration-page.component';
 import { WorkshopDetailPageComponent } from './features/public/workshops/workshop-detail-page.component';
@@ -52,6 +54,11 @@ export const routes: Routes = [
         component: ContactPageComponent,
         title: 'Winilo Kids | Contact',
       },
+      {
+        path: 'faq',
+        component: FaqPageComponent,
+        title: 'Winilo Kids | FAQ',
+      },
     ],
   },
   {
@@ -89,6 +96,11 @@ export const routes: Routes = [
         path: 'contacts',
         component: AdminContactsPageComponent,
         title: 'Winilo Kids | Messages contact',
+      },
+      {
+        path: 'faq',
+        component: AdminFaqPageComponent,
+        title: 'Winilo Kids | FAQ admin',
       },
     ],
   },

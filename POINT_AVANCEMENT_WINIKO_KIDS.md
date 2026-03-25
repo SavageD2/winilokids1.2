@@ -25,6 +25,7 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - page d'accueil avec hero, blocs de valeur et mise en avant des ateliers
 - listing des ateliers publies
 - page detail d'un atelier
+- page FAQ publique
 - formulaire d'inscription a un atelier
 - formulaire de contact
 - routage public propre avec layout dedie
@@ -50,6 +51,12 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
   - consultation des messages recus
   - recherche rapide
   - liens directs mail / telephone
+- gestion de la FAQ
+  - liste
+  - creation
+  - modification
+  - suppression
+  - publication / brouillon
 - layout admin avec navigation dediee
 
 ### Backend
@@ -70,18 +77,24 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - module contacts
   - endpoint public de creation
   - endpoint admin de consultation
+- module FAQ
+  - endpoint public des reponses publiees
+  - endpoints admin CRUD
 - module dashboard admin
   - nombre d'ateliers
   - nombre d'inscriptions
   - nombre de messages contact
+  - repartition des statuts d'inscription
+  - ateliers publies / brouillons
   - prochains ateliers
 
 ### Donnees et infra
 
-- schema Prisma avec `Admin`, `ParentAccount`, `Workshop`, `Registration`, `Contact`
+- schema Prisma avec `Admin`, `ParentAccount`, `Workshop`, `Registration`, `Contact`, `FaqEntry`
 - migration initiale presente
 - seed admin present
 - seed de demonstration enrichi present
+- seed FAQ de demonstration present
 - `docker-compose.yml` pour Postgres local
 - `.env` backend local deja configure
 

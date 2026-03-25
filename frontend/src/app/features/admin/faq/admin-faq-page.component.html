@@ -1,0 +1,135 @@
+<section class="page-grid">
+  <div class="catalog-panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Base de connaissance</p>
+        <h2>FAQ</h2>
+      </div>
+      <button class="button button-secondary" type="button" (click)="createNewEntry()">
+        Nouvelle reponse
+      </button>
+    </div>
+
+    <label class="search-field">
+      <span>Recherche</span>
+      <input
+        type="search"
+        [value]="search()"
+        (input)="updateSearch($event)"
+        placeholder="Question, theme ou contenu de reponse"
+      />
+    </label>
+
+    @if (loading()) {
+      <p class="panel">Chargement de la FAQ...</p>
+    } @else if (filteredEntries().length === 0) {
+      <p class="panel">Aucune entree FAQ ne correspond a la recherche actuelle.</p>
+    } @else {
+      <div class="faq-list">
+        @for (entry of filteredEntries(); track entry.id) {
+          <article class="faq-item">
+            <div class="faq-item-head">
+              <div>
+                <h3>{{ entry.question }}</h3>
+                <p>{{ entry.category || 'Questions frequentes' }}</p>
+              </div>
+              <span class="status-pill" [class.status-pill-live]="entry.isPublished">
+                {{ entry.isPublished ? 'Publie' : 'Brouillon' }}
+              </span>
+            </div>
+
+            <p class="summary">{{ entry.answer }}</p>
+
+            <div class="meta-tags">
+              <span>Ordre {{ entry.displayOrder }}</span>
+              <span>{{ entry.category || 'Categorie libre' }}</span>
+            </div>
+
+            <div class="item-actions">
+              <button class="button button-secondary" type="button" (click)="editEntry(entry)">
+                Modifier
+              </button>
+              <button
+                class="button button-secondary danger"
+                type="button"
+                [disabled]="deletingId() === entry.id"
+                (click)="removeEntry(entry)"
+              >
+                @if (deletingId() === entry.id) {
+                  Suppression...
+                } @else {
+                  Supprimer
+                }
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+
+  <form class="editor-panel" [formGroup]="faqForm" (ngSubmit)="submit()">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Edition</p>
+        <h2>
+          @if (editingEntryId()) {
+            Modifier une reponse
+          } @else {
+            Creer une reponse
+          }
+        </h2>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="feedback feedback-error">{{ errorMessage() }}</p>
+    }
+
+    @if (successMessage()) {
+      <p class="feedback feedback-success">{{ successMessage() }}</p>
+    }
+
+    <div class="form-grid">
+      <label class="full-width">
+        <span>Question</span>
+        <input type="text" formControlName="question" />
+      </label>
+
+      <label class="full-width">
+        <span>Reponse</span>
+        <textarea rows="7" formControlName="answer"></textarea>
+      </label>
+
+      <label>
+        <span>Categorie</span>
+        <input type="text" formControlName="category" placeholder="Choisir un atelier" />
+      </label>
+
+      <label>
+        <span>Ordre d affichage</span>
+        <input type="number" min="0" max="999" formControlName="displayOrder" />
+      </label>
+
+      <label class="checkbox-field full-width">
+        <input type="checkbox" formControlName="isPublished" />
+        <span>Publier cette reponse</span>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button class="button button-primary" type="submit" [disabled]="saving()">
+        @if (saving()) {
+          Enregistrement...
+        } @else if (editingEntryId()) {
+          Mettre a jour
+        } @else {
+          Creer la reponse
+        }
+      </button>
+      <button class="button button-secondary" type="button" (click)="createNewEntry()">
+        Reinitialiser
+      </button>
+    </div>
+  </form>
+</section>
