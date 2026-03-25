@@ -1,11 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ChatbotWidgetComponent } from '../../components/chatbot-widget/chatbot-widget.component';
 import { AdminAuthService } from '../../services/admin-auth.service';
 import { ParentAuthService } from '../../services/parent-auth.service';
 
 @Component({
   selector: 'app-public-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ChatbotWidgetComponent],
   templateUrl: './public-layout.component.html',
   styleUrl: './public-layout.component.scss',
 })

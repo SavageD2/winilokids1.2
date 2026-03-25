@@ -214,6 +214,7 @@ Le projet est fonctionnel en local avec :
 - reservation d'atelier conditionnee a la connexion
 - annulation parent
 - FAQ dynamique cote public et cote admin
+- assistant conversationnel public base sur la FAQ et les ateliers publies
 - espace admin complet pour le MVP
 
 ## Notes
@@ -221,4 +222,5 @@ Le projet est fonctionnel en local avec :
 - l'admin n'apparait dans la navigation publique que si une session admin est active
 - les ateliers de demonstration proviennent du seed `seed:demo`
 - relancer `npm run seed:demo` reinitialise uniquement les reservations et messages lies aux comptes de demonstration, pour garder un environnement de test propre
+- le chatbot MVP ne realise aucune action sensible et n'invente pas de donnees : il s'appuie sur la FAQ publiee, les ateliers publies et des reponses de guidage controlees
 - la documentation d'avancement complementaire est dans [POINT_AVANCEMENT_WINIKO_KIDS.md](/home/Savage/git/win1.2/POINT_AVANCEMENT_WINIKO_KIDS.md)

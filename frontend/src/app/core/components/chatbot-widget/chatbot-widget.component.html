@@ -1,0 +1,75 @@
+<button class="chatbot-toggle" type="button" (click)="toggleOpen()" [attr.aria-expanded]="isOpen()">
+  {{ isOpen() ? 'Fermer l assistant' : 'Assistant parents' }}
+</button>
+
+@if (isOpen()) {
+  <section class="chatbot-panel" aria-label="Assistant conversationnel Winilo Kids">
+    <header class="chatbot-header">
+      <div>
+        <p class="eyebrow">Assistant parents</p>
+        <h2>Besoin d aide pour choisir ou reserver ?</h2>
+      </div>
+      <button class="close-button" type="button" (click)="close()">Fermer</button>
+    </header>
+
+    <div class="chatbot-body">
+      <div class="messages-list">
+        @for (message of messages(); track message.id) {
+          <article class="message-bubble" [class.message-bubble-user]="message.author === 'user'">
+            <p class="message-author">
+              {{ message.author === 'assistant' ? 'Assistant Winilo Kids' : 'Vous' }}
+            </p>
+            <p class="message-text">{{ message.text }}</p>
+
+            @if (message.author === 'assistant' && message.suggestions.length > 0) {
+              <div class="suggestions-list">
+                @for (suggestion of message.suggestions; track suggestion.route) {
+                  <button type="button" (click)="navigateTo(suggestion.route)">
+                    {{ suggestion.label }}
+                  </button>
+                }
+              </div>
+            }
+          </article>
+        }
+      </div>
+
+      @if (messages().length === 1) {
+        <div class="starter-prompts">
+          @for (prompt of starterPrompts; track prompt) {
+            <button type="button" (click)="useStarterPrompt(prompt)">{{ prompt }}</button>
+          }
+        </div>
+      }
+
+      @if (error()) {
+        <p class="feedback feedback-error">{{ error() }}</p>
+      }
+    </div>
+
+    <form class="chatbot-form" [formGroup]="messageForm" (ngSubmit)="submit()">
+      <label>
+        <span>Votre question</span>
+        <textarea
+          rows="3"
+          formControlName="message"
+          placeholder="Exemple : je cherche un atelier pour 6 ans ou comment fonctionne l inscription ?"
+        ></textarea>
+      </label>
+
+      <div class="chatbot-actions">
+        <p class="helper-text">
+          L assistant s appuie sur la FAQ et les ateliers publies. Pour un besoin specifique, il
+          vous orientera vers le contact.
+        </p>
+        <button class="button button-primary" type="submit" [disabled]="sending()">
+          @if (sending()) {
+            Reponse en cours...
+          } @else {
+            Envoyer
+          }
+        </button>
+      </div>
+    </form>
+  </section>
+}

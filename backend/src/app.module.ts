@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { validateEnv } from './config/env.validation';
 import { AdminsModule } from './modules/admins/admins.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ChatbotModule } from './modules/chatbot/chatbot.module';
 import { ContactsModule } from './modules/contacts/contacts.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { FaqModule } from './modules/faq/faq.module';
@@ -22,6 +23,7 @@ import { PrismaModule } from './prisma/prisma.module';
     PrismaModule,
     AdminsModule,
     AuthModule,
+    ChatbotModule,
     ParentAuthModule,
     FaqModule,
     DashboardModule,
