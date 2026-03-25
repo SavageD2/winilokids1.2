@@ -19,5 +19,9 @@ export interface AdminDashboardSummary {
   cancelledRegistrationsCount: number;
   attendedRegistrationsCount: number;
   contactsCount: number;
+  chatbotMessagesCount: number;
+  chatbotFallbackCount: number;
+  chatbotFaqMessagesCount: number;
+  chatbotWorkshopMessagesCount: number;
   upcomingWorkshops: AdminDashboardUpcomingWorkshop[];
 }

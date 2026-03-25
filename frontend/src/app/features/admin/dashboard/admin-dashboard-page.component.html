@@ -34,6 +34,11 @@
       <a class="text-link" routerLink="/admin/contacts">Ouvrir la boite de reception</a>
     </article>
     <article class="stat-card">
+      <p>Messages chatbot</p>
+      <strong>{{ data.chatbotMessagesCount }}</strong>
+      <a class="text-link" routerLink="/admin/chatbot">Ouvrir le suivi</a>
+    </article>
+    <article class="stat-card">
       <p>Prochains ateliers</p>
       <strong>{{ data.upcomingWorkshops.length }}</strong>
     </article>
@@ -64,6 +69,35 @@
       <article class="status-card">
         <p>Presences</p>
         <strong>{{ data.attendedRegistrationsCount }}</strong>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-card">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Assistant parents</p>
+        <h2>Usage du chatbot</h2>
+      </div>
+      <a class="text-link" routerLink="/admin/chatbot">Voir le detail</a>
+    </div>
+
+    <div class="status-grid">
+      <article class="status-card">
+        <p>Total messages</p>
+        <strong>{{ data.chatbotMessagesCount }}</strong>
+      </article>
+      <article class="status-card">
+        <p>Fallback contact</p>
+        <strong>{{ data.chatbotFallbackCount }}</strong>
+      </article>
+      <article class="status-card">
+        <p>Reponses FAQ</p>
+        <strong>{{ data.chatbotFaqMessagesCount }}</strong>
+      </article>
+      <article class="status-card">
+        <p>Reco ateliers</p>
+        <strong>{{ data.chatbotWorkshopMessagesCount }}</strong>
       </article>
     </div>
   </section>

@@ -215,6 +215,7 @@ Le projet est fonctionnel en local avec :
 - annulation parent
 - FAQ dynamique cote public et cote admin
 - assistant conversationnel public base sur la FAQ et les ateliers publies
+- suivi admin des messages du chatbot avec stats legeres
 - espace admin complet pour le MVP
 
 ## Notes

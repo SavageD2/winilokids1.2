@@ -13,6 +13,13 @@ enum RegistrationStatus {
   ATTENDED
 }
 
+enum ChatbotSourceType {
+  FAQ
+  WORKSHOP
+  GUIDANCE
+  FALLBACK
+}
+
 model Admin {
   id           Int      @id @default(autoincrement())
   email        String   @unique
@@ -103,4 +110,21 @@ model FaqEntry {
   @@index([category])
   @@index([displayOrder])
   @@index([isPublished])
+}
+
+model ChatbotMessageLog {
+  id                Int               @id @default(autoincrement())
+  message           String
+  normalizedMessage String
+  currentRoute      String?
+  sourceType        ChatbotSourceType
+  fallbackToContact Boolean           @default(false)
+  matchedFaqIds     Int[]
+  matchedWorkshopIds Int[]
+  reply             String
+  createdAt         DateTime          @default(now())
+
+  @@index([sourceType])
+  @@index([fallbackToContact])
+  @@index([createdAt])
 }

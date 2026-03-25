@@ -5,6 +5,7 @@ import { adminAuthGuard } from './core/guards/admin-auth.guard';
 import { adminLoginGuard } from './core/guards/admin-login.guard';
 import { AdminLoginPageComponent } from './features/admin/auth/admin-login-page.component';
 import { AdminDashboardPageComponent } from './features/admin/dashboard/admin-dashboard-page.component';
+import { AdminChatbotPageComponent } from './features/admin/chatbot/admin-chatbot-page.component';
 import { AdminFaqPageComponent } from './features/admin/faq/admin-faq-page.component';
 import { AdminContactsPageComponent } from './features/admin/contacts/admin-contacts-page.component';
 import { AdminRegistrationsPageComponent } from './features/admin/registrations/admin-registrations-page.component';
@@ -96,6 +97,11 @@ export const routes: Routes = [
         path: 'contacts',
         component: AdminContactsPageComponent,
         title: 'Winilo Kids | Messages contact',
+      },
+      {
+        path: 'chatbot',
+        component: AdminChatbotPageComponent,
+        title: 'Winilo Kids | Suivi chatbot',
       },
       {
         path: 'faq',

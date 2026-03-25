@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RegistrationStatus } from '@prisma/client';
+import { ChatbotSourceType, RegistrationStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 const ACTIVE_REGISTRATION_STATUSES: RegistrationStatus[] = [
@@ -24,6 +24,10 @@ export class DashboardService {
       cancelledRegistrationsCount,
       attendedRegistrationsCount,
       contactsCount,
+      chatbotMessagesCount,
+      chatbotFallbackCount,
+      chatbotFaqMessagesCount,
+      chatbotWorkshopMessagesCount,
       upcomingWorkshops,
     ] = await Promise.all([
       this.prisma.workshop.count(),
@@ -54,6 +58,22 @@ export class DashboardService {
         },
       }),
       this.prisma.contact.count(),
+      this.prisma.chatbotMessageLog.count(),
+      this.prisma.chatbotMessageLog.count({
+        where: {
+          fallbackToContact: true,
+        },
+      }),
+      this.prisma.chatbotMessageLog.count({
+        where: {
+          sourceType: ChatbotSourceType.FAQ,
+        },
+      }),
+      this.prisma.chatbotMessageLog.count({
+        where: {
+          sourceType: ChatbotSourceType.WORKSHOP,
+        },
+      }),
       this.prisma.workshop.findMany({
         where: {
           startAt: {
@@ -82,6 +102,10 @@ export class DashboardService {
       cancelledRegistrationsCount,
       attendedRegistrationsCount,
       contactsCount,
+      chatbotMessagesCount,
+      chatbotFallbackCount,
+      chatbotFaqMessagesCount,
+      chatbotWorkshopMessagesCount,
       upcomingWorkshops: upcomingWorkshops.map((workshop) => ({
         id: workshop.id,
         title: workshop.title,

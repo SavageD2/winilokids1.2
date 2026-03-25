@@ -1,0 +1,118 @@
+@if (summary(); as data) {
+  <section class="stats-grid">
+    <article class="stat-card">
+      <p>Messages</p>
+      <strong>{{ data.totalMessages }}</strong>
+    </article>
+    <article class="stat-card">
+      <p>FAQ</p>
+      <strong>{{ data.faqMessages }}</strong>
+    </article>
+    <article class="stat-card">
+      <p>Recommandations ateliers</p>
+      <strong>{{ data.workshopMessages }}</strong>
+    </article>
+    <article class="stat-card stat-card-accent">
+      <p>Fallback vers contact</p>
+      <strong>{{ data.fallbackMessages }}</strong>
+    </article>
+  </section>
+}
+
+<section class="filters-card" [formGroup]="filtersForm">
+  <div class="filters-heading">
+    <div>
+      <p class="eyebrow">Observation produit</p>
+      <h2>Messages du chatbot</h2>
+    </div>
+    <p>Ce suivi aide a identifier les vraies questions des parents et les cas que le bot couvre encore mal.</p>
+  </div>
+
+  <div class="filters-grid">
+    <label>
+      <span>Recherche</span>
+      <input type="search" formControlName="search" placeholder="Message, reponse ou route" />
+    </label>
+
+    <label>
+      <span>Type de reponse</span>
+      <select formControlName="sourceType">
+        <option value="ALL">Tous</option>
+        @for (sourceType of sourceTypes; track sourceType) {
+          <option [value]="sourceType">{{ sourceLabel(sourceType) }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      <span>Orientation contact</span>
+      <select formControlName="fallbackOnly">
+        <option value="ALL">Tous</option>
+        <option value="ONLY_TRUE">Oui</option>
+        <option value="ONLY_FALSE">Non</option>
+      </select>
+    </label>
+  </div>
+
+  <p class="results-summary">
+    {{ total() }} message(s) trouve(s)
+    @if (totalPages() > 0) {
+      <span>· page {{ page() }} / {{ totalPages() }}</span>
+    }
+  </p>
+</section>
+
+@if (loading()) {
+  <p class="panel">Chargement des messages du chatbot...</p>
+} @else if (error()) {
+  <p class="panel panel-error">{{ error() }}</p>
+} @else if (logs().length === 0) {
+  <p class="panel">Aucun message ne correspond aux filtres actuels.</p>
+} @else {
+  <section class="logs-list">
+    @for (log of logs(); track log.id) {
+      <article class="log-card">
+        <div class="log-head">
+          <div>
+            <h3>{{ sourceLabel(log.sourceType) }}</h3>
+            <p>{{ log.createdAt | date: 'd MMM y, HH:mm':'':'fr' }}</p>
+          </div>
+
+          <div class="log-meta">
+            <span class="meta-pill">{{ sourceLabel(log.sourceType) }}</span>
+            @if (log.fallbackToContact) {
+              <span class="meta-pill meta-pill-warn">Vers contact</span>
+            }
+            @if (log.currentRoute) {
+              <span class="meta-pill">{{ log.currentRoute }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="log-content">
+          <div>
+            <p class="content-label">Question parent</p>
+            <p class="content-box">{{ log.message }}</p>
+          </div>
+
+          <div>
+            <p class="content-label">Reponse du bot</p>
+            <p class="content-box">{{ log.reply }}</p>
+          </div>
+        </div>
+      </article>
+    }
+  </section>
+
+  @if (totalPages() > 1) {
+    <nav class="pagination-card" aria-label="Pagination chatbot">
+      <button type="button" [disabled]="!hasPreviousPage()" (click)="changePage(page() - 1)">
+        Page precedente
+      </button>
+      <span>Page {{ page() }} sur {{ totalPages() }}</span>
+      <button type="button" [disabled]="!hasNextPage()" (click)="changePage(page() + 1)">
+        Page suivante
+      </button>
+    </nav>
+  }
+}

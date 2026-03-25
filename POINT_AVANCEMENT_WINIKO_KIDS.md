@@ -58,6 +58,10 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
   - modification
   - suppression
   - publication / brouillon
+- suivi chatbot
+  - statistiques simples
+  - liste des messages
+  - filtres et pagination
 - layout admin avec navigation dediee
 
 ### Backend
@@ -84,6 +88,9 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - module chatbot public
   - endpoint de reponse conversationnelle controlee
   - appui sur FAQ publiee et ateliers publies
+- journalisation chatbot
+  - historique des messages
+  - stats d'usage simples pour l'admin
 - module dashboard admin
   - nombre d'ateliers
   - nombre d'inscriptions

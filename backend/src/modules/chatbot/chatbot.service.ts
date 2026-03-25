@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { FaqEntry } from '@prisma/client';
+import { ChatbotSourceType, FaqEntry } from '@prisma/client';
+import { PrismaService } from '../../prisma/prisma.service';
 import { FaqService } from '../faq/faq.service';
 import { WorkshopsService } from '../workshops/workshops.service';
 import { CreateChatbotMessageDto } from './dto/create-chatbot-message.dto';
+import { ListChatbotLogsQueryDto } from './dto/list-chatbot-logs-query.dto';
 
 type ChatbotSuggestion = {
   label: string;
@@ -93,6 +95,7 @@ const STOP_WORDS = new Set([
 @Injectable()
 export class ChatbotService {
   constructor(
+    private readonly prisma: PrismaService,
     private readonly faqService: FaqService,
     private readonly workshopsService: WorkshopsService,
   ) {}
@@ -148,8 +151,10 @@ export class ChatbotService {
         'recommandation',
       ]);
 
+    let response: ChatbotReply;
+
     if (needsHumanHelp && faqMatches.length === 0 && workshopMatches.length === 0) {
-      return {
+      response = {
         reply:
           "Je peux aider sur les questions frequentes, le choix d'un atelier ou le parcours d'inscription. Pour une situation plus specifique, le formulaire de contact sera plus adapte.",
         sourceType: 'fallback',
@@ -161,16 +166,14 @@ export class ChatbotService {
         matchedWorkshopIds: [],
         fallbackToContact: true,
       };
-    }
-
-    if (asksForWorkshopAdvice && workshopMatches.length > 0) {
+    } else if (asksForWorkshopAdvice && workshopMatches.length > 0) {
       const topWorkshops = workshopMatches.slice(0, 3);
       const reply =
         ageHint !== null
           ? `Pour ${this.describeAgeHint(ageHint)}, je peux te proposer ${this.formatWorkshopList(topWorkshops)}.`
           : `Je peux te proposer ${this.formatWorkshopList(topWorkshops)}.`;
 
-      return {
+      response = {
         reply,
         sourceType: 'workshop',
         suggestions: this.deduplicateSuggestions([
@@ -184,9 +187,7 @@ export class ChatbotService {
         matchedWorkshopIds: topWorkshops.map((workshop) => workshop.id),
         fallbackToContact: false,
       };
-    }
-
-    if (faqMatches.length > 0) {
+    } else if (faqMatches.length > 0) {
       const bestMatch = faqMatches[0];
       const suggestions: ChatbotSuggestion[] = [];
 
@@ -200,7 +201,7 @@ export class ChatbotService {
 
       suggestions.push({ label: 'Voir la FAQ', route: '/faq' });
 
-      return {
+      response = {
         reply: bestMatch.answer,
         sourceType: 'faq',
         suggestions: this.deduplicateSuggestions(suggestions),
@@ -208,10 +209,8 @@ export class ChatbotService {
         matchedWorkshopIds: [],
         fallbackToContact: false,
       };
-    }
-
-    if (asksAboutRegistration) {
-      return {
+    } else if (asksAboutRegistration) {
+      response = {
         reply:
           "Pour reserver, il faut d'abord passer par l'espace Inscription / Connexion afin d'utiliser un compte parent. Ensuite tu peux choisir un atelier publie et finaliser la reservation depuis sa fiche ou le parcours prevu.",
         sourceType: 'guidance',
@@ -224,24 +223,101 @@ export class ChatbotService {
         matchedWorkshopIds: [],
         fallbackToContact: false,
       };
+    } else if (this.hasAnyKeyword(normalizedMessage, ['bonjour', 'hello', 'salut'])) {
+      response = this.buildGreetingReply();
+    } else {
+      response = {
+        reply:
+          "Je peux t'aider a choisir un atelier, comprendre l'inscription ou retrouver une reponse frequente. Si ta demande depasse ce cadre, le formulaire de contact reste la meilleure option.",
+        sourceType: 'fallback',
+        suggestions: this.deduplicateSuggestions([
+          { label: 'Voir les ateliers', route: '/ateliers' },
+          { label: 'Consulter la FAQ', route: '/faq' },
+          { label: 'Poser une question', route: '/contact' },
+        ]),
+        matchedFaqIds: [],
+        matchedWorkshopIds: [],
+        fallbackToContact: true,
+      };
     }
 
-    if (this.hasAnyKeyword(normalizedMessage, ['bonjour', 'hello', 'salut'])) {
-      return this.buildGreetingReply();
-    }
+    await this.logReply(message, normalizedMessage, createChatbotMessageDto.context?.currentRoute, response);
+
+    return response;
+  }
+
+  async findAll(query: ListChatbotLogsQueryDto) {
+    const page = query.page ?? 1;
+    const pageSize = query.pageSize ?? 10;
+    const search = query.search?.trim();
+    const where = {
+      sourceType: query.sourceType,
+      fallbackToContact: query.fallbackToContact,
+      ...(search
+        ? {
+            OR: [
+              { message: { contains: search, mode: 'insensitive' as const } },
+              { reply: { contains: search, mode: 'insensitive' as const } },
+              { currentRoute: { contains: search, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    };
+
+    const [items, total] = await Promise.all([
+      this.prisma.chatbotMessageLog.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      this.prisma.chatbotMessageLog.count({ where }),
+    ]);
 
     return {
-      reply:
-        "Je peux t'aider a choisir un atelier, comprendre l'inscription ou retrouver une reponse frequente. Si ta demande depasse ce cadre, le formulaire de contact reste la meilleure option.",
-      sourceType: 'fallback',
-      suggestions: this.deduplicateSuggestions([
-        { label: 'Voir les ateliers', route: '/ateliers' },
-        { label: 'Consulter la FAQ', route: '/faq' },
-        { label: 'Poser une question', route: '/contact' },
-      ]),
-      matchedFaqIds: [],
-      matchedWorkshopIds: [],
-      fallbackToContact: true,
+      items,
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    };
+  }
+
+  async getSummary() {
+    const [
+      totalMessages,
+      fallbackMessages,
+      faqMessages,
+      workshopMessages,
+      guidanceMessages,
+      recentMessages,
+    ] = await Promise.all([
+      this.prisma.chatbotMessageLog.count(),
+      this.prisma.chatbotMessageLog.count({
+        where: { fallbackToContact: true },
+      }),
+      this.prisma.chatbotMessageLog.count({
+        where: { sourceType: ChatbotSourceType.FAQ },
+      }),
+      this.prisma.chatbotMessageLog.count({
+        where: { sourceType: ChatbotSourceType.WORKSHOP },
+      }),
+      this.prisma.chatbotMessageLog.count({
+        where: { sourceType: ChatbotSourceType.GUIDANCE },
+      }),
+      this.prisma.chatbotMessageLog.findMany({
+        orderBy: { createdAt: 'desc' },
+        take: 5,
+      }),
+    ]);
+
+    return {
+      totalMessages,
+      fallbackMessages,
+      faqMessages,
+      workshopMessages,
+      guidanceMessages,
+      recentMessages,
     };
   }
 
@@ -453,5 +529,38 @@ export class ChatbotService {
       seen.add(suggestion.route);
       return true;
     });
+  }
+
+  private async logReply(
+    message: string,
+    normalizedMessage: string,
+    currentRoute: string | undefined,
+    response: ChatbotReply,
+  ) {
+    await this.prisma.chatbotMessageLog.create({
+      data: {
+        message,
+        normalizedMessage,
+        currentRoute: currentRoute ?? null,
+        sourceType: this.toPrismaSourceType(response.sourceType),
+        fallbackToContact: response.fallbackToContact,
+        matchedFaqIds: response.matchedFaqIds,
+        matchedWorkshopIds: response.matchedWorkshopIds,
+        reply: response.reply,
+      },
+    });
+  }
+
+  private toPrismaSourceType(sourceType: ChatbotReply['sourceType']) {
+    switch (sourceType) {
+      case 'faq':
+        return ChatbotSourceType.FAQ;
+      case 'workshop':
+        return ChatbotSourceType.WORKSHOP;
+      case 'guidance':
+        return ChatbotSourceType.GUIDANCE;
+      case 'fallback':
+        return ChatbotSourceType.FALLBACK;
+    }
   }
 }

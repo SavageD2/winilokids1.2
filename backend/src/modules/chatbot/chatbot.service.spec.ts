@@ -1,6 +1,13 @@
 import { ChatbotService } from './chatbot.service';
 
 describe('ChatbotService', () => {
+  const prismaService = {
+    chatbotMessageLog: {
+      create: jest.fn(),
+      count: jest.fn(),
+      findMany: jest.fn(),
+    },
+  };
   const faqService = {
     findPublished: jest.fn(),
   };
@@ -13,7 +20,7 @@ describe('ChatbotService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    service = new ChatbotService(faqService as never, workshopsService as never);
+    service = new ChatbotService(prismaService as never, faqService as never, workshopsService as never);
   });
 
   it('recommends published workshops when an age is provided', async () => {
@@ -44,6 +51,7 @@ describe('ChatbotService', () => {
     expect(reply.sourceType).toBe('workshop');
     expect(reply.matchedWorkshopIds).toEqual([1]);
     expect(reply.suggestions.some((suggestion) => suggestion.route === '/ateliers/atelier-peinture-sensorielle')).toBe(true);
+    expect(prismaService.chatbotMessageLog.create).toHaveBeenCalled();
   });
 
   it('uses FAQ content when a frequent question is matched', async () => {
