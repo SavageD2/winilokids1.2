@@ -9,6 +9,13 @@ type CreateParentAccountInput = {
   phone?: string | null;
 };
 
+type UpdateParentAccountInput = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone?: string | null;
+};
+
 @Injectable()
 export class ParentAccountsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -47,6 +54,28 @@ export class ParentAccountsService {
     }
 
     return parent;
+  }
+
+  async update(id: number, input: UpdateParentAccountInput) {
+    const currentParent = await this.findById(id);
+
+    if (currentParent.email !== input.email) {
+      const existingParent = await this.findByEmail(input.email);
+
+      if (existingParent && existingParent.id !== id) {
+        throw new ConflictException('A parent account already exists with this email');
+      }
+    }
+
+    return this.prisma.parentAccount.update({
+      where: { id },
+      data: {
+        email: input.email,
+        firstName: input.firstName,
+        lastName: input.lastName,
+        phone: input.phone ?? null,
+      },
+    });
   }
 
   sanitizeParent(parent: {

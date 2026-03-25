@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -28,9 +28,12 @@ export class AccountPageComponent {
   protected readonly loginSubmitting = signal(false);
   protected readonly loadingReservations = signal(false);
   protected readonly cancellingReservationId = signal<number | null>(null);
+  protected readonly savingProfile = signal(false);
   protected readonly reservationsErrorMessage = signal<string | null>(null);
   protected readonly registerErrorMessage = signal<string | null>(null);
   protected readonly loginErrorMessage = signal<string | null>(null);
+  protected readonly profileErrorMessage = signal<string | null>(null);
+  protected readonly profileSuccessMessage = signal<string | null>(null);
   protected readonly reservations = signal<RegistrationRecord[]>([]);
 
   protected readonly registerForm = this.formBuilder.nonNullable.group({
@@ -44,6 +47,13 @@ export class AccountPageComponent {
   protected readonly loginForm = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
+  });
+
+  protected readonly profileForm = this.formBuilder.nonNullable.group({
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    phone: [''],
   });
 
   protected submitRegistration() {
@@ -115,6 +125,8 @@ export class AccountPageComponent {
     this.reservationsErrorMessage.set(null);
     this.registerErrorMessage.set(null);
     this.loginErrorMessage.set(null);
+    this.profileErrorMessage.set(null);
+    this.profileSuccessMessage.set(null);
   }
 
   protected continuePath() {
@@ -179,9 +191,57 @@ export class AccountPageComponent {
   }
 
   constructor() {
+    effect(() => {
+      const parent = this.parent();
+
+      if (!parent) {
+        return;
+      }
+
+      this.profileForm.reset({
+        firstName: parent.firstName,
+        lastName: parent.lastName,
+        email: parent.email,
+        phone: parent.phone ?? '',
+      });
+    });
+
     if (this.parentAuthService.isAuthenticated()) {
       this.loadReservations();
     }
+  }
+
+  protected saveProfile() {
+    if (this.profileForm.invalid) {
+      this.profileForm.markAllAsTouched();
+      return;
+    }
+
+    this.savingProfile.set(true);
+    this.profileErrorMessage.set(null);
+    this.profileSuccessMessage.set(null);
+
+    this.parentAuthService
+      .updateProfile({
+        ...this.profileForm.getRawValue(),
+        phone: this.profileForm.getRawValue().phone || null,
+      })
+      .pipe(
+        finalize(() => {
+          this.savingProfile.set(false);
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: () => {
+          this.profileSuccessMessage.set('Profil mis a jour avec succes.');
+        },
+        error: () => {
+          this.profileErrorMessage.set(
+            'Impossible de mettre a jour le profil pour le moment.',
+          );
+        },
+      });
   }
 
   private redirectAfterAuth() {

@@ -3,8 +3,8 @@
 }
 
 .eyebrow {
-  color: var(--color-accent);
-  font-size: 0.85rem;
+  color: var(--color-accent-red);
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   margin: 0 0 1rem;
@@ -18,8 +18,8 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(2.3rem, 5vw, 4rem);
-  line-height: 1;
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  line-height: 0.98;
   max-width: 14ch;
 }
 
@@ -37,14 +37,28 @@ h1 {
 }
 
 .catalog-card {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(196, 144, 94, 0.18);
-  border-radius: 1.5rem;
-  box-shadow: 0 1.2rem 2.8rem rgba(62, 39, 24, 0.08);
+  background:
+    radial-gradient(circle at top right, rgba(255, 191, 31, 0.18), transparent 18%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 236, 0.96) 100%);
+  border: 2px solid rgba(242, 107, 46, 0.08);
+  border-radius: 1.8rem;
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1.5rem;
+  position: relative;
+}
+
+.catalog-card::before {
+  background: linear-gradient(90deg, #ff8b39 0%, #ffca2b 24%, #47c070 50%, #4dc0e9 74%, #ff7f3c 100%);
+  border-radius: 999px;
+  content: '';
+  height: 0.45rem;
+  left: 1.4rem;
+  position: absolute;
+  top: 1rem;
+  width: 4.2rem;
 }
 
 .catalog-card p,
@@ -61,6 +75,10 @@ h1 {
 .catalog-card p {
   color: var(--color-muted);
   line-height: 1.75;
+}
+
+.catalog-card h2 {
+  margin-top: 0.7rem;
 }
 
 .details {
@@ -83,9 +101,9 @@ h1 {
 }
 
 .panel {
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px dashed rgba(196, 144, 94, 0.4);
-  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.86);
+  border: 2px dashed rgba(242, 107, 46, 0.22);
+  border-radius: 1.8rem;
   color: var(--color-muted);
   padding: 1rem 1.25rem;
 }

@@ -5,6 +5,7 @@ import { ParentAccountsService } from '../parent-accounts/parent-accounts.servic
 import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 import { LoginParentDto } from './dto/login-parent.dto';
 import { RegisterParentDto } from './dto/register-parent.dto';
+import { UpdateParentProfileDto } from './dto/update-parent-profile.dto';
 
 @Injectable()
 export class ParentAuthService {
@@ -45,6 +46,17 @@ export class ParentAuthService {
 
   async getProfile(parentAccountId: number) {
     const parent = await this.parentAccountsService.findById(parentAccountId);
+    return this.parentAccountsService.sanitizeParent(parent);
+  }
+
+  async updateProfile(parentAccountId: number, updateParentProfileDto: UpdateParentProfileDto) {
+    const parent = await this.parentAccountsService.update(parentAccountId, {
+      email: updateParentProfileDto.email,
+      firstName: updateParentProfileDto.firstName,
+      lastName: updateParentProfileDto.lastName,
+      phone: updateParentProfileDto.phone ?? null,
+    });
+
     return this.parentAccountsService.sanitizeParent(parent);
   }
 

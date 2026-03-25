@@ -7,6 +7,7 @@ import {
   ParentProfile,
   ParentSession,
   RegisterParentPayload,
+  UpdateParentProfilePayload,
 } from '../../shared/models/parent-auth.model';
 import { ParentSessionService } from './parent-session.service';
 
@@ -35,6 +36,14 @@ export class ParentAuthService {
 
   getProfile(): Observable<ParentProfile> {
     return this.http.get<ParentProfile>(`${API_BASE_URL}/parent/auth/me`).pipe(
+      tap((parent) => {
+        this.session.updateParent(parent);
+      }),
+    );
+  }
+
+  updateProfile(payload: UpdateParentProfilePayload): Observable<ParentProfile> {
+    return this.http.patch<ParentProfile>(`${API_BASE_URL}/parent/auth/me`, payload).pipe(
       tap((parent) => {
         this.session.updateParent(parent);
       }),

@@ -23,3 +23,10 @@ export interface RegisterParentPayload {
   phone?: string | null;
   password: string;
 }
+
+export interface UpdateParentProfilePayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string | null;
+}

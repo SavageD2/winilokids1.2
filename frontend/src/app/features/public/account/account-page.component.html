@@ -27,7 +27,52 @@
       </div>
     </article>
 
-    <article class="reservations-card">
+    <article class="profile-card">
+      <p class="eyebrow">Mon profil</p>
+      <h2>Informations du parent</h2>
+
+      <form class="profile-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+        <div class="form-grid">
+          <label>
+            <span>Prenom</span>
+            <input type="text" formControlName="firstName" placeholder="Camille" />
+          </label>
+
+          <label>
+            <span>Nom</span>
+            <input type="text" formControlName="lastName" placeholder="Martin" />
+          </label>
+
+          <label class="full-width">
+            <span>Email</span>
+            <input type="email" formControlName="email" placeholder="camille@example.com" />
+          </label>
+
+          <label class="full-width">
+            <span>Telephone</span>
+            <input type="tel" formControlName="phone" placeholder="0612345678" />
+          </label>
+        </div>
+
+        @if (profileErrorMessage()) {
+          <p class="feedback feedback-error">{{ profileErrorMessage() }}</p>
+        }
+
+        @if (profileSuccessMessage()) {
+          <p class="feedback feedback-success">{{ profileSuccessMessage() }}</p>
+        }
+
+        <button class="button button-primary" type="submit" [disabled]="savingProfile()">
+          @if (savingProfile()) {
+            Enregistrement...
+          } @else {
+            Mettre a jour le profil
+          }
+        </button>
+      </form>
+    </article>
+
+    <article class="reservations-card full-span">
       <div class="reservations-heading">
         <div>
           <p class="eyebrow">Mes reservations</p>

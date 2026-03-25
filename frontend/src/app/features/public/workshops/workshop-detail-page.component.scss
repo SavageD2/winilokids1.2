@@ -5,8 +5,8 @@
 }
 
 .eyebrow {
-  color: var(--color-accent);
-  font-size: 0.85rem;
+  color: var(--color-accent-red);
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   margin: 0 0 1rem;
@@ -20,8 +20,8 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
-  line-height: 1;
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  line-height: 0.97;
 }
 
 .intro {
@@ -34,13 +34,16 @@ h1 {
 .description-card,
 .info-card,
 .panel {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(196, 144, 94, 0.18);
-  border-radius: 1.5rem;
-  box-shadow: 0 1.2rem 2.8rem rgba(62, 39, 24, 0.08);
+  background: var(--color-card);
+  border: 2px solid rgba(242, 107, 46, 0.08);
+  border-radius: 1.8rem;
+  box-shadow: var(--shadow-card);
 }
 
 .description-card {
+  background:
+    radial-gradient(circle at top right, rgba(255, 191, 31, 0.18), transparent 16%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 236, 0.96) 100%);
   margin-top: 2rem;
   padding: 1.75rem;
 }
@@ -52,6 +55,9 @@ h1 {
 }
 
 .info-card {
+  background:
+    radial-gradient(circle at top left, rgba(89, 194, 230, 0.18), transparent 16%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 251, 255, 0.92) 100%);
   padding: 1.5rem;
 }
 

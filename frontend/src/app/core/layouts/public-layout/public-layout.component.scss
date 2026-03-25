@@ -16,7 +16,7 @@
   gap: 1rem;
   justify-content: space-between;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1220px;
   padding: 1.25rem clamp(1.1rem, 4vw, 2rem);
   width: 100%;
 }
@@ -28,10 +28,13 @@
 }
 
 .site-header::before {
-  background: rgba(255, 250, 242, 0.82);
+  background:
+    radial-gradient(circle at top left, rgba(255, 191, 31, 0.16), transparent 24%),
+    radial-gradient(circle at right center, rgba(89, 194, 230, 0.14), transparent 20%),
+    rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(18px);
-  border: 1px solid rgba(196, 144, 94, 0.18);
-  border-radius: 999px;
+  border: 2px solid rgba(242, 107, 46, 0.1);
+  border-radius: 1.7rem;
   bottom: 0.35rem;
   content: '';
   left: clamp(0.7rem, 3vw, 1.6rem);
@@ -45,41 +48,71 @@
   align-items: center;
   color: var(--color-ink);
   display: inline-flex;
-  gap: 0.85rem;
+  gap: 1rem;
+  position: relative;
   text-decoration: none;
 }
 
 .brand strong,
 .site-footer strong {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.22rem;
+  letter-spacing: 0.01em;
 }
 
 .brand small {
   color: var(--color-muted);
   display: block;
   font-size: 0.82rem;
-  margin-top: 0.1rem;
+  margin-top: 0.18rem;
 }
 
 .brand-mark {
   align-items: center;
-  background: linear-gradient(135deg, #f08d6f 0%, #c86741 100%);
-  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 28% 28%, #fff6be 0 18%, transparent 19%),
+    linear-gradient(180deg, #7fd9f2 0%, #48b9e3 100%);
+  border: 4px solid white;
+  border-radius: 1.1rem;
+  box-shadow: 0 0.55rem 0 rgba(89, 194, 230, 0.28);
   color: white;
   display: inline-flex;
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 700;
-  height: 2.5rem;
+  height: 3rem;
   justify-content: center;
-  width: 2.5rem;
+  overflow: hidden;
+  position: relative;
+  width: 3rem;
+}
+
+.brand-mark::before {
+  background: linear-gradient(90deg, #ff8b39 0%, #ffca2b 24%, #47c070 50%, #4dc0e9 74%, #ff7f3c 100%);
+  border-radius: 999px 999px 0 0;
+  content: '';
+  height: 1.35rem;
+  left: -0.15rem;
+  position: absolute;
+  right: -0.15rem;
+  top: -0.3rem;
+}
+
+.brand-mark::after {
+  background: white;
+  border-radius: 999px 999px 0 0;
+  content: '';
+  height: 0.82rem;
+  left: 0.55rem;
+  position: absolute;
+  right: 0.55rem;
+  top: 0.18rem;
 }
 
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.55rem;
 }
 
 .site-nav a,
@@ -90,27 +123,33 @@
 
 .site-nav a {
   border-radius: 999px;
-  padding: 0.65rem 0.95rem;
+  font-weight: 700;
+  padding: 0.68rem 1rem;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .site-nav a.active,
 .site-nav a:hover {
-  background: rgba(245, 228, 208, 0.9);
-  color: #9a4a2d;
+  background: linear-gradient(180deg, #fff5d7 0%, #ffe9b1 100%);
+  color: var(--color-accent-dark);
 }
 
 .page-shell {
   margin: 0 auto;
-  max-width: 1200px;
-  padding: 2rem clamp(1.1rem, 4vw, 2rem) 4rem;
+  max-width: 1220px;
+  padding: 2.2rem clamp(1.1rem, 4vw, 2rem) 4.5rem;
   width: 100%;
 }
 
 .site-footer {
   align-items: start;
-  border-top: 1px solid rgba(196, 144, 94, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36) 0%, rgba(255, 247, 232, 0.82) 100%);
+  border-top: 2px solid rgba(242, 107, 46, 0.1);
+  border-radius: 2rem 2rem 0 0;
   color: var(--color-muted);
+  margin-top: 2rem;
+  padding-top: 1.8rem;
 }
 
 .site-footer p {
@@ -125,10 +164,18 @@
   gap: 1rem;
 }
 
+.footer-links a {
+  font-weight: 700;
+}
+
 @media (max-width: 880px) {
   .site-header,
   .site-footer {
     align-items: start;
     flex-direction: column;
+  }
+
+  .site-header::before {
+    border-radius: 1.4rem;
   }
 }

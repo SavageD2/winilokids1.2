@@ -1,14 +1,22 @@
 :root {
-  --color-background: #fcf6ed;
-  --color-background-accent: #f6ead9;
-  --color-surface-soft: #f8efe2;
-  --color-ink: #352317;
-  --color-muted: #6c584a;
-  --color-accent: #c86741;
-  --color-accent-dark: #a14d2f;
-  --color-card: rgba(255, 255, 255, 0.9);
-  --font-body: 'Avenir Next', 'Trebuchet MS', 'Segoe UI', sans-serif;
-  --font-display: 'Georgia', 'Times New Roman', serif;
+  --color-background: #fff8ef;
+  --color-background-accent: #fff1d6;
+  --color-surface-soft: #fff5de;
+  --color-surface-blue: #dff5ff;
+  --color-surface-green: #e9f8dc;
+  --color-surface-pink: #ffe5da;
+  --color-ink: #4a3425;
+  --color-muted: #6f675e;
+  --color-accent: #f26b2e;
+  --color-accent-dark: #dd5621;
+  --color-accent-yellow: #ffbf1f;
+  --color-accent-green: #39b56a;
+  --color-accent-blue: #59c2e6;
+  --color-accent-red: #f25c3a;
+  --color-card: rgba(255, 255, 255, 0.92);
+  --shadow-card: 0 1.15rem 0 rgba(236, 138, 61, 0.16), 0 1.9rem 3rem rgba(122, 81, 36, 0.08);
+  --font-body: 'Trebuchet MS', 'Gill Sans', 'Verdana', sans-serif;
+  --font-display: 'Arial Rounded MT Bold', 'Trebuchet MS', 'Gill Sans', sans-serif;
 }
 
 *,
@@ -23,9 +31,10 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(240, 141, 111, 0.16), transparent 30%),
-    radial-gradient(circle at top right, rgba(187, 212, 174, 0.22), transparent 28%),
-    linear-gradient(180deg, var(--color-background) 0%, #fffdf8 100%);
+    radial-gradient(circle at top left, rgba(255, 191, 31, 0.26), transparent 22%),
+    radial-gradient(circle at 85% 12%, rgba(89, 194, 230, 0.2), transparent 18%),
+    radial-gradient(circle at 72% 88%, rgba(57, 181, 106, 0.16), transparent 16%),
+    linear-gradient(180deg, #fff9f2 0%, #fffef9 100%);
   color: var(--color-ink);
   font-family: var(--font-body);
   margin: 0;
@@ -34,9 +43,10 @@ body {
 
 body::before {
   background-image:
-    linear-gradient(rgba(196, 144, 94, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 144, 94, 0.05) 1px, transparent 1px);
-  background-size: 42px 42px;
+    radial-gradient(circle at 12% 18%, rgba(255, 191, 31, 0.16) 0 0.2rem, transparent 0.21rem),
+    radial-gradient(circle at 85% 36%, rgba(57, 181, 106, 0.14) 0 0.22rem, transparent 0.23rem),
+    radial-gradient(circle at 70% 78%, rgba(242, 92, 58, 0.12) 0 0.18rem, transparent 0.19rem),
+    radial-gradient(circle at 24% 82%, rgba(89, 194, 230, 0.14) 0 0.2rem, transparent 0.21rem);
   content: '';
   inset: 0;
   pointer-events: none;
@@ -59,31 +69,43 @@ a {
 
 .button {
   border: none;
-  border-radius: 999px;
+  border-radius: 1.25rem;
+  box-shadow: 0 0.5rem 0 rgba(240, 152, 74, 0.2);
   cursor: pointer;
   font: inherit;
   min-height: 3rem;
-  padding: 0.8rem 1.2rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  padding: 0.85rem 1.25rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
 .button:hover {
-  transform: translateY(-1px);
+  transform: translateY(-3px);
 }
 
 .button-primary {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
-  box-shadow: 0 0.9rem 1.8rem rgba(200, 103, 65, 0.22);
+  background: linear-gradient(180deg, #ff8a42 0%, var(--color-accent) 100%);
+  box-shadow: 0 0.65rem 0 #de561a, 0 1rem 1.8rem rgba(242, 107, 46, 0.24);
   color: white;
 }
 
 .button-secondary {
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(196, 144, 94, 0.22);
+  background: linear-gradient(180deg, #ffffff 0%, #fff8eb 100%);
+  border: 1px solid rgba(242, 107, 46, 0.14);
   color: var(--color-ink);
 }
 
 .text-link {
   color: var(--color-accent-dark);
   gap: 0.4rem;
+  text-decoration-thickness: 0.16rem;
+  text-underline-offset: 0.18rem;
+}
+
+.text-link:hover {
+  color: var(--color-accent);
+}
+
+::selection {
+  background: rgba(255, 191, 31, 0.35);
+  color: var(--color-ink);
 }
