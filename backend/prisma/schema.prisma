@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  ATTENDED
+}
+
+model Admin {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Workshop {
+  id                Int            @id @default(autoincrement())
+  title             String
+  slug              String         @unique
+  shortDescription  String
+  description       String
+  startAt           DateTime
+  endAt             DateTime?
+  location          String
+  recommendedAgeMin Int?
+  recommendedAgeMax Int?
+  capacity          Int?
+  isPublished       Boolean        @default(false)
+  registrations     Registration[]
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  @@index([startAt])
+  @@index([isPublished])
+}
+
+model Registration {
+  id             Int                @id @default(autoincrement())
+  parentName     String
+  parentEmail    String
+  parentPhone    String?
+  childFirstName String
+  childAge       Int
+  message        String?
+  status         RegistrationStatus @default(PENDING)
+  workshopId     Int
+  workshop       Workshop           @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@index([workshopId])
+  @@index([status])
+  @@index([parentEmail])
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}

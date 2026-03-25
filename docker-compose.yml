@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: winilo-kids-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: winilo_kids
+      POSTGRES_USER: winilo_user
+      POSTGRES_PASSWORD: winilo_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U winilo_user -d winilo_kids"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
