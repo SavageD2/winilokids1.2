@@ -1,7 +1,6 @@
+export type RegistrationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'ATTENDED';
+
 export interface CreateRegistrationPayload {
-  parentName: string;
-  parentEmail: string;
-  parentPhone?: string | null;
   childFirstName: string;
   childAge: number;
   workshopId: number;
@@ -10,7 +9,10 @@ export interface CreateRegistrationPayload {
 
 export interface RegistrationRecord extends CreateRegistrationPayload {
   id: number;
-  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'ATTENDED';
+  parentName: string;
+  parentEmail: string;
+  parentPhone?: string | null;
+  status: RegistrationStatus;
   createdAt: string;
   updatedAt: string;
   workshop: {
@@ -20,4 +22,15 @@ export interface RegistrationRecord extends CreateRegistrationPayload {
     startAt: string;
     location: string;
   };
+  parentAccount?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string | null;
+  } | null;
+}
+
+export interface UpdateRegistrationStatusPayload {
+  status: RegistrationStatus;
 }

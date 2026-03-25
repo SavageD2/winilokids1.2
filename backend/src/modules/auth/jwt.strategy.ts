@@ -15,8 +15,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload) {
+    if (payload.role === 'admin') {
+      return {
+        role: 'admin' as const,
+        adminId: payload.sub,
+        email: payload.email,
+      };
+    }
+
     return {
-      adminId: payload.sub,
+      role: 'parent' as const,
+      parentAccountId: payload.sub,
       email: payload.email,
     };
   }

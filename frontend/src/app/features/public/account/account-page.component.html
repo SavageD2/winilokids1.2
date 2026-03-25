@@ -1,0 +1,101 @@
+<section class="page-hero">
+  <p class="eyebrow">Compte parent</p>
+  <h1>Connecte-toi ou cree ton compte avant de reserver un atelier.</h1>
+  <p>
+    Le compte parent permet de retrouver un parcours plus clair, de centraliser les reservations et
+    de securiser l inscription aux ateliers.
+  </p>
+</section>
+
+@if (isAuthenticated() && parent(); as currentParent) {
+  <section class="connected-card">
+    <p class="eyebrow">Session active</p>
+    <h2>{{ currentParent.firstName }} {{ currentParent.lastName }}</h2>
+    <p>{{ currentParent.email }}</p>
+    @if (currentParent.phone) {
+      <p>{{ currentParent.phone }}</p>
+    }
+
+    <div class="connected-actions">
+      <button class="button button-primary" type="button" (click)="continuePath()">
+        Continuer
+      </button>
+      <button class="button button-secondary" type="button" (click)="logout()">
+        Se deconnecter
+      </button>
+    </div>
+  </section>
+} @else {
+  <section class="auth-layout">
+    <form class="auth-card" [formGroup]="registerForm" (ngSubmit)="submitRegistration()">
+      <p class="eyebrow">Inscription</p>
+      <h2>Creer un compte</h2>
+
+      <div class="form-grid">
+        <label>
+          <span>Prenom</span>
+          <input type="text" formControlName="firstName" placeholder="Camille" />
+        </label>
+
+        <label>
+          <span>Nom</span>
+          <input type="text" formControlName="lastName" placeholder="Martin" />
+        </label>
+
+        <label class="full-width">
+          <span>Email</span>
+          <input type="email" formControlName="email" placeholder="camille@example.com" />
+        </label>
+
+        <label>
+          <span>Telephone</span>
+          <input type="tel" formControlName="phone" placeholder="0612345678" />
+        </label>
+
+        <label>
+          <span>Mot de passe</span>
+          <input type="password" formControlName="password" placeholder="Au moins 8 caracteres" />
+        </label>
+      </div>
+
+      @if (registerErrorMessage()) {
+        <p class="feedback feedback-error">{{ registerErrorMessage() }}</p>
+      }
+
+      <button class="button button-primary" type="submit" [disabled]="registerSubmitting()">
+        @if (registerSubmitting()) {
+          Creation...
+        } @else {
+          Creer mon compte
+        }
+      </button>
+    </form>
+
+    <form class="auth-card" [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+      <p class="eyebrow">Connexion</p>
+      <h2>Acceder a mon compte</h2>
+
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="camille@example.com" />
+      </label>
+
+      <label>
+        <span>Mot de passe</span>
+        <input type="password" formControlName="password" placeholder="Votre mot de passe" />
+      </label>
+
+      @if (loginErrorMessage()) {
+        <p class="feedback feedback-error">{{ loginErrorMessage() }}</p>
+      }
+
+      <button class="button button-primary" type="submit" [disabled]="loginSubmitting()">
+        @if (loginSubmitting()) {
+          Connexion...
+        } @else {
+          Me connecter
+        }
+      </button>
+    </form>
+  </section>
+}

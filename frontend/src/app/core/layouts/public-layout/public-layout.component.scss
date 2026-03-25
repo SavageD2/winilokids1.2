@@ -1,0 +1,134 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+.site-header,
+.site-footer {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 1.25rem clamp(1.1rem, 4vw, 2rem);
+  width: 100%;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-header::before {
+  background: rgba(255, 250, 242, 0.82);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(196, 144, 94, 0.18);
+  border-radius: 999px;
+  bottom: 0.35rem;
+  content: '';
+  left: clamp(0.7rem, 3vw, 1.6rem);
+  position: absolute;
+  right: clamp(0.7rem, 3vw, 1.6rem);
+  top: 0.35rem;
+  z-index: -1;
+}
+
+.brand {
+  align-items: center;
+  color: var(--color-ink);
+  display: inline-flex;
+  gap: 0.85rem;
+  text-decoration: none;
+}
+
+.brand strong,
+.site-footer strong {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.brand small {
+  color: var(--color-muted);
+  display: block;
+  font-size: 0.82rem;
+  margin-top: 0.1rem;
+}
+
+.brand-mark {
+  align-items: center;
+  background: linear-gradient(135deg, #f08d6f 0%, #c86741 100%);
+  border-radius: 1rem;
+  color: white;
+  display: inline-flex;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  height: 2.5rem;
+  justify-content: center;
+  width: 2.5rem;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.site-nav a,
+.footer-links a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.site-nav a {
+  border-radius: 999px;
+  padding: 0.65rem 0.95rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.site-nav a.active,
+.site-nav a:hover {
+  background: rgba(245, 228, 208, 0.9);
+  color: #9a4a2d;
+}
+
+.page-shell {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 2rem clamp(1.1rem, 4vw, 2rem) 4rem;
+  width: 100%;
+}
+
+.site-footer {
+  align-items: start;
+  border-top: 1px solid rgba(196, 144, 94, 0.18);
+  color: var(--color-muted);
+}
+
+.site-footer p {
+  line-height: 1.7;
+  margin: 0.4rem 0 0;
+  max-width: 34rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 880px) {
+  .site-header,
+  .site-footer {
+    align-items: start;
+    flex-direction: column;
+  }
+}

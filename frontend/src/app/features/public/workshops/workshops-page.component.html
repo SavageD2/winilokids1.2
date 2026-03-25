@@ -49,8 +49,12 @@
           <a class="button button-secondary" [routerLink]="['/ateliers', workshop.slug]">
             Voir le detail
           </a>
-          <a class="text-link" [routerLink]="['/inscription']" [queryParams]="{ workshopId: workshop.id }">
-            Inscrire mon enfant
+          <a
+            class="text-link"
+            [routerLink]="[reservationLink(workshop)]"
+            [queryParams]="reservationQueryParams(workshop)"
+          >
+            {{ isParentAuthenticated() ? 'Reserver cet atelier' : 'Se connecter pour reserver' }}
           </a>
         </div>
       </article>

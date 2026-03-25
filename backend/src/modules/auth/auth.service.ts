@@ -28,6 +28,7 @@ export class AuthService {
     const payload: JwtPayload = {
       sub: admin.id,
       email: admin.email,
+      role: 'admin',
     };
 
     return {

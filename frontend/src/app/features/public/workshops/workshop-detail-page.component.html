@@ -56,8 +56,12 @@
         </dl>
 
         <div class="aside-actions">
-          <a class="button button-primary" [routerLink]="['/inscription']" [queryParams]="{ workshopId: item.id }">
-            Inscrire mon enfant
+          <a
+            class="button button-primary"
+            [routerLink]="[reservationLink(item)]"
+            [queryParams]="reservationQueryParams(item)"
+          >
+            {{ isParentAuthenticated() ? 'Reserver cet atelier' : 'Se connecter pour reserver' }}
           </a>
           <a class="button button-secondary" routerLink="/contact">Poser une question</a>
         </div>

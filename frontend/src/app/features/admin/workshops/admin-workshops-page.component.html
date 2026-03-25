@@ -1,0 +1,165 @@
+<section class="page-grid">
+  <div class="catalog-panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Catalogue admin</p>
+        <h2>Ateliers</h2>
+      </div>
+      <button class="button button-secondary" type="button" (click)="createNewWorkshop()">
+        Nouvel atelier
+      </button>
+    </div>
+
+    @if (loading()) {
+      <p class="panel">Chargement des ateliers...</p>
+    } @else if (workshops().length === 0) {
+      <p class="panel">Aucun atelier cree pour le moment.</p>
+    } @else {
+      <div class="workshop-list">
+        @for (workshop of workshops(); track workshop.id) {
+          <article class="workshop-item">
+            <div class="workshop-item-head">
+              <div>
+                <h3>{{ workshop.title }}</h3>
+                <p>
+                  {{ workshop.startAt | date: 'd MMMM y':'':'fr' }} ·
+                  {{ workshop.startAt | date: 'HH:mm' }}
+                </p>
+              </div>
+              <span class="status-pill" [class.status-pill-live]="workshop.isPublished">
+                {{ workshop.isPublished ? 'Publie' : 'Brouillon' }}
+              </span>
+            </div>
+
+            <p class="summary">{{ workshop.shortDescription }}</p>
+
+            <div class="meta-tags">
+              <span>{{ workshop.location }}</span>
+              <span>{{ ageLabel(workshop) }}</span>
+              <span>
+                {{ workshop.registrationsCount }}
+                @if (workshop.capacity !== null) {
+                  / {{ workshop.capacity }}
+                }
+              </span>
+            </div>
+
+            <div class="item-actions">
+              <button class="button button-secondary" type="button" (click)="editWorkshop(workshop)">
+                Modifier
+              </button>
+              <button
+                class="button button-secondary danger"
+                type="button"
+                [disabled]="deletingId() === workshop.id"
+                (click)="removeWorkshop(workshop)"
+              >
+                @if (deletingId() === workshop.id) {
+                  Suppression...
+                } @else {
+                  Supprimer
+                }
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+
+  <form class="editor-panel" [formGroup]="workshopForm" (ngSubmit)="submit()">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Edition</p>
+        <h2>
+          @if (editingWorkshopId()) {
+            Modifier un atelier
+          } @else {
+            Creer un atelier
+          }
+        </h2>
+      </div>
+      <button class="text-link" type="button" (click)="generateSlug()">Generer le slug</button>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="feedback feedback-error">{{ errorMessage() }}</p>
+    }
+
+    @if (successMessage()) {
+      <p class="feedback feedback-success">{{ successMessage() }}</p>
+    }
+
+    <div class="form-grid">
+      <label class="full-width">
+        <span>Titre</span>
+        <input type="text" formControlName="title" />
+      </label>
+
+      <label class="full-width">
+        <span>Slug</span>
+        <input type="text" formControlName="slug" />
+      </label>
+
+      <label class="full-width">
+        <span>Description courte</span>
+        <textarea rows="3" formControlName="shortDescription"></textarea>
+      </label>
+
+      <label class="full-width">
+        <span>Description complete</span>
+        <textarea rows="5" formControlName="description"></textarea>
+      </label>
+
+      <label>
+        <span>Debut</span>
+        <input type="datetime-local" formControlName="startAt" />
+      </label>
+
+      <label>
+        <span>Fin</span>
+        <input type="datetime-local" formControlName="endAt" />
+      </label>
+
+      <label class="full-width">
+        <span>Lieu</span>
+        <input type="text" formControlName="location" />
+      </label>
+
+      <label>
+        <span>Age minimum</span>
+        <input type="number" min="0" max="17" formControlName="recommendedAgeMin" />
+      </label>
+
+      <label>
+        <span>Age maximum</span>
+        <input type="number" min="0" max="17" formControlName="recommendedAgeMax" />
+      </label>
+
+      <label>
+        <span>Capacite</span>
+        <input type="number" min="1" formControlName="capacity" />
+      </label>
+
+      <label class="checkbox-field">
+        <input type="checkbox" formControlName="isPublished" />
+        <span>Publier cet atelier</span>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button class="button button-primary" type="submit" [disabled]="saving()">
+        @if (saving()) {
+          Enregistrement...
+        } @else if (editingWorkshopId()) {
+          Mettre a jour
+        } @else {
+          Creer l atelier
+        }
+      </button>
+      <button class="button button-secondary" type="button" (click)="createNewWorkshop()">
+        Reinitialiser
+      </button>
+    </div>
+  </form>
+</section>

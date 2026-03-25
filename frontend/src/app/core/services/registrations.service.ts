@@ -14,6 +14,6 @@ export class RegistrationsService {
   private readonly http = inject(HttpClient);
 
   create(payload: CreateRegistrationPayload): Observable<RegistrationRecord> {
-    return this.http.post<RegistrationRecord>(`${API_BASE_URL}/registrations`, payload);
+    return this.http.post<RegistrationRecord>(`${API_BASE_URL}/parent/registrations`, payload);
   }
 }

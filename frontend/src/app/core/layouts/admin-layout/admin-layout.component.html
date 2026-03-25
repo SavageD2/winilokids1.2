@@ -1,0 +1,41 @@
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a class="admin-brand" routerLink="/admin/dashboard">
+      <span class="brand-mark">WK</span>
+      <span>
+        <strong>Winilo Kids</strong>
+        <small>Administration</small>
+      </span>
+    </a>
+
+    <nav class="admin-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/admin/ateliers" routerLinkActive="active">Ateliers</a>
+      <a routerLink="/admin/inscriptions" routerLinkActive="active">Inscriptions</a>
+      <a routerLink="/admin/contacts" routerLinkActive="active">Contacts</a>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      @if (admin(); as currentAdmin) {
+        <p class="admin-user">
+          Connecte en tant que <strong>{{ currentAdmin.firstName }} {{ currentAdmin.lastName }}</strong>
+        </p>
+      }
+      <button class="button button-secondary" type="button" (click)="logout()">Se deconnecter</button>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <p class="eyebrow">Back-office</p>
+        <h1>Espace administrateur</h1>
+      </div>
+      <a class="text-link" routerLink="/">Retour au site public</a>
+    </header>
+
+    <main class="admin-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

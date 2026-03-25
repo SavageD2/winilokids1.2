@@ -8,9 +8,10 @@ export class DashboardService {
   async getSummary() {
     const now = new Date();
 
-    const [workshopsCount, registrationsCount, upcomingWorkshops] = await Promise.all([
+    const [workshopsCount, registrationsCount, contactsCount, upcomingWorkshops] = await Promise.all([
       this.prisma.workshop.count(),
       this.prisma.registration.count(),
+      this.prisma.contact.count(),
       this.prisma.workshop.findMany({
         where: {
           startAt: {
@@ -32,6 +33,7 @@ export class DashboardService {
     return {
       workshopsCount,
       registrationsCount,
+      contactsCount,
       upcomingWorkshops: upcomingWorkshops.map((workshop) => ({
         id: workshop.id,
         title: workshop.title,

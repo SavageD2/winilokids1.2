@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
+import { ParentAuthService } from '../../../core/services/parent-auth.service';
 import { RegistrationsService } from '../../../core/services/registrations.service';
 import { WorkshopsService } from '../../../core/services/workshops.service';
 import { Workshop } from '../../../shared/models/workshop.model';
@@ -18,6 +19,7 @@ export class RegistrationPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly workshopsService = inject(WorkshopsService);
   private readonly registrationsService = inject(RegistrationsService);
+  protected readonly parentAuthService = inject(ParentAuthService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly workshops = signal<Workshop[]>([]);
@@ -27,9 +29,6 @@ export class RegistrationPageComponent {
   protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly registrationForm = this.formBuilder.nonNullable.group({
-    parentName: ['', [Validators.required, Validators.minLength(2)]],
-    parentEmail: ['', [Validators.required, Validators.email]],
-    parentPhone: [''],
     childFirstName: ['', [Validators.required, Validators.minLength(2)]],
     childAge: [5, [Validators.required, Validators.min(0), Validators.max(17)]],
     workshopId: [0, [Validators.required, Validators.min(1)]],
@@ -67,11 +66,7 @@ export class RegistrationPageComponent {
     this.successMessage.set(null);
 
     this.registrationsService
-      .create({
-        ...this.registrationForm.getRawValue(),
-        parentPhone: this.registrationForm.getRawValue().parentPhone || null,
-        message: this.registrationForm.getRawValue().message || null,
-      })
+      .create({ ...this.registrationForm.getRawValue(), message: this.registrationForm.getRawValue().message || null })
       .pipe(
         finalize(() => {
           this.submitting.set(false);
@@ -84,9 +79,6 @@ export class RegistrationPageComponent {
             `Demande enregistree pour l atelier "${registration.workshop.title}". Nous reviendrons vers vous rapidement.`,
           );
           this.registrationForm.patchValue({
-            parentName: '',
-            parentEmail: '',
-            parentPhone: '',
             childFirstName: '',
             childAge: 5,
             message: '',

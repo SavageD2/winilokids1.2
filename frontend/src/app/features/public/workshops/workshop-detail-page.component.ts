@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
+import { ParentAuthService } from '../../../core/services/parent-auth.service';
 import { WorkshopsService } from '../../../core/services/workshops.service';
 import { Workshop } from '../../../shared/models/workshop.model';
 
@@ -14,12 +15,14 @@ import { Workshop } from '../../../shared/models/workshop.model';
 })
 export class WorkshopDetailPageComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly parentAuthService = inject(ParentAuthService);
   private readonly workshopsService = inject(WorkshopsService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly workshop = signal<Workshop | null>(null);
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
+  protected readonly isParentAuthenticated = computed(() => this.parentAuthService.isAuthenticated());
 
   constructor() {
     this.route.paramMap
@@ -58,5 +61,17 @@ export class WorkshopDetailPageComponent {
     }
 
     return `Jusqu a ${workshop.recommendedAgeMax} ans`;
+  }
+
+  protected reservationLink(workshop: Workshop) {
+    return this.isParentAuthenticated() ? '/reservation' : '/inscription';
+  }
+
+  protected reservationQueryParams(workshop: Workshop) {
+    if (this.isParentAuthenticated()) {
+      return { workshopId: workshop.id };
+    }
+
+    return { redirectUrl: `/reservation?workshopId=${workshop.id}` };
   }
 }

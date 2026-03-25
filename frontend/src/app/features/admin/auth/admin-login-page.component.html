@@ -1,0 +1,37 @@
+<section class="login-shell">
+  <article class="login-copy">
+    <p class="eyebrow">Administration</p>
+    <h1>Un acces simple et securise pour gerer les ateliers Winilo Kids.</h1>
+    <p>
+      Connecte-toi pour acceder au tableau de bord, publier les ateliers et suivre les demandes
+      d inscription.
+    </p>
+    <a class="text-link" routerLink="/">Retour au site public</a>
+  </article>
+
+  <form class="login-card" [formGroup]="loginForm" (ngSubmit)="submit()">
+    <h2>Connexion admin</h2>
+
+    <label>
+      <span>Email</span>
+      <input type="email" formControlName="email" placeholder="admin@winilo-kids.fr" />
+    </label>
+
+    <label>
+      <span>Mot de passe</span>
+      <input type="password" formControlName="password" placeholder="Mot de passe admin" />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="feedback feedback-error">{{ errorMessage() }}</p>
+    }
+
+    <button class="button button-primary" type="submit" [disabled]="submitting()">
+      @if (submitting()) {
+        Connexion...
+      } @else {
+        Se connecter
+      }
+    </button>
+  </form>
+</section>

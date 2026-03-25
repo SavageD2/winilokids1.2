@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { RegistrationStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { ParentAccountsService } from '../parent-accounts/parent-accounts.service';
 import { WorkshopsService } from '../workshops/workshops.service';
 import { CreateRegistrationDto } from './dto/create-registration.dto';
 import { ListRegistrationsQueryDto } from './dto/list-registrations-query.dto';
@@ -15,17 +16,25 @@ export class RegistrationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly workshopsService: WorkshopsService,
+    private readonly parentAccountsService: ParentAccountsService,
   ) {}
 
-  async create(createRegistrationDto: CreateRegistrationDto) {
+  async create(createRegistrationDto: CreateRegistrationDto, parentAccountId: number) {
     const workshop = await this.workshopsService.ensurePublishedWorkshopExists(
       createRegistrationDto.workshopId,
     );
+    const parentAccount = await this.parentAccountsService.findById(parentAccountId);
 
     await this.ensureCapacity(workshop.id, workshop.capacity);
 
     return this.prisma.registration.create({
-      data: createRegistrationDto,
+      data: {
+        ...createRegistrationDto,
+        parentName: `${parentAccount.firstName} ${parentAccount.lastName}`.trim(),
+        parentEmail: parentAccount.email,
+        parentPhone: parentAccount.phone,
+        parentAccountId: parentAccount.id,
+      },
       include: {
         workshop: {
           select: {
@@ -57,6 +66,15 @@ export class RegistrationsService {
       },
       orderBy: { createdAt: 'desc' },
       include: {
+        parentAccount: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone: true,
+          },
+        },
         workshop: {
           select: {
             id: true,
@@ -78,6 +96,15 @@ export class RegistrationsService {
       where: { workshopId },
       orderBy: { createdAt: 'desc' },
       include: {
+        parentAccount: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone: true,
+          },
+        },
         workshop: {
           select: {
             id: true,
@@ -99,6 +126,15 @@ export class RegistrationsService {
         status: updateRegistrationStatusDto.status,
       },
       include: {
+        parentAccount: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone: true,
+          },
+        },
         workshop: {
           select: {
             id: true,

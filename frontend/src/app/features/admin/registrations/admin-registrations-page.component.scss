@@ -1,0 +1,184 @@
+.filters-card,
+.panel,
+.accordion-item,
+.registration-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(196, 144, 94, 0.18);
+  border-radius: 1.5rem;
+  box-shadow: 0 1rem 2.5rem rgba(62, 39, 24, 0.07);
+}
+
+.filters-card {
+  padding: 1.5rem;
+}
+
+.filters-heading {
+  align-items: end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.filters-heading p:last-child {
+  color: var(--color-muted);
+  max-width: 34rem;
+}
+
+.eyebrow {
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin: 0 0 0.55rem;
+  text-transform: uppercase;
+}
+
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+.filters-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.5fr) minmax(14rem, 0.6fr);
+  margin-top: 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+label span {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+input,
+select {
+  background: #fffaf2;
+  border: 1px solid rgba(196, 144, 94, 0.25);
+  border-radius: 1rem;
+  color: var(--color-ink);
+  font: inherit;
+  padding: 0.9rem 1rem;
+}
+
+input:focus,
+select:focus {
+  border-color: rgba(200, 103, 65, 0.55);
+  box-shadow: 0 0 0 0.18rem rgba(200, 103, 65, 0.12);
+  outline: none;
+}
+
+.panel {
+  color: var(--color-muted);
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.panel-error {
+  color: #7a2b1c;
+}
+
+.accordion-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.accordion-item {
+  overflow: hidden;
+}
+
+summary {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  list-style: none;
+  padding: 1.25rem 1.5rem;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary p {
+  color: var(--color-muted);
+  margin: 0.35rem 0 0;
+}
+
+.summary-pill,
+.status-chip {
+  background: var(--color-surface-soft);
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+}
+
+.registration-list {
+  display: grid;
+  gap: 1rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.registration-card {
+  padding: 1rem 1.1rem;
+}
+
+.registration-main {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.registration-main p {
+  color: var(--color-muted);
+  line-height: 1.7;
+  margin: 0.3rem 0 0;
+}
+
+.message {
+  background: #fff7ec;
+  border-radius: 1rem;
+  padding: 0.8rem 0.95rem;
+}
+
+.registration-meta {
+  align-items: end;
+  display: grid;
+  gap: 0.45rem;
+  justify-items: end;
+}
+
+.status-editor {
+  margin-top: 1rem;
+}
+
+.empty-row {
+  color: var(--color-muted);
+  margin: 0;
+  padding: 0 1.5rem 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .filters-heading,
+  .registration-main,
+  summary {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-meta {
+    justify-items: start;
+  }
+}

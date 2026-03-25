@@ -7,6 +7,7 @@ import { AdminsModule } from './modules/admins/admins.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ContactsModule } from './modules/contacts/contacts.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { ParentAuthModule } from './modules/parent-auth/parent-auth.module';
 import { RegistrationsModule } from './modules/registrations/registrations.module';
 import { WorkshopsModule } from './modules/workshops/workshops.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -20,6 +21,7 @@ import { PrismaModule } from './prisma/prisma.module';
     PrismaModule,
     AdminsModule,
     AuthModule,
+    ParentAuthModule,
     DashboardModule,
     WorkshopsModule,
     RegistrationsModule,

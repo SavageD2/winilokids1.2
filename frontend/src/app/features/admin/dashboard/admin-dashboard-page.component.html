@@ -1,0 +1,62 @@
+@if (loading()) {
+  <p class="panel">Chargement du tableau de bord...</p>
+} @else if (error()) {
+  <p class="panel panel-error">{{ error() }}</p>
+} @else if (summary(); as data) {
+  <section class="stats-grid">
+    <article class="stat-card">
+      <p>Ateliers</p>
+      <strong>{{ data.workshopsCount }}</strong>
+    </article>
+    <article class="stat-card">
+      <p>Inscriptions</p>
+      <strong>{{ data.registrationsCount }}</strong>
+    </article>
+    <article class="stat-card stat-card-accent">
+      <p>Prochains ateliers</p>
+      <strong>{{ data.upcomingWorkshops.length }}</strong>
+    </article>
+    <article class="stat-card">
+      <p>Messages contact</p>
+      <strong>{{ data.contactsCount }}</strong>
+      <a class="text-link" routerLink="/admin/contacts">Ouvrir la boite de reception</a>
+    </article>
+  </section>
+
+  <section class="section-card">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">A venir</p>
+        <h2>Les prochains ateliers</h2>
+      </div>
+      <a class="text-link" routerLink="/admin/ateliers">Gerer les ateliers</a>
+    </div>
+
+    @if (data.upcomingWorkshops.length === 0) {
+      <p class="panel">Aucun atelier a venir pour le moment.</p>
+    } @else {
+      <div class="upcoming-list">
+        @for (workshop of data.upcomingWorkshops; track workshop.id) {
+          <article class="upcoming-card">
+            <div>
+              <h3>{{ workshop.title }}</h3>
+              <p>
+                {{ workshop.startAt | date: 'EEEE d MMMM':'':'fr' }} ·
+                {{ workshop.startAt | date: 'HH:mm' }}
+              </p>
+            </div>
+            <div class="upcoming-meta">
+              <span>{{ workshop.location }}</span>
+              <span>
+                {{ workshop.registrationsCount }}
+                @if (workshop.capacity !== null) {
+                  / {{ workshop.capacity }}
+                }
+              </span>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+}

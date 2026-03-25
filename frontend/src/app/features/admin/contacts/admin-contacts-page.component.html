@@ -1,0 +1,54 @@
+<section class="filters-card">
+  <div class="filters-heading">
+    <div>
+      <p class="eyebrow">Boite de reception</p>
+      <h2>Messages de contact</h2>
+    </div>
+    <p>
+      Retrouve ici les demandes envoyees depuis le site public, avec recherche rapide par parent,
+      email, telephone ou contenu.
+    </p>
+  </div>
+
+  <label class="search-field">
+    <span>Recherche</span>
+    <input
+      type="search"
+      placeholder="Nom, email, telephone ou extrait du message"
+      [value]="search()"
+      (input)="updateSearch($event)"
+    />
+  </label>
+</section>
+
+@if (loading()) {
+  <p class="panel">Chargement des messages...</p>
+} @else if (error()) {
+  <p class="panel panel-error">{{ error() }}</p>
+} @else if (contacts().length === 0) {
+  <p class="panel">Aucun message recu pour le moment.</p>
+} @else if (filteredContacts().length === 0) {
+  <p class="panel">Aucun message ne correspond a la recherche actuelle.</p>
+} @else {
+  <section class="contacts-list">
+    @for (contact of filteredContacts(); track contact.id) {
+      <article class="contact-card">
+        <div class="contact-head">
+          <div>
+            <h3>{{ contact.name }}</h3>
+            <p>{{ contact.createdAt | date: 'd MMM y, HH:mm':'':'fr' }}</p>
+          </div>
+
+          <div class="contact-actions">
+            <a class="text-link" [href]="'mailto:' + contact.email">{{ contact.email }}</a>
+            @if (contact.phone) {
+              <a class="text-link" [href]="phoneHref(contact.phone)">{{ contact.phone }}</a>
+            }
+          </div>
+        </div>
+
+        <p class="message">{{ contact.message }}</p>
+      </article>
+    }
+  </section>
+}
