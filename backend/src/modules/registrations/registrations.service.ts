@@ -49,6 +49,42 @@ export class RegistrationsService {
     });
   }
 
+  async findByParent(parentAccountId: number) {
+    await this.parentAccountsService.findById(parentAccountId);
+
+    return this.prisma.registration.findMany({
+      where: { parentAccountId },
+      orderBy: { createdAt: 'desc' },
+      include: this.parentRegistrationInclude,
+    });
+  }
+
+  async cancelByParent(id: number, parentAccountId: number) {
+    const registration = await this.prisma.registration.findUnique({
+      where: { id },
+      include: this.parentRegistrationInclude,
+    });
+
+    if (!registration || registration.parentAccountId !== parentAccountId) {
+      throw new NotFoundException('Registration not found');
+    }
+
+    if (
+      registration.status !== RegistrationStatus.PENDING &&
+      registration.status !== RegistrationStatus.CONFIRMED
+    ) {
+      throw new BadRequestException('This registration can no longer be cancelled');
+    }
+
+    return this.prisma.registration.update({
+      where: { id },
+      data: {
+        status: RegistrationStatus.CANCELLED,
+      },
+      include: this.parentRegistrationInclude,
+    });
+  }
+
   async findAll(query: ListRegistrationsQueryDto) {
     const registrations = await this.prisma.registration.findMany({
       where: {
@@ -181,4 +217,16 @@ export class RegistrationsService {
       throw new BadRequestException('No places available for this workshop');
     }
   }
+
+  private readonly parentRegistrationInclude = {
+    workshop: {
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        startAt: true,
+        location: true,
+      },
+    },
+  } as const;
 }

@@ -30,7 +30,8 @@ h1 {
   max-width: 60ch;
 }
 
-.auth-layout {
+.auth-layout,
+.account-layout {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -38,7 +39,10 @@ h1 {
 }
 
 .auth-card,
-.connected-card {
+.connected-card,
+.reservations-card,
+.panel,
+.reservation-item {
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(196, 144, 94, 0.18);
   border-radius: 1.5rem;
@@ -46,9 +50,9 @@ h1 {
   padding: 1.5rem;
 }
 
-.connected-card {
-  margin-top: 2rem;
-  max-width: 40rem;
+.connected-card,
+.reservations-card {
+  height: fit-content;
 }
 
 .form-grid {
@@ -98,6 +102,15 @@ input:focus {
   color: #8a3c24;
 }
 
+.panel {
+  color: var(--color-muted);
+  padding: 1rem 1.25rem;
+}
+
+.panel-error {
+  color: #7a2b1c;
+}
+
 .button {
   margin-top: 1.25rem;
 }
@@ -109,9 +122,56 @@ input:focus {
   margin-top: 1.25rem;
 }
 
+.reservations-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.reservation-item {
+  padding: 1.1rem 1.15rem;
+}
+
+.reservation-head {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.reservation-head p,
+.reservation-item > p {
+  color: var(--color-muted);
+  margin: 0.35rem 0 0;
+}
+
+.status-pill {
+  background: var(--color-surface-soft);
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  white-space: nowrap;
+}
+
+.reservation-message {
+  background: #fff7ec;
+  border-radius: 1rem;
+  line-height: 1.7;
+  margin: 1rem 0 0;
+  padding: 0.95rem 1rem;
+}
+
+.reservation-actions {
+  margin-top: 1rem;
+}
+
 @media (max-width: 960px) {
   .auth-layout,
+  .account-layout,
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .reservation-head {
+    flex-direction: column;
   }
 }

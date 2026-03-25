@@ -1,19 +1,23 @@
+import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { ParentAuthService } from '../../../core/services/parent-auth.service';
+import { ParentRegistrationsService } from '../../../core/services/parent-registrations.service';
+import { RegistrationRecord, RegistrationStatus } from '../../../shared/models/registration.model';
 
 @Component({
   selector: 'app-account-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DatePipe],
   templateUrl: './account-page.component.html',
   styleUrl: './account-page.component.scss',
 })
 export class AccountPageComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly parentAuthService = inject(ParentAuthService);
+  private readonly parentRegistrationsService = inject(ParentRegistrationsService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
@@ -22,8 +26,12 @@ export class AccountPageComponent {
   protected readonly isAuthenticated = computed(() => this.parentAuthService.isAuthenticated());
   protected readonly registerSubmitting = signal(false);
   protected readonly loginSubmitting = signal(false);
+  protected readonly loadingReservations = signal(false);
+  protected readonly cancellingReservationId = signal<number | null>(null);
+  protected readonly reservationsErrorMessage = signal<string | null>(null);
   protected readonly registerErrorMessage = signal<string | null>(null);
   protected readonly loginErrorMessage = signal<string | null>(null);
+  protected readonly reservations = signal<RegistrationRecord[]>([]);
 
   protected readonly registerForm = this.formBuilder.nonNullable.group({
     firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -60,6 +68,7 @@ export class AccountPageComponent {
       )
       .subscribe({
         next: () => {
+          this.loadReservations();
           void this.redirectAfterAuth();
         },
         error: () => {
@@ -89,6 +98,7 @@ export class AccountPageComponent {
       )
       .subscribe({
         next: () => {
+          this.loadReservations();
           void this.redirectAfterAuth();
         },
         error: () => {
@@ -101,6 +111,8 @@ export class AccountPageComponent {
 
   protected logout() {
     this.parentAuthService.logout();
+    this.reservations.set([]);
+    this.reservationsErrorMessage.set(null);
     this.registerErrorMessage.set(null);
     this.loginErrorMessage.set(null);
   }
@@ -109,8 +121,95 @@ export class AccountPageComponent {
     void this.redirectAfterAuth();
   }
 
+  protected statusLabel(status: RegistrationStatus): string {
+    switch (status) {
+      case 'PENDING':
+        return 'En attente';
+      case 'CONFIRMED':
+        return 'Confirmee';
+      case 'CANCELLED':
+        return 'Annulee';
+      case 'ATTENDED':
+        return 'Presente';
+    }
+  }
+
+  protected canCancel(reservation: RegistrationRecord) {
+    return reservation.status === 'PENDING' || reservation.status === 'CONFIRMED';
+  }
+
+  protected cancelReservation(reservation: RegistrationRecord) {
+    if (!this.canCancel(reservation)) {
+      return;
+    }
+
+    const confirmed = confirm(
+      `Annuler la reservation pour "${reservation.workshop.title}" au nom de ${reservation.childFirstName} ?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.cancellingReservationId.set(reservation.id);
+    this.reservationsErrorMessage.set(null);
+
+    this.parentRegistrationsService
+      .cancel(reservation.id)
+      .pipe(
+        finalize(() => {
+          this.cancellingReservationId.set(null);
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (updatedReservation) => {
+          this.reservations.update((reservations) =>
+            reservations.map((item) =>
+              item.id === updatedReservation.id ? updatedReservation : item,
+            ),
+          );
+        },
+        error: () => {
+          this.reservationsErrorMessage.set(
+            'Impossible d annuler cette reservation pour le moment.',
+          );
+        },
+      });
+  }
+
+  constructor() {
+    if (this.parentAuthService.isAuthenticated()) {
+      this.loadReservations();
+    }
+  }
+
   private redirectAfterAuth() {
-    const redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl') ?? '/ateliers';
+    const redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl') ?? '/inscription';
     return this.router.navigateByUrl(redirectUrl);
+  }
+
+  private loadReservations() {
+    this.loadingReservations.set(true);
+    this.reservationsErrorMessage.set(null);
+
+    this.parentRegistrationsService
+      .getMine()
+      .pipe(
+        finalize(() => {
+          this.loadingReservations.set(false);
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (reservations) => {
+          this.reservations.set(reservations);
+        },
+        error: () => {
+          this.reservationsErrorMessage.set(
+            'Impossible de charger tes reservations pour le moment.',
+          );
+        },
+      });
   }
 }

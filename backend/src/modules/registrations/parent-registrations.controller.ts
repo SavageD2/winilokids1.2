@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { ParentJwtAuthGuard } from '../auth/parent-jwt-auth.guard';
@@ -19,6 +19,19 @@ type AuthenticatedParentRequest = Request & {
 @Controller('parent/registrations')
 export class ParentRegistrationsController {
   constructor(private readonly registrationsService: RegistrationsService) {}
+
+  @Get()
+  findMine(@Req() req: AuthenticatedParentRequest) {
+    return this.registrationsService.findByParent(req.user.parentAccountId);
+  }
+
+  @Patch(':id/cancel')
+  cancel(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() req: AuthenticatedParentRequest,
+  ) {
+    return this.registrationsService.cancelByParent(id, req.user.parentAccountId);
+  }
 
   @Post()
   create(

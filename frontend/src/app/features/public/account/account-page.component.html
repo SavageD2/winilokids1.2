@@ -8,22 +8,85 @@
 </section>
 
 @if (isAuthenticated() && parent(); as currentParent) {
-  <section class="connected-card">
-    <p class="eyebrow">Session active</p>
-    <h2>{{ currentParent.firstName }} {{ currentParent.lastName }}</h2>
-    <p>{{ currentParent.email }}</p>
-    @if (currentParent.phone) {
-      <p>{{ currentParent.phone }}</p>
-    }
+  <section class="account-layout">
+    <article class="connected-card">
+      <p class="eyebrow">Session active</p>
+      <h2>{{ currentParent.firstName }} {{ currentParent.lastName }}</h2>
+      <p>{{ currentParent.email }}</p>
+      @if (currentParent.phone) {
+        <p>{{ currentParent.phone }}</p>
+      }
 
-    <div class="connected-actions">
-      <button class="button button-primary" type="button" (click)="continuePath()">
-        Continuer
-      </button>
-      <button class="button button-secondary" type="button" (click)="logout()">
-        Se deconnecter
-      </button>
-    </div>
+      <div class="connected-actions">
+        <button class="button button-primary" type="button" (click)="continuePath()">
+          Continuer
+        </button>
+        <button class="button button-secondary" type="button" (click)="logout()">
+          Se deconnecter
+        </button>
+      </div>
+    </article>
+
+    <article class="reservations-card">
+      <div class="reservations-heading">
+        <div>
+          <p class="eyebrow">Mes reservations</p>
+          <h2>Suivi des ateliers</h2>
+        </div>
+      </div>
+
+      @if (loadingReservations()) {
+        <p class="panel">Chargement des reservations...</p>
+      } @else if (reservationsErrorMessage()) {
+        <p class="panel panel-error">{{ reservationsErrorMessage() }}</p>
+      } @else if (reservations().length === 0) {
+        <p class="panel">Aucune reservation enregistree pour le moment.</p>
+      } @else {
+        <div class="reservations-list">
+          @for (reservation of reservations(); track reservation.id) {
+            <article class="reservation-item">
+              <div class="reservation-head">
+                <div>
+                  <h3>{{ reservation.workshop.title }}</h3>
+                  <p>
+                    {{ reservation.workshop.startAt | date: 'EEEE d MMMM':'':'fr' }} ·
+                    {{ reservation.workshop.startAt | date: 'HH:mm' }} ·
+                    {{ reservation.workshop.location }}
+                  </p>
+                </div>
+                <span class="status-pill">{{ statusLabel(reservation.status) }}</span>
+              </div>
+
+              <p>
+                Enfant: <strong>{{ reservation.childFirstName }}</strong> ·
+                {{ reservation.childAge }} ans
+              </p>
+
+              @if (reservation.message) {
+                <p class="reservation-message">{{ reservation.message }}</p>
+              }
+
+              @if (canCancel(reservation)) {
+                <div class="reservation-actions">
+                  <button
+                    class="button button-secondary"
+                    type="button"
+                    [disabled]="cancellingReservationId() === reservation.id"
+                    (click)="cancelReservation(reservation)"
+                  >
+                    @if (cancellingReservationId() === reservation.id) {
+                      Annulation...
+                    } @else {
+                      Annuler la reservation
+                    }
+                  </button>
+                </div>
+              }
+            </article>
+          }
+        </div>
+      }
+    </article>
   </section>
 } @else {
   <section class="auth-layout">
