@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Workshop } from '@prisma/client';
+import { RegistrationStatus, Workshop } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateWorkshopDto } from './dto/create-workshop.dto';
 import { UpdateWorkshopDto } from './dto/update-workshop.dto';
@@ -13,7 +13,16 @@ type WorkshopWithRegistrationCount = Workshop & {
   _count: {
     registrations: number;
   };
+  registrations: Array<{
+    status: RegistrationStatus;
+  }>;
 };
+
+const ACTIVE_REGISTRATION_STATUSES: RegistrationStatus[] = [
+  RegistrationStatus.PENDING,
+  RegistrationStatus.CONFIRMED,
+  RegistrationStatus.ATTENDED,
+];
 
 @Injectable()
 export class WorkshopsService {
@@ -27,6 +36,11 @@ export class WorkshopsService {
         _count: {
           select: {
             registrations: true,
+          },
+        },
+        registrations: {
+          select: {
+            status: true,
           },
         },
       },
@@ -45,6 +59,11 @@ export class WorkshopsService {
         _count: {
           select: {
             registrations: true,
+          },
+        },
+        registrations: {
+          select: {
+            status: true,
           },
         },
       },
@@ -66,6 +85,11 @@ export class WorkshopsService {
             registrations: true,
           },
         },
+        registrations: {
+          select: {
+            status: true,
+          },
+        },
       },
     });
 
@@ -79,6 +103,11 @@ export class WorkshopsService {
         _count: {
           select: {
             registrations: true,
+          },
+        },
+        registrations: {
+          select: {
+            status: true,
           },
         },
       },
@@ -106,6 +135,11 @@ export class WorkshopsService {
             registrations: true,
           },
         },
+        registrations: {
+          select: {
+            status: true,
+          },
+        },
       },
     });
 
@@ -127,6 +161,11 @@ export class WorkshopsService {
         _count: {
           select: {
             registrations: true,
+          },
+        },
+        registrations: {
+          select: {
+            status: true,
           },
         },
       },
@@ -201,12 +240,18 @@ export class WorkshopsService {
   }
 
   private serializeWorkshop(workshop: WorkshopWithRegistrationCount) {
-    const registrationsCount = workshop._count.registrations;
+    const { _count, registrations, ...workshopData } = workshop;
+    const registrationsCount = _count.registrations;
+    const activeRegistrationsCount = registrations.filter((registration) =>
+      ACTIVE_REGISTRATION_STATUSES.includes(registration.status),
+    ).length;
     const availablePlaces =
-      workshop.capacity === null ? null : Math.max(workshop.capacity - registrationsCount, 0);
+      workshopData.capacity === null
+        ? null
+        : Math.max(workshopData.capacity - activeRegistrationsCount, 0);
 
     return {
-      ...workshop,
+      ...workshopData,
       registrationsCount,
       availablePlaces,
     };

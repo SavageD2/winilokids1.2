@@ -2,9 +2,9 @@
   <div class="filters-heading">
     <div>
       <p class="eyebrow">Lecture rapide</p>
-      <h2>Inscriptions par atelier</h2>
+      <h2>Inscriptions</h2>
     </div>
-    <p>Utilise la recherche et le filtre de statut pour garder un back-office lisible.</p>
+    <p>Recherche, filtre et pagination sont maintenant geres cote serveur pour garder l'admin fluide.</p>
   </div>
 
   <div class="filters-grid">
@@ -22,19 +22,36 @@
         }
       </select>
     </label>
+
+    <label>
+      <span>Atelier</span>
+      <select formControlName="workshopId">
+        <option value="ALL">Tous les ateliers</option>
+        @for (workshop of workshops(); track workshop.id) {
+          <option [value]="workshop.id">{{ workshop.title }}</option>
+        }
+      </select>
+    </label>
   </div>
+
+  <p class="results-summary">
+    {{ total() }} inscription(s) trouvee(s)
+    @if (totalPages() > 0) {
+      <span>· page {{ page() }} / {{ totalPages() }}</span>
+    }
+  </p>
 </section>
 
 @if (loading()) {
   <p class="panel">Chargement des inscriptions...</p>
 } @else if (error()) {
   <p class="panel panel-error">{{ error() }}</p>
-} @else if (groups().length === 0) {
-  <p class="panel">Aucun atelier disponible pour afficher des inscriptions.</p>
+} @else if (registrations().length === 0) {
+  <p class="panel">Aucune inscription ne correspond aux filtres actuels.</p>
 } @else {
   <section class="accordion-list">
     @for (group of groups(); track group.workshop.id) {
-      <details class="accordion-item" [open]="group.workshop.isPublished || group.registrations.length > 0">
+      <details class="accordion-item" open>
         <summary>
           <div>
             <h3>{{ group.workshop.title }}</h3>
@@ -43,53 +60,61 @@
               {{ group.workshop.startAt | date: 'HH:mm' }} · {{ group.workshop.location }}
             </p>
           </div>
-          <span class="summary-pill">{{ totalVisible(group) }} inscription(s)</span>
+          <span class="summary-pill">{{ group.registrations.length }} inscription(s)</span>
         </summary>
 
-        @if (visibleRegistrations(group).length === 0) {
-          <p class="empty-row">Aucune inscription ne correspond aux filtres actuels pour cet atelier.</p>
-        } @else {
-          <div class="registration-list">
-            @for (registration of visibleRegistrations(group); track registration.id) {
-              <article class="registration-card">
-                <div class="registration-main">
-                  <div>
-                    <h4>{{ registration.parentName }}</h4>
-                    <p>{{ registration.parentEmail }}</p>
-                    <p>
-                      Enfant: {{ registration.childFirstName }} · {{ registration.childAge }} ans
-                    </p>
-                    @if (registration.parentPhone) {
-                      <p>Telephone: {{ registration.parentPhone }}</p>
-                    }
-                    @if (registration.message) {
-                      <p class="message">{{ registration.message }}</p>
-                    }
-                  </div>
-
-                  <div class="registration-meta">
-                    <span class="status-chip">{{ statusLabel(registration.status) }}</span>
-                    <small>{{ registration.createdAt | date: 'd MMM y, HH:mm':'':'fr' }}</small>
-                  </div>
+        <div class="registration-list">
+          @for (registration of group.registrations; track registration.id) {
+            <article class="registration-card">
+              <div class="registration-main">
+                <div>
+                  <h4>{{ registration.parentName }}</h4>
+                  <p>{{ registration.parentEmail }}</p>
+                  <p>
+                    Enfant: {{ registration.childFirstName }} · {{ registration.childAge }} ans
+                  </p>
+                  @if (registration.parentPhone) {
+                    <p>Telephone: {{ registration.parentPhone }}</p>
+                  }
+                  @if (registration.message) {
+                    <p class="message">{{ registration.message }}</p>
+                  }
                 </div>
 
-                <label class="status-editor">
-                  <span>Changer le statut</span>
-                  <select
-                    [value]="registration.status"
-                    [disabled]="updatingRegistrationId() === registration.id"
-                    (change)="updateStatus(registration, $any($event.target).value)"
-                  >
-                    @for (status of statuses; track status) {
-                      <option [value]="status">{{ statusLabel(status) }}</option>
-                    }
-                  </select>
-                </label>
-              </article>
-            }
-          </div>
-        }
+                <div class="registration-meta">
+                  <span class="status-chip">{{ statusLabel(registration.status) }}</span>
+                  <small>{{ registration.createdAt | date: 'd MMM y, HH:mm':'':'fr' }}</small>
+                </div>
+              </div>
+
+              <label class="status-editor">
+                <span>Changer le statut</span>
+                <select
+                  [value]="registration.status"
+                  [disabled]="updatingRegistrationId() === registration.id"
+                  (change)="updateStatus(registration, $any($event.target).value)"
+                >
+                  @for (status of statuses; track status) {
+                    <option [value]="status">{{ statusLabel(status) }}</option>
+                  }
+                </select>
+              </label>
+            </article>
+          }
+        </div>
       </details>
     }
   </section>
+
+  @if (totalPages() > 1) {
+    <nav class="pagination-card" aria-label="Pagination inscriptions">
+      <button type="button" [disabled]="!hasPreviousPage()" (click)="changePage(page() - 1)">
+        Page precedente
+      </button>
+      <span>Page {{ page() }} sur {{ totalPages() }}</span>
+      <button type="button" [disabled]="!hasNextPage()" (click)="changePage(page() + 1)">
+        Page suivante
+      </button>
+    </nav>
+  }
 }

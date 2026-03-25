@@ -95,7 +95,13 @@ cd backend
 npm run seed:demo
 ```
 
-Ce seed publie 3 ateliers pour pouvoir tester le parcours parent sans passer par l'admin.
+Ce seed charge un jeu de donnees de demonstration complet :
+
+- 3 ateliers publies visibles cote public
+- 1 atelier en brouillon pour le back-office admin
+- 3 comptes parents de test
+- 4 reservations avec plusieurs statuts
+- 3 messages de contact
 
 ### 5. Lancer le backend
 
@@ -143,6 +149,16 @@ Le parent peut :
 - voir ses reservations
 - annuler une reservation selon son statut
 - modifier son profil
+
+Comptes parents de demonstration apres `npm run seed:demo` :
+
+- `camille.martin@example.com`
+- `nora.bernard@example.com`
+- `julien.robert@example.com`
+
+Mot de passe commun :
+
+- `DemoParent123!`
 
 ## Parcours de verification recommande
 
@@ -199,4 +215,5 @@ Le projet est fonctionnel en local avec :
 
 - l'admin n'apparait dans la navigation publique que si une session admin est active
 - les ateliers de demonstration proviennent du seed `seed:demo`
+- relancer `npm run seed:demo` reinitialise uniquement les reservations et messages lies aux comptes de demonstration, pour garder un environnement de test propre
 - la documentation d'avancement complementaire est dans [POINT_AVANCEMENT_WINIKO_KIDS.md](/home/Savage/git/win1.2/POINT_AVANCEMENT_WINIKO_KIDS.md)

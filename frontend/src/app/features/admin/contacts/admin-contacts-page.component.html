@@ -1,4 +1,4 @@
-<section class="filters-card">
+<section class="filters-card" [formGroup]="filtersForm">
   <div class="filters-heading">
     <div>
       <p class="eyebrow">Boite de reception</p>
@@ -15,10 +15,16 @@
     <input
       type="search"
       placeholder="Nom, email, telephone ou extrait du message"
-      [value]="search()"
-      (input)="updateSearch($event)"
+      formControlName="search"
     />
   </label>
+
+  <p class="results-summary">
+    {{ total() }} message(s) trouve(s)
+    @if (totalPages() > 0) {
+      <span>· page {{ page() }} / {{ totalPages() }}</span>
+    }
+  </p>
 </section>
 
 @if (loading()) {
@@ -26,12 +32,10 @@
 } @else if (error()) {
   <p class="panel panel-error">{{ error() }}</p>
 } @else if (contacts().length === 0) {
-  <p class="panel">Aucun message recu pour le moment.</p>
-} @else if (filteredContacts().length === 0) {
   <p class="panel">Aucun message ne correspond a la recherche actuelle.</p>
 } @else {
   <section class="contacts-list">
-    @for (contact of filteredContacts(); track contact.id) {
+    @for (contact of contacts(); track contact.id) {
       <article class="contact-card">
         <div class="contact-head">
           <div>
@@ -51,4 +55,16 @@
       </article>
     }
   </section>
+
+  @if (totalPages() > 1) {
+    <nav class="pagination-card" aria-label="Pagination contacts">
+      <button type="button" [disabled]="!hasPreviousPage()" (click)="changePage(page() - 1)">
+        Page precedente
+      </button>
+      <span>Page {{ page() }} sur {{ totalPages() }}</span>
+      <button type="button" [disabled]="!hasNextPage()" (click)="changePage(page() + 1)">
+        Page suivante
+      </button>
+    </nav>
+  }
 }

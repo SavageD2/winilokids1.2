@@ -1,21 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { RegistrationStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
 
-export class ListRegistrationsQueryDto {
-  @ApiPropertyOptional({ example: 1 })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  workshopId?: number;
-
-  @ApiPropertyOptional({ enum: RegistrationStatus })
-  @IsOptional()
-  @IsEnum(RegistrationStatus)
-  status?: RegistrationStatus;
-
+export class ListContactsQueryDto {
   @ApiPropertyOptional({ example: 'camille' })
   @IsOptional()
   @IsString()

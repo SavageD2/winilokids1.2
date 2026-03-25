@@ -1,5 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { RegistrationStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+
+const ACTIVE_REGISTRATION_STATUSES: RegistrationStatus[] = [
+  RegistrationStatus.PENDING,
+  RegistrationStatus.CONFIRMED,
+  RegistrationStatus.ATTENDED,
+];
 
 @Injectable()
 export class DashboardService {
@@ -8,9 +15,44 @@ export class DashboardService {
   async getSummary() {
     const now = new Date();
 
-    const [workshopsCount, registrationsCount, contactsCount, upcomingWorkshops] = await Promise.all([
+    const [
+      workshopsCount,
+      publishedWorkshopsCount,
+      registrationsCount,
+      pendingRegistrationsCount,
+      confirmedRegistrationsCount,
+      cancelledRegistrationsCount,
+      attendedRegistrationsCount,
+      contactsCount,
+      upcomingWorkshops,
+    ] = await Promise.all([
       this.prisma.workshop.count(),
+      this.prisma.workshop.count({
+        where: {
+          isPublished: true,
+        },
+      }),
       this.prisma.registration.count(),
+      this.prisma.registration.count({
+        where: {
+          status: RegistrationStatus.PENDING,
+        },
+      }),
+      this.prisma.registration.count({
+        where: {
+          status: RegistrationStatus.CONFIRMED,
+        },
+      }),
+      this.prisma.registration.count({
+        where: {
+          status: RegistrationStatus.CANCELLED,
+        },
+      }),
+      this.prisma.registration.count({
+        where: {
+          status: RegistrationStatus.ATTENDED,
+        },
+      }),
       this.prisma.contact.count(),
       this.prisma.workshop.findMany({
         where: {
@@ -21,9 +63,9 @@ export class DashboardService {
         orderBy: { startAt: 'asc' },
         take: 5,
         include: {
-          _count: {
+          registrations: {
             select: {
-              registrations: true,
+              status: true,
             },
           },
         },
@@ -32,7 +74,13 @@ export class DashboardService {
 
     return {
       workshopsCount,
+      publishedWorkshopsCount,
+      draftWorkshopsCount: workshopsCount - publishedWorkshopsCount,
       registrationsCount,
+      pendingRegistrationsCount,
+      confirmedRegistrationsCount,
+      cancelledRegistrationsCount,
+      attendedRegistrationsCount,
       contactsCount,
       upcomingWorkshops: upcomingWorkshops.map((workshop) => ({
         id: workshop.id,
@@ -40,8 +88,20 @@ export class DashboardService {
         slug: workshop.slug,
         startAt: workshop.startAt,
         location: workshop.location,
-        registrationsCount: workshop._count.registrations,
+        registrationsCount: workshop.registrations.filter((registration) =>
+          ACTIVE_REGISTRATION_STATUSES.includes(registration.status),
+        ).length,
         capacity: workshop.capacity,
+        availablePlaces:
+          workshop.capacity === null
+            ? null
+            : Math.max(
+                workshop.capacity -
+                  workshop.registrations.filter((registration) =>
+                    ACTIVE_REGISTRATION_STATUSES.includes(registration.status),
+                  ).length,
+                0,
+              ),
       })),
     };
   }

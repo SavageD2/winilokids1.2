@@ -1,8 +1,10 @@
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, RegistrationStatus } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 import { createPrismaClientOptions } from '../src/prisma/prisma-client-options';
 
 const prisma = new PrismaClient(createPrismaClientOptions());
+const DEMO_PARENT_PASSWORD = 'DemoParent123!';
 
 function atLocalHour(date: Date, hour: number, minutes = 0) {
   const next = new Date(date);
@@ -65,7 +67,69 @@ async function main() {
       capacity: 10,
       isPublished: true,
     },
+    {
+      title: 'Laboratoire nature et petites experiences',
+      slug: 'laboratoire-nature-petites-experiences',
+      shortDescription:
+        'Une session brouillon pour preparer les prochaines ouvertures de reservations.',
+      description:
+        'Cet atelier melange petites observations, manipulations simples et temps d echange autour de la nature. Il reste volontairement en brouillon pour permettre la verification du back-office admin.',
+      startAt: atLocalHour(addDays(today, 28), 15, 0),
+      endAt: atLocalHour(addDays(today, 28), 16, 30),
+      location: 'Maison de quartier, Croix',
+      recommendedAgeMin: 7,
+      recommendedAgeMax: 10,
+      capacity: 10,
+      isPublished: false,
+    },
   ];
+
+  const demoParents = [
+    {
+      email: 'camille.martin@example.com',
+      firstName: 'Camille',
+      lastName: 'Martin',
+      phone: '0611223344',
+    },
+    {
+      email: 'nora.bernard@example.com',
+      firstName: 'Nora',
+      lastName: 'Bernard',
+      phone: '0677889900',
+    },
+    {
+      email: 'julien.robert@example.com',
+      firstName: 'Julien',
+      lastName: 'Robert',
+      phone: '0622334455',
+    },
+  ];
+
+  const demoContacts = [
+    {
+      name: 'Camille Martin',
+      email: 'camille.martin@example.com',
+      phone: '0611223344',
+      message:
+        'Bonjour, je voudrais savoir si vous proposez un accompagnement pour les enfants un peu timides lors du premier atelier.',
+    },
+    {
+      name: 'Sophie Leroy',
+      email: 'sophie.leroy@example.com',
+      phone: '0699001122',
+      message:
+        'Bonjour, avez-vous deja les dates prevues pour les ateliers des vacances de printemps et faut-il prevoir une tenue particuliere ?',
+    },
+    {
+      name: 'Julien Robert',
+      email: 'julien.robert@example.com',
+      phone: '0622334455',
+      message:
+        'Bonjour, mon fils a une sensibilite au bruit. Pouvez-vous me dire combien d enfants sont accueillis en moyenne sur les ateliers musique ?',
+    },
+  ];
+
+  const demoPasswordHash = await bcrypt.hash(DEMO_PARENT_PASSWORD, 10);
 
   for (const workshop of workshops) {
     await prisma.workshop.upsert({
@@ -75,7 +139,126 @@ async function main() {
     });
   }
 
+  for (const parent of demoParents) {
+    await prisma.parentAccount.upsert({
+      where: { email: parent.email },
+      update: {
+        firstName: parent.firstName,
+        lastName: parent.lastName,
+        phone: parent.phone,
+        passwordHash: demoPasswordHash,
+      },
+      create: {
+        ...parent,
+        passwordHash: demoPasswordHash,
+      },
+    });
+  }
+
+  const workshopRecords = await prisma.workshop.findMany({
+    where: {
+      slug: {
+        in: workshops.map((workshop) => workshop.slug),
+      },
+    },
+  });
+  const parents = await prisma.parentAccount.findMany({
+    where: {
+      email: {
+        in: demoParents.map((parent) => parent.email),
+      },
+    },
+  });
+
+  const workshopBySlug = new Map(workshopRecords.map((workshop) => [workshop.slug, workshop]));
+  const parentByEmail = new Map(parents.map((parent) => [parent.email, parent]));
+
+  await prisma.registration.deleteMany({
+    where: {
+      parentAccountId: {
+        in: parents.map((parent) => parent.id),
+      },
+    },
+  });
+
+  await prisma.contact.deleteMany({
+    where: {
+      email: {
+        in: demoContacts.map((contact) => contact.email),
+      },
+    },
+  });
+
+  const registrations = [
+    {
+      parentEmail: 'camille.martin@example.com',
+      workshopSlug: 'atelier-peinture-sensorielle',
+      childFirstName: 'Lina',
+      childAge: 5,
+      message:
+        'Lina adore les activites manuelles et sera ravie de participer a un petit groupe.',
+      status: RegistrationStatus.CONFIRMED,
+    },
+    {
+      parentEmail: 'camille.martin@example.com',
+      workshopSlug: 'initiation-musique-et-rythme',
+      childFirstName: 'Lina',
+      childAge: 5,
+      message: 'Premiere decouverte musicale pour elle, nous sommes curieux du format.',
+      status: RegistrationStatus.PENDING,
+    },
+    {
+      parentEmail: 'nora.bernard@example.com',
+      workshopSlug: 'parcours-motricite-jeux-cooperatifs',
+      childFirstName: 'Yanis',
+      childAge: 7,
+      message: 'Yanis aime beaucoup les jeux d equipe et les parcours moteurs.',
+      status: RegistrationStatus.ATTENDED,
+    },
+    {
+      parentEmail: 'julien.robert@example.com',
+      workshopSlug: 'atelier-peinture-sensorielle',
+      childFirstName: 'Milo',
+      childAge: 6,
+      message: 'Reservation annulee apres un changement de planning familial.',
+      status: RegistrationStatus.CANCELLED,
+    },
+  ];
+
+  for (const registration of registrations) {
+    const parent = parentByEmail.get(registration.parentEmail);
+    const workshop = workshopBySlug.get(registration.workshopSlug);
+
+    if (!parent || !workshop) {
+      throw new Error(
+        `Missing demo relation for ${registration.parentEmail} / ${registration.workshopSlug}`,
+      );
+    }
+
+    await prisma.registration.create({
+      data: {
+        parentName: `${parent.firstName} ${parent.lastName}`.trim(),
+        parentEmail: parent.email,
+        parentPhone: parent.phone,
+        parentAccountId: parent.id,
+        workshopId: workshop.id,
+        childFirstName: registration.childFirstName,
+        childAge: registration.childAge,
+        message: registration.message,
+        status: registration.status,
+      },
+    });
+  }
+
+  await prisma.contact.createMany({
+    data: demoContacts,
+  });
+
   console.log(`Demo workshops ready: ${workshops.length}`);
+  console.log(`Demo parent accounts ready: ${demoParents.length}`);
+  console.log(`Demo registrations ready: ${registrations.length}`);
+  console.log(`Demo contacts ready: ${demoContacts.length}`);
+  console.log(`Demo parent password: ${DEMO_PARENT_PASSWORD}`);
 }
 
 main()

@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ContactsService } from './contacts.service';
+import { ListContactsQueryDto } from './dto/list-contacts-query.dto';
 
 @ApiTags('Admin Contacts')
 @ApiBearerAuth()
@@ -11,7 +12,7 @@ export class AdminContactsController {
   constructor(private readonly contactsService: ContactsService) {}
 
   @Get()
-  findAll() {
-    return this.contactsService.findAll();
+  findAll(@Query() query: ListContactsQueryDto) {
+    return this.contactsService.findAll(query);
   }
 }

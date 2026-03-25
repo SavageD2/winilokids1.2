@@ -34,3 +34,11 @@ export interface RegistrationRecord extends CreateRegistrationPayload {
 export interface UpdateRegistrationStatusPayload {
   status: RegistrationStatus;
 }
+
+export interface AdminRegistrationsQuery {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: RegistrationStatus;
+  workshopId?: number;
+}

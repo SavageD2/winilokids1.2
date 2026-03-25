@@ -78,9 +78,10 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 
 ### Donnees et infra
 
-- schema Prisma avec `Admin`, `Workshop`, `Registration`, `Contact`
+- schema Prisma avec `Admin`, `ParentAccount`, `Workshop`, `Registration`, `Contact`
 - migration initiale presente
 - seed admin present
+- seed de demonstration enrichi present
 - `docker-compose.yml` pour Postgres local
 - `.env` backend local deja configure
 
@@ -108,16 +109,13 @@ Je n'ai pas pu produire de capture d'ecran graphique directement depuis ce termi
 
 ## Points d'attention
 
-- le `README.md` du projet n'est pas encore documente
 - les tests frontend sont encore tres legers
-- sans donnees ateliers publiees, certaines pages publiques afficheront surtout des etats vides
 - la gestion admin des contacts est en lecture seule pour le moment
-- il manque encore un vrai jeu de donnees de demo pour juger le parcours complet et le rendu avec contenu reel
+- il reste a valider le rendu plus finement avec davantage de cas de contenu si l on vise une preproduction
 
 ## Prochaines suites logiques
 
-1. Ajouter un seed de donnees de demo pour ateliers, inscriptions et contacts.
-2. Renforcer les tests frontend et ajouter des tests E2E.
-3. Documenter le projet dans un vrai README de lancement.
-4. Completer l'admin avec des actions supplementaires sur les messages de contact si besoin.
-5. Preparer la configuration de deploiement et les variables d'environnement par environnement.
+1. Renforcer les tests frontend et ajouter des tests E2E.
+2. Completer l'admin avec des actions supplementaires sur les messages de contact si besoin.
+3. Preparer la configuration de deploiement et les variables d'environnement par environnement.
+4. Ajouter des donnees de demonstration encore plus riches si besoin pour les recettes produit.

@@ -43,7 +43,7 @@ h4 {
 .filters-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: minmax(0, 1.5fr) minmax(14rem, 0.6fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(14rem, 0.6fr) minmax(14rem, 0.8fr);
   margin-top: 1rem;
 }
 
@@ -88,6 +88,11 @@ select:focus {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
+}
+
+.results-summary {
+  color: var(--color-muted);
+  margin: 1rem 0 0;
 }
 
 .accordion-item {
@@ -166,10 +171,35 @@ summary p {
   padding: 0 1.5rem 1.5rem;
 }
 
+.pagination-card {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pagination-card button {
+  background: linear-gradient(180deg, #fff5d7 0%, #ffe9b1 100%);
+  border: 1px solid rgba(196, 144, 94, 0.2);
+  border-radius: 999px;
+  color: var(--color-accent-dark);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+}
+
+.pagination-card button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 @media (max-width: 900px) {
   .filters-heading,
   .registration-main,
-  summary {
+  summary,
+  .pagination-card {
     align-items: start;
     flex-direction: column;
   }

@@ -86,43 +86,59 @@ export class RegistrationsService {
   }
 
   async findAll(query: ListRegistrationsQueryDto) {
-    const registrations = await this.prisma.registration.findMany({
-      where: {
-        workshopId: query.workshopId,
-        status: query.status,
-        ...(query.search
-          ? {
-              OR: [
-                { parentName: { contains: query.search, mode: 'insensitive' } },
-                { parentEmail: { contains: query.search, mode: 'insensitive' } },
-                { childFirstName: { contains: query.search, mode: 'insensitive' } },
-              ],
-            }
-          : {}),
-      },
-      orderBy: { createdAt: 'desc' },
-      include: {
-        parentAccount: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            phone: true,
-          },
-        },
-        workshop: {
-          select: {
-            id: true,
-            title: true,
-            slug: true,
-            startAt: true,
-          },
-        },
-      },
-    });
+    const page = query.page ?? 1;
+    const pageSize = query.pageSize ?? 10;
+    const where = {
+      workshopId: query.workshopId,
+      status: query.status,
+      ...(query.search
+        ? {
+            OR: [
+              { parentName: { contains: query.search, mode: 'insensitive' as const } },
+              { parentEmail: { contains: query.search, mode: 'insensitive' as const } },
+              { childFirstName: { contains: query.search, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    };
 
-    return registrations;
+    const [items, total] = await Promise.all([
+      this.prisma.registration.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        include: {
+          parentAccount: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              phone: true,
+            },
+          },
+          workshop: {
+            select: {
+              id: true,
+              title: true,
+              slug: true,
+              startAt: true,
+              location: true,
+            },
+          },
+        },
+      }),
+      this.prisma.registration.count({ where }),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    };
   }
 
   async findByWorkshop(workshopId: number) {

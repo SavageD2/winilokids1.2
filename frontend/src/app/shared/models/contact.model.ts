@@ -9,3 +9,9 @@ export interface ContactRecord extends ContactMessage {
   id: number;
   createdAt: string;
 }
+
+export interface AdminContactsQuery {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+}

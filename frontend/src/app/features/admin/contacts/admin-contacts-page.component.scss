@@ -44,6 +44,11 @@ h3 {
   margin-top: 1rem;
 }
 
+.results-summary {
+  color: var(--color-muted);
+  margin: 1rem 0 0;
+}
+
 .search-field span {
   color: var(--color-ink);
   font-weight: 600;
@@ -80,6 +85,30 @@ input:focus {
   margin-top: 1rem;
 }
 
+.pagination-card {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pagination-card button {
+  background: linear-gradient(180deg, #fff5d7 0%, #ffe9b1 100%);
+  border: 1px solid rgba(196, 144, 94, 0.2);
+  border-radius: 999px;
+  color: var(--color-accent-dark);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+}
+
+.pagination-card button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .contact-card {
   padding: 1.25rem;
 }
@@ -112,7 +141,8 @@ input:focus {
 
 @media (max-width: 900px) {
   .filters-heading,
-  .contact-head {
+  .contact-head,
+  .pagination-card {
     align-items: start;
     flex-direction: column;
   }
