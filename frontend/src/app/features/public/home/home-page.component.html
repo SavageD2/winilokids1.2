@@ -1,0 +1,77 @@
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Ateliers bienveillants pour enfants curieux</p>
+    <h1>Winilo Kids aide les parents a trouver des moments joyeux, rassurants et vraiment utiles.</h1>
+    <p class="lead">
+      Des ateliers creatifs, sensoriels et ludiques, penses pour les enfants et presentes avec
+      clarte pour que les familles puissent choisir en confiance.
+    </p>
+    <div class="hero-actions">
+      <a class="button button-primary" routerLink="/ateliers">Voir les ateliers</a>
+      <a class="button button-secondary" routerLink="/contact">Poser une question</a>
+    </div>
+  </div>
+
+  <aside class="hero-panel">
+    <p class="panel-label">L experience Winilo Kids</p>
+    <ul>
+      <li>Des informations claires sur l age, le lieu et les horaires</li>
+      <li>Une inscription simple en quelques minutes</li>
+      <li>Un ton rassurant et une organisation lisible pour les parents</li>
+    </ul>
+  </aside>
+</section>
+
+<section class="values">
+  <article class="value-card">
+    <h2>Clarte</h2>
+    <p>Chaque atelier presente l essentiel: date, lieu, public recommande et disponibilite.</p>
+  </article>
+  <article class="value-card">
+    <h2>Confiance</h2>
+    <p>Le site est pense pour rassurer les parents et rendre les choix plus faciles.</p>
+  </article>
+  <article class="value-card">
+    <h2>Joie</h2>
+    <p>Le projet met en avant des experiences vivantes, creatives et adaptees aux enfants.</p>
+  </article>
+</section>
+
+<section class="spotlight">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">A venir</p>
+      <h2>Les prochains ateliers</h2>
+    </div>
+    <a class="text-link" routerLink="/ateliers">Tout voir</a>
+  </div>
+
+  @if (loading()) {
+    <p class="empty-state">Chargement des ateliers...</p>
+  } @else if (featuredWorkshops().length === 0) {
+    <p class="empty-state">
+      Les prochains ateliers apparaitront ici des qu ils seront publies depuis l espace admin.
+    </p>
+  } @else {
+    <div class="workshop-grid">
+      @for (workshop of featuredWorkshops(); track workshop.id) {
+        <article class="workshop-card">
+          <p class="workshop-meta">
+            {{ workshop.startAt | date: 'fullDate':'':'fr' }} a
+            {{ workshop.startAt | date: 'HH:mm' }}
+          </p>
+          <h3>{{ workshop.title }}</h3>
+          <p>{{ workshop.shortDescription }}</p>
+          <div class="workshop-tags">
+            <span>{{ workshop.location }}</span>
+            <span>{{ ageLabel(workshop) }}</span>
+            @if (workshop.availablePlaces !== null) {
+              <span>{{ workshop.availablePlaces }} place(s) restantes</span>
+            }
+          </div>
+          <a class="text-link" [routerLink]="['/ateliers', workshop.slug]">Voir le detail</a>
+        </article>
+      }
+    </div>
+  }
+</section>

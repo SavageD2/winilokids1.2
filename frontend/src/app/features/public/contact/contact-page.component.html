@@ -1,0 +1,61 @@
+<section class="page-hero">
+  <p class="eyebrow">Contact</p>
+  <h1>Une question de parent merite une reponse simple et rapide.</h1>
+  <p>
+    Utilise ce formulaire pour demander une precision sur un atelier, une tranche d age, une
+    disponibilite ou une organisation particuliere.
+  </p>
+</section>
+
+<section class="contact-layout">
+  <article class="contact-side">
+    <h2>Ce formulaire est utile si...</h2>
+    <ul>
+      <li>tu hesites entre plusieurs ateliers</li>
+      <li>tu veux verifier l adaptation a l age de ton enfant</li>
+      <li>tu as besoin d un retour avant de finaliser une inscription</li>
+    </ul>
+  </article>
+
+  <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="submit()">
+    <label>
+      <span>Nom</span>
+      <input type="text" formControlName="name" placeholder="Claire Dupont" />
+    </label>
+
+    <label>
+      <span>Email</span>
+      <input type="email" formControlName="email" placeholder="claire@example.com" />
+    </label>
+
+    <label>
+      <span>Telephone</span>
+      <input type="tel" formControlName="phone" placeholder="0611223344" />
+    </label>
+
+    <label>
+      <span>Message</span>
+      <textarea
+        rows="6"
+        formControlName="message"
+        placeholder="Bonjour, je souhaite en savoir plus sur les ateliers du samedi."
+      ></textarea>
+    </label>
+
+    @if (errorMessage()) {
+      <p class="feedback feedback-error">{{ errorMessage() }}</p>
+    }
+
+    @if (successMessage()) {
+      <p class="feedback feedback-success">{{ successMessage() }}</p>
+    }
+
+    <button class="button button-primary" type="submit" [disabled]="submitting()">
+      @if (submitting()) {
+        Envoi en cours...
+      } @else {
+        Envoyer le message
+      }
+    </button>
+  </form>
+</section>

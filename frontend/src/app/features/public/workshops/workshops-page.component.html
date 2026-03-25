@@ -1,0 +1,59 @@
+<section class="page-hero">
+  <p class="eyebrow">Programme</p>
+  <h1>Des ateliers clairs a parcourir, sans chercher l information partout.</h1>
+  <p>
+    Chaque fiche regroupe l essentiel pour aider les parents a choisir facilement: contenu, age
+    recommande, lieu, horaire et disponibilite.
+  </p>
+</section>
+
+@if (loading()) {
+  <p class="panel">Chargement des ateliers...</p>
+} @else if (error()) {
+  <p class="panel panel-error">{{ error() }}</p>
+} @else if (workshops().length === 0) {
+  <p class="panel">Aucun atelier n est encore publie.</p>
+} @else {
+  <section class="catalog-grid">
+    @for (workshop of workshops(); track workshop.id) {
+      <article class="catalog-card">
+        <p class="meta">
+          {{ workshop.startAt | date: 'EEEE d MMMM':'':'fr' }} ·
+          {{ workshop.startAt | date: 'HH:mm' }}
+        </p>
+        <h2>{{ workshop.title }}</h2>
+        <p>{{ workshop.shortDescription }}</p>
+
+        <dl class="details">
+          <div>
+            <dt>Lieu</dt>
+            <dd>{{ workshop.location }}</dd>
+          </div>
+          <div>
+            <dt>Age</dt>
+            <dd>{{ ageLabel(workshop) }}</dd>
+          </div>
+          <div>
+            <dt>Disponibilite</dt>
+            <dd>
+              @if (workshop.availablePlaces !== null) {
+                {{ workshop.availablePlaces }} place(s) restante(s)
+              } @else {
+                Sur demande
+              }
+            </dd>
+          </div>
+        </dl>
+
+        <div class="card-actions">
+          <a class="button button-secondary" [routerLink]="['/ateliers', workshop.slug]">
+            Voir le detail
+          </a>
+          <a class="text-link" [routerLink]="['/inscription']" [queryParams]="{ workshopId: workshop.id }">
+            Inscrire mon enfant
+          </a>
+        </div>
+      </article>
+    }
+  </section>
+}

@@ -1,0 +1,85 @@
+<section class="page-hero">
+  <p class="eyebrow">Inscription</p>
+  <h1>Un formulaire simple pour inscrire son enfant sans stress.</h1>
+  <p>
+    Les informations sont centralisees cote admin pour permettre un suivi clair des demandes et des
+    confirmations.
+  </p>
+</section>
+
+<section class="form-layout">
+  <article class="info-card">
+    <h2>Avant de valider</h2>
+    <ul>
+      <li>Choisis l atelier qui t interesse le plus</li>
+      <li>Ajoute l age de l enfant pour faciliter le traitement</li>
+      <li>Precise un message si tu veux partager un besoin particulier</li>
+    </ul>
+    <p class="subtle">Si tu as un doute sur un atelier, tu peux aussi utiliser le formulaire de contact.</p>
+    <a class="text-link" routerLink="/contact">Contacter Winilo Kids</a>
+  </article>
+
+  <form class="form-card" [formGroup]="registrationForm" (ngSubmit)="submit()">
+    <div class="form-grid">
+      <label>
+        <span>Nom du parent</span>
+        <input type="text" formControlName="parentName" placeholder="Camille Martin" />
+      </label>
+
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="parentEmail" placeholder="camille@example.com" />
+      </label>
+
+      <label>
+        <span>Telephone</span>
+        <input type="tel" formControlName="parentPhone" placeholder="0612345678" />
+      </label>
+
+      <label>
+        <span>Prenom de l enfant</span>
+        <input type="text" formControlName="childFirstName" placeholder="Lina" />
+      </label>
+
+      <label>
+        <span>Age de l enfant</span>
+        <input type="number" min="0" max="17" formControlName="childAge" />
+      </label>
+
+      <label>
+        <span>Atelier</span>
+        <select formControlName="workshopId" [disabled]="loadingWorkshops()">
+          <option [ngValue]="0">Choisir un atelier</option>
+          @for (workshop of workshops(); track workshop.id) {
+            <option [ngValue]="workshop.id">{{ workshop.title }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <label class="textarea-field">
+      <span>Message complementaire</span>
+      <textarea
+        rows="5"
+        formControlName="message"
+        placeholder="Exemple: mon enfant prefere les activites manuelles."
+      ></textarea>
+    </label>
+
+    @if (errorMessage()) {
+      <p class="feedback feedback-error">{{ errorMessage() }}</p>
+    }
+
+    @if (successMessage()) {
+      <p class="feedback feedback-success">{{ successMessage() }}</p>
+    }
+
+    <button class="button button-primary" type="submit" [disabled]="submitting() || loadingWorkshops()">
+      @if (submitting()) {
+        Envoi en cours...
+      } @else {
+        Envoyer l inscription
+      }
+    </button>
+  </form>
+</section>

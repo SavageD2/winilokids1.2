@@ -1,0 +1,67 @@
+@if (loading()) {
+  <p class="panel">Chargement du detail de l atelier...</p>
+} @else if (error()) {
+  <div class="panel panel-error">
+    <p>{{ error() }}</p>
+    <a class="text-link" routerLink="/ateliers">Revenir a la liste</a>
+  </div>
+} @else if (workshop(); as item) {
+  <section class="detail-layout">
+    <article class="detail-main">
+      <p class="eyebrow">Detail atelier</p>
+      <h1>{{ item.title }}</h1>
+      <p class="intro">{{ item.shortDescription }}</p>
+
+      <div class="description-card">
+        <h2>Ce que les parents doivent savoir</h2>
+        <p>{{ item.description }}</p>
+      </div>
+    </article>
+
+    <aside class="detail-aside">
+      <div class="info-card">
+        <h2>Informations pratiques</h2>
+        <dl>
+          <div>
+            <dt>Date</dt>
+            <dd>{{ item.startAt | date: 'fullDate':'':'fr' }}</dd>
+          </div>
+          <div>
+            <dt>Horaire</dt>
+            <dd>
+              {{ item.startAt | date: 'HH:mm' }}
+              @if (item.endAt) {
+                - {{ item.endAt | date: 'HH:mm' }}
+              }
+            </dd>
+          </div>
+          <div>
+            <dt>Lieu</dt>
+            <dd>{{ item.location }}</dd>
+          </div>
+          <div>
+            <dt>Age recommande</dt>
+            <dd>{{ ageLabel(item) }}</dd>
+          </div>
+          <div>
+            <dt>Places</dt>
+            <dd>
+              @if (item.availablePlaces !== null) {
+                {{ item.availablePlaces }} place(s) restante(s)
+              } @else {
+                Disponibilite sur demande
+              }
+            </dd>
+          </div>
+        </dl>
+
+        <div class="aside-actions">
+          <a class="button button-primary" [routerLink]="['/inscription']" [queryParams]="{ workshopId: item.id }">
+            Inscrire mon enfant
+          </a>
+          <a class="button button-secondary" routerLink="/contact">Poser une question</a>
+        </div>
+      </div>
+    </aside>
+  </section>
+}
