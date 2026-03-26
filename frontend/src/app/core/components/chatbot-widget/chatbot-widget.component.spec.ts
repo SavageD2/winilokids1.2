@@ -115,6 +115,22 @@ describe('ChatbotWidgetComponent', () => {
     });
   });
 
+  it('closes the widget from the dedicated close button', () => {
+    const fixture = TestBed.createComponent(ChatbotWidgetComponent);
+    const component = fixture.componentInstance as any;
+
+    component.toggleOpen();
+    fixture.detectChanges();
+
+    const closeButton = fixture.nativeElement.querySelector('.close-button') as HTMLButtonElement;
+    expect(closeButton).toBeTruthy();
+
+    closeButton.click();
+    fixture.detectChanges();
+
+    expect(component.isOpen()).toBe(false);
+  });
+
   it('navigates when a suggestion is selected', () => {
     const fixture = TestBed.createComponent(ChatbotWidgetComponent);
     const component = fixture.componentInstance as any;
