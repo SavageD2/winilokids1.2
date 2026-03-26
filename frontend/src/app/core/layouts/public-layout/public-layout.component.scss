@@ -28,12 +28,9 @@
 }
 
 .site-header::before {
-  background:
-    radial-gradient(circle at top left, rgba(255, 191, 31, 0.16), transparent 24%),
-    radial-gradient(circle at right center, rgba(89, 194, 230, 0.14), transparent 20%),
-    rgba(255, 255, 255, 0.82);
+  background: var(--theme-gradient-header);
   backdrop-filter: blur(18px);
-  border: 2px solid rgba(242, 107, 46, 0.1);
+  border: 2px solid var(--theme-border-subtle);
   border-radius: 1.7rem;
   bottom: 0.35rem;
   content: '';
@@ -69,13 +66,11 @@
 
 .brand-mark {
   align-items: center;
-  background:
-    radial-gradient(circle at 28% 28%, #fff6be 0 18%, transparent 19%),
-    linear-gradient(180deg, #7fd9f2 0%, #48b9e3 100%);
-  border: 4px solid white;
+  background: var(--theme-gradient-brand-mark);
+  border: 4px solid var(--theme-surface-card-strong);
   border-radius: 1.1rem;
-  box-shadow: 0 0.55rem 0 rgba(89, 194, 230, 0.28);
-  color: white;
+  box-shadow: 0 0.55rem 0 var(--theme-border-subtle);
+  color: var(--theme-text-on-accent);
   display: inline-flex;
   font-family: var(--font-display);
   font-size: 1rem;
@@ -88,7 +83,7 @@
 }
 
 .brand-mark::before {
-  background: linear-gradient(90deg, #ff8b39 0%, #ffca2b 24%, #47c070 50%, #4dc0e9 74%, #ff7f3c 100%);
+  background: var(--theme-gradient-brand-ribbon);
   border-radius: 999px 999px 0 0;
   content: '';
   height: 1.35rem;
@@ -99,7 +94,7 @@
 }
 
 .brand-mark::after {
-  background: white;
+  background: var(--theme-surface-card-strong);
   border-radius: 999px 999px 0 0;
   content: '';
   height: 0.82rem;
@@ -109,10 +104,23 @@
   top: 0.18rem;
 }
 
+.header-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  justify-content: flex-end;
+}
+
 .site-nav {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+}
+
+.site-nav app-theme-switcher {
+  display: inline-flex;
 }
 
 .site-nav a,
@@ -130,7 +138,7 @@
 
 .site-nav a.active,
 .site-nav a:hover {
-  background: linear-gradient(180deg, #fff5d7 0%, #ffe9b1 100%);
+  background: var(--theme-gradient-tag);
   color: var(--color-accent-dark);
 }
 
@@ -143,9 +151,8 @@
 
 .site-footer {
   align-items: start;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.36) 0%, rgba(255, 247, 232, 0.82) 100%);
-  border-top: 2px solid rgba(242, 107, 46, 0.1);
+  background: var(--theme-gradient-footer);
+  border-top: 2px solid var(--theme-border-subtle);
   border-radius: 2rem 2rem 0 0;
   color: var(--color-muted);
   margin-top: 2rem;
@@ -173,6 +180,10 @@
   .site-footer {
     align-items: start;
     flex-direction: column;
+  }
+
+  .header-actions {
+    width: 100%;
   }
 
   .site-header::before {

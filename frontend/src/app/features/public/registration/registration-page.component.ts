@@ -28,6 +28,20 @@ export class RegistrationPageComponent {
   protected readonly successMessage = signal<string | null>(null);
   protected readonly errorMessage = signal<string | null>(null);
 
+  protected parentDisplayName() {
+    const parent = this.parentAuthService.parent();
+
+    if (!parent) {
+      return '';
+    }
+
+    const fullName = [parent.firstName.trim(), parent.lastName.trim()]
+      .filter((value) => value.length > 0)
+      .join(' ');
+
+    return fullName || parent.email;
+  }
+
   protected readonly registrationForm = this.formBuilder.nonNullable.group({
     childFirstName: ['', [Validators.required, Validators.minLength(2)]],
     childAge: [5, [Validators.required, Validators.min(0), Validators.max(17)]],
@@ -66,7 +80,10 @@ export class RegistrationPageComponent {
     this.successMessage.set(null);
 
     this.registrationsService
-      .create({ ...this.registrationForm.getRawValue(), message: this.registrationForm.getRawValue().message || null })
+      .create({
+        ...this.registrationForm.getRawValue(),
+        message: this.registrationForm.getRawValue().message || null,
+      })
       .pipe(
         finalize(() => {
           this.submitting.set(false);
@@ -86,7 +103,7 @@ export class RegistrationPageComponent {
         },
         error: () => {
           this.errorMessage.set(
-            "Impossible d envoyer l inscription pour le moment. Merci de reessayer dans quelques instants.",
+            'Impossible d envoyer l inscription pour le moment. Merci de reessayer dans quelques instants.',
           );
         },
       });

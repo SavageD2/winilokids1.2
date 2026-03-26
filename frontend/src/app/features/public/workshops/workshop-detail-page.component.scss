@@ -35,15 +35,13 @@ h1 {
 .info-card,
 .panel {
   background: var(--color-card);
-  border: 2px solid rgba(242, 107, 46, 0.08);
+  border: 2px solid var(--theme-border-card);
   border-radius: 1.8rem;
   box-shadow: var(--shadow-card);
 }
 
 .description-card {
-  background:
-    radial-gradient(circle at top right, rgba(255, 191, 31, 0.18), transparent 16%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 236, 0.96) 100%);
+  background: var(--theme-gradient-panel-warm);
   margin-top: 2rem;
   padding: 1.75rem;
 }
@@ -55,9 +53,7 @@ h1 {
 }
 
 .info-card {
-  background:
-    radial-gradient(circle at top left, rgba(89, 194, 230, 0.18), transparent 16%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 251, 255, 0.92) 100%);
+  background: var(--theme-gradient-panel-cool);
   padding: 1.5rem;
 }
 
@@ -89,7 +85,7 @@ dd {
 }
 
 .panel-error {
-  color: #7a2b1c;
+  color: var(--theme-text-danger-strong);
 }
 
 @media (max-width: 960px) {

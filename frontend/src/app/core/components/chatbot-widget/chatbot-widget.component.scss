@@ -9,12 +9,12 @@
 .chatbot-panel,
 .message-bubble,
 .starter-prompts button {
-  border: 1px solid rgba(196, 144, 94, 0.18);
-  box-shadow: 0 1rem 2.5rem rgba(62, 39, 24, 0.12);
+  border: 1px solid var(--theme-border-regular);
+  box-shadow: var(--theme-shadow-soft);
 }
 
 .chatbot-toggle {
-  background: linear-gradient(135deg, #ffecd0 0%, #ffe3aa 100%);
+  background: var(--theme-gradient-toggle);
   border-radius: 999px;
   color: var(--color-accent-dark);
   cursor: pointer;
@@ -24,7 +24,7 @@
 }
 
 .chatbot-panel {
-  background: rgba(255, 252, 245, 0.98);
+  background: var(--theme-surface-card-strong);
   border-radius: 1.5rem;
   margin-top: 0.75rem;
   width: min(26rem, calc(100vw - 1.5rem));
@@ -80,13 +80,13 @@ h2 {
 }
 
 .message-bubble {
-  background: white;
+  background: var(--theme-surface-card);
   border-radius: 1.2rem;
   padding: 0.9rem 1rem;
 }
 
 .message-bubble-user {
-  background: #fff3da;
+  background: var(--theme-surface-chat-user);
 }
 
 .message-author {
@@ -113,7 +113,7 @@ h2 {
 
 .suggestions-list button,
 .starter-prompts button {
-  background: #fff9eb;
+  background: var(--theme-gradient-tag);
   border-radius: 999px;
   color: var(--color-accent-dark);
   cursor: pointer;
@@ -127,7 +127,7 @@ h2 {
 }
 
 .chatbot-form {
-  border-top: 1px solid rgba(196, 144, 94, 0.14);
+  border-top: 1px solid var(--theme-border-subtle);
   margin-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -143,8 +143,8 @@ label span {
 }
 
 textarea {
-  background: #fffaf2;
-  border: 1px solid rgba(196, 144, 94, 0.25);
+  background: var(--theme-surface-soft-alt);
+  border: 1px solid var(--theme-border-strong);
   border-radius: 1rem;
   color: var(--color-ink);
   font: inherit;
@@ -153,8 +153,8 @@ textarea {
 }
 
 textarea:focus {
-  border-color: rgba(200, 103, 65, 0.55);
-  box-shadow: 0 0 0 0.18rem rgba(200, 103, 65, 0.12);
+  border-color: var(--theme-border-focus);
+  box-shadow: 0 0 0 0.18rem var(--theme-focus-ring);
   outline: none;
 }
 
@@ -180,8 +180,8 @@ textarea:focus {
 }
 
 .feedback-error {
-  background: #fff1eb;
-  color: #8a3c24;
+  background: var(--theme-surface-status-danger);
+  color: var(--theme-text-danger);
 }
 
 @media (max-width: 640px) {

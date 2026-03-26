@@ -3,10 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { API_BASE_URL } from '../config/api.config';
 import {
+  GoogleLoginParentPayload,
   LoginParentPayload,
   ParentProfile,
   ParentSession,
   RegisterParentPayload,
+  SetParentPasswordPayload,
   UpdateParentProfilePayload,
 } from '../../shared/models/parent-auth.model';
 import { ParentSessionService } from './parent-session.service';
@@ -34,6 +36,12 @@ export class ParentAuthService {
       .pipe(tap((session) => this.session.storeSession(session)));
   }
 
+  loginWithGoogle(payload: GoogleLoginParentPayload): Observable<ParentSession> {
+    return this.http
+      .post<ParentSession>(`${API_BASE_URL}/parent/auth/google`, payload)
+      .pipe(tap((session) => this.session.storeSession(session)));
+  }
+
   getProfile(): Observable<ParentProfile> {
     return this.http.get<ParentProfile>(`${API_BASE_URL}/parent/auth/me`).pipe(
       tap((parent) => {
@@ -44,6 +52,14 @@ export class ParentAuthService {
 
   updateProfile(payload: UpdateParentProfilePayload): Observable<ParentProfile> {
     return this.http.patch<ParentProfile>(`${API_BASE_URL}/parent/auth/me`, payload).pipe(
+      tap((parent) => {
+        this.session.updateParent(parent);
+      }),
+    );
+  }
+
+  setPassword(payload: SetParentPasswordPayload): Observable<ParentProfile> {
+    return this.http.post<ParentProfile>(`${API_BASE_URL}/parent/auth/set-password`, payload).pipe(
       tap((parent) => {
         this.session.updateParent(parent);
       }),

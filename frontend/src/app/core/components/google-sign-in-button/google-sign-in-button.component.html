@@ -1,0 +1,7 @@
+<div class="google-sign-in">
+  <div #buttonHost class="google-sign-in-host"></div>
+
+  @if (errorMessage()) {
+    <p class="google-sign-in-note">{{ errorMessage() }}</p>
+  }
+</div>

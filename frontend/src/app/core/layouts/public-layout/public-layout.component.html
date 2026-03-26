@@ -8,20 +8,23 @@
       </span>
     </a>
 
-    <nav class="site-nav">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        Accueil
-      </a>
-      <a routerLink="/ateliers" routerLinkActive="active">Ateliers</a>
-      <a routerLink="/faq" routerLinkActive="active">FAQ</a>
-      <a routerLink="/inscription" routerLinkActive="active">
-        {{ isParentAuthenticated() ? 'Mon compte' : 'Inscription / Connexion' }}
-      </a>
-      <a routerLink="/contact" routerLinkActive="active">Contact</a>
-      @if (isAdminAuthenticated()) {
-        <a routerLink="/admin/dashboard" routerLinkActive="active">Admin</a>
-      }
-    </nav>
+    <div class="header-actions">
+      <nav class="site-nav">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          Accueil
+        </a>
+        <a routerLink="/ateliers" routerLinkActive="active">Ateliers</a>
+        <a routerLink="/faq" routerLinkActive="active">FAQ</a>
+        <a routerLink="/inscription" routerLinkActive="active">
+          {{ isParentAuthenticated() ? 'Mon compte' : 'Inscription / Connexion' }}
+        </a>
+        <a routerLink="/contact" routerLinkActive="active">Contact</a>
+        <app-theme-switcher label="Theme" [compact]="true"></app-theme-switcher>
+        @if (isAdminAuthenticated()) {
+          <a routerLink="/admin/dashboard" routerLinkActive="active">Admin</a>
+        }
+      </nav>
+    </div>
   </header>
 
   <main class="page-shell">

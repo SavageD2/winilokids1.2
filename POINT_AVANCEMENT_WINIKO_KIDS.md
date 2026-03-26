@@ -16,6 +16,7 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - Base de donnees: PostgreSQL 16 via Docker
 - ORM: Prisma
 - Auth admin: JWT
+- Auth parent: local JWT + Google Identity Services valides sur la branche `login`
 - Documentation API: Swagger sur `/docs`
 
 ## Ce qui est deja en place
@@ -28,6 +29,7 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - page FAQ publique
 - assistant chatbot integre au layout public
 - formulaire d'inscription a un atelier
+- page compte parent avec inscription locale, connexion locale, bouton Google et activation optionnelle d un mot de passe local apres premier login Google
 - formulaire de contact
 - routage public propre avec layout dedie
 
@@ -75,6 +77,13 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - module auth admin
   - login
   - profil courant
+- module auth parent
+  - register local
+  - login local
+  - profil courant
+  - mise a jour du profil
+  - login Google via verification d ID token cote serveur
+  - activation d un mot de passe local pour un compte cree via Google
 - module ateliers
   - endpoints publics
   - endpoints admin CRUD
@@ -105,7 +114,13 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 ### Donnees et infra
 
 - schema Prisma avec `Admin`, `ParentAccount`, `Workshop`, `Registration`, `Contact`, `FaqEntry`
+- extension `ParentAccount` ajoutee pour auth hybride local + Google :
+  - `passwordHash` nullable
+  - `googleSubject`
+  - `googleEmailVerified`
+  - `googleLinkedAt`
 - migration initiale presente
+- migration `20260326103000_add_parent_google_auth` ajoutee et appliquee
 - seed admin present
 - seed de demonstration enrichi present
 - seed FAQ de demonstration present
@@ -123,11 +138,14 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - `npm test -- --watch=false` dans `frontend/` : OK
 - `npm run build` dans `backend/` : OK
 - `npm test -- --watch=false` dans `backend/` : OK
+- `npm run prisma:generate` dans `backend/` apres extension Google : OK
+- `npm run prisma:migrate:deploy` dans `backend/` avec la migration Google : OK
 - `docker compose -f docker-compose.prod.yml --env-file .env.prod.example config` : OK
 - backend lance sur `http://localhost:3000`
 - frontend lance sur `http://127.0.0.1:4200`
 - verification HTTP backend : `GET /api/health` retourne `{"status":"ok","service":"winilo-kids-api"}`
 - verification HTTP frontend : reponse `200 OK`
+- validation manuelle du parcours parent local + Google sur la branche `login` : OK
 - installation Playwright + Chromium : OK
 - execution E2E Playwright dans cet environnement : bloquee par dependances systeme manquantes du navigateur
 
@@ -142,13 +160,16 @@ Je n'ai pas pu produire de capture d'ecran graphique directement depuis ce termi
 
 ## Points d'attention
 
+- pour activer Google login, il faut renseigner `GOOGLE_CLIENT_ID` cote backend et `googleClientId` cote frontend runtime local ou `WINILO_GOOGLE_CLIENT_ID` en deploiement Docker
+- la branche `login` reste volontairement separee de la future branche `scheduling`
+- le stockage de session parent reste en bearer token local pour limiter le risque de regression MVP
 - la couverture frontend couvre maintenant plusieurs parcours publics et admins, mais reste encore partielle
 - les E2E sont poses, mais leur execution depend encore des bibliotheques systeme requises par Chromium selon l environnement
 - il reste a valider le rendu plus finement avec davantage de cas de contenu si l on vise une preproduction
 
 ## Prochaines suites logiques
 
-1. Finir la validation E2E sur une machine disposant des dependances systeme Chromium.
-2. Etendre encore les tests admin aux inscriptions et au dashboard si besoin.
-3. Affiner la strategie de deploiement ciblee selon l hebergeur retenu.
-4. Ajouter des donnees de demonstration encore plus riches si besoin pour les recettes produit.
+1. Reporter la configuration Google validee localement vers les variables de prod (`GOOGLE_CLIENT_ID` backend et `WINILO_GOOGLE_CLIENT_ID` frontend).
+2. Finir la validation E2E sur une machine disposant des dependances systeme Chromium.
+3. Relire la branche `login` pour un passage de nettoyage final avant merge.
+4. Une fois la branche `login` figee, ouvrir la branche `scheduling` avec une source de verite app -> Google Calendar.

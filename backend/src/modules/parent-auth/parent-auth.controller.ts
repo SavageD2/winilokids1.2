@@ -1,10 +1,20 @@
-import { Body, Controller, Get, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { ParentJwtAuthGuard } from '../auth/parent-jwt-auth.guard';
+import { GoogleParentLoginDto } from './dto/google-parent-login.dto';
 import { LoginParentDto } from './dto/login-parent.dto';
 import { RegisterParentDto } from './dto/register-parent.dto';
 import { ParentAuthService } from './parent-auth.service';
+import { SetParentPasswordDto } from './dto/set-parent-password.dto';
 import { UpdateParentProfileDto } from './dto/update-parent-profile.dto';
 
 type AuthenticatedParentRequest = Request & {
@@ -30,6 +40,11 @@ export class ParentAuthController {
     return this.parentAuthService.login(loginParentDto);
   }
 
+  @Post('google')
+  loginWithGoogle(@Body() googleParentLoginDto: GoogleParentLoginDto) {
+    return this.parentAuthService.loginWithGoogle(googleParentLoginDto);
+  }
+
   @ApiBearerAuth()
   @UseGuards(ParentJwtAuthGuard)
   @Get('me')
@@ -44,6 +59,22 @@ export class ParentAuthController {
     @Req() req: AuthenticatedParentRequest,
     @Body() updateParentProfileDto: UpdateParentProfileDto,
   ) {
-    return this.parentAuthService.updateProfile(req.user.parentAccountId, updateParentProfileDto);
+    return this.parentAuthService.updateProfile(
+      req.user.parentAccountId,
+      updateParentProfileDto,
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(ParentJwtAuthGuard)
+  @Post('set-password')
+  setPassword(
+    @Req() req: AuthenticatedParentRequest,
+    @Body() setParentPasswordDto: SetParentPasswordDto,
+  ) {
+    return this.parentAuthService.setPassword(
+      req.user.parentAccountId,
+      setParentPasswordDto,
+    );
   }
 }

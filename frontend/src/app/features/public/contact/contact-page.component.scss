@@ -40,22 +40,18 @@ h1 {
 .contact-side,
 .contact-form {
   background: var(--color-card);
-  border: 2px solid rgba(242, 107, 46, 0.08);
+  border: 2px solid var(--theme-border-card);
   border-radius: 1.8rem;
   box-shadow: var(--shadow-card);
   padding: 1.5rem;
 }
 
 .contact-side {
-  background:
-    radial-gradient(circle at top right, rgba(255, 191, 31, 0.2), transparent 18%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 236, 0.96) 100%);
+  background: var(--theme-gradient-panel-warm);
 }
 
 .contact-form {
-  background:
-    radial-gradient(circle at top left, rgba(89, 194, 230, 0.18), transparent 18%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(243, 252, 255, 0.92) 100%);
+  background: var(--theme-gradient-panel-cool);
 }
 
 .contact-side ul {
@@ -82,8 +78,8 @@ label span {
 
 input,
 textarea {
-  background: #fffdf7;
-  border: 2px solid rgba(242, 107, 46, 0.12);
+  background: var(--theme-surface-soft-alt);
+  border: 2px solid var(--theme-border-emphasis);
   border-radius: 1rem;
   color: var(--color-ink);
   font: inherit;
@@ -92,8 +88,8 @@ textarea {
 
 input:focus,
 textarea:focus {
-  border-color: rgba(200, 103, 65, 0.55);
-  box-shadow: 0 0 0 0.18rem rgba(200, 103, 65, 0.12);
+  border-color: var(--theme-border-focus);
+  box-shadow: 0 0 0 0.18rem var(--theme-focus-ring);
   outline: none;
 }
 
@@ -104,13 +100,13 @@ textarea:focus {
 }
 
 .feedback-error {
-  background: #fff1eb;
-  color: #8a3c24;
+  background: var(--theme-surface-status-danger);
+  color: var(--theme-text-danger);
 }
 
 .feedback-success {
-  background: #edf9f0;
-  color: #29613d;
+  background: var(--theme-surface-status-success);
+  color: var(--theme-text-success);
 }
 
 .button[disabled] {

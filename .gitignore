@@ -5,3 +5,4 @@ frontend/dist
 coverage
 backend/.env
 frontend/.env
+client_secret*.json

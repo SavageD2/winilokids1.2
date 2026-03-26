@@ -11,10 +11,13 @@
   <section class="account-layout">
     <article class="connected-card">
       <p class="eyebrow">Session active</p>
-      <h2>{{ currentParent.firstName }} {{ currentParent.lastName }}</h2>
+      <h2>{{ connectedParentDisplayName() }}</h2>
       <p>{{ currentParent.email }}</p>
       @if (currentParent.phone) {
         <p>{{ currentParent.phone }}</p>
+      }
+      @if (authMethodsLabel()) {
+        <p>Methode active: {{ authMethodsLabel() }}</p>
       }
 
       <div class="connected-actions">
@@ -72,6 +75,49 @@
       </form>
     </article>
 
+    @if (canSetPassword()) {
+      <article class="profile-card">
+        <p class="eyebrow">Connexion locale</p>
+        <h2>Ajouter un mot de passe</h2>
+        <p class="auth-note">
+          Ton compte Google est deja actif. Tu peux aussi definir un mot de passe pour te connecter
+          plus tard avec ton email.
+        </p>
+
+        <form class="profile-form" [formGroup]="passwordForm" (ngSubmit)="setPassword()">
+          <label>
+            <span>Nouveau mot de passe</span>
+            <input type="password" formControlName="password" placeholder="Au moins 8 caracteres" />
+          </label>
+
+          <label>
+            <span>Confirmer le mot de passe</span>
+            <input
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="Ressaisir le mot de passe"
+            />
+          </label>
+
+          @if (passwordErrorMessage()) {
+            <p class="feedback feedback-error">{{ passwordErrorMessage() }}</p>
+          }
+
+          @if (passwordSuccessMessage()) {
+            <p class="feedback feedback-success">{{ passwordSuccessMessage() }}</p>
+          }
+
+          <button class="button button-primary" type="submit" [disabled]="settingPassword()">
+            @if (settingPassword()) {
+              Activation...
+            } @else {
+              Activer la connexion par mot de passe
+            }
+          </button>
+        </form>
+      </article>
+    }
+
     <article class="reservations-card full-span">
       <div class="reservations-heading">
         <div>
@@ -94,7 +140,7 @@
                 <div>
                   <h3>{{ reservation.workshop.title }}</h3>
                   <p>
-                    {{ reservation.workshop.startAt | date: 'EEEE d MMMM':'':'fr' }} ·
+                    {{ reservation.workshop.startAt | date: 'EEEE d MMMM' : '' : 'fr' }} ·
                     {{ reservation.workshop.startAt | date: 'HH:mm' }} ·
                     {{ reservation.workshop.location }}
                   </p>
@@ -135,6 +181,29 @@
   </section>
 } @else {
   <section class="auth-layout">
+    <article class="auth-card social-auth-card full-span">
+      <p class="eyebrow">Connexion Google</p>
+      <h2>Continuer avec Google</h2>
+      <p class="auth-note">
+        Utilise le meme bouton pour creer ton compte parent ou retrouver un compte existant par
+        email. Les administrateurs continuent a se connecter uniquement sur l espace dedie.
+      </p>
+
+      <app-google-sign-in-button
+        text="continue_with"
+        unavailableMessage="Ajoute GOOGLE_CLIENT_ID cote frontend et backend pour activer Google."
+        (credentialReceived)="submitGoogleLogin($event)"
+      />
+
+      @if (googleSubmitting()) {
+        <p class="feedback">Connexion Google en cours...</p>
+      }
+
+      @if (googleErrorMessage()) {
+        <p class="feedback feedback-error">{{ googleErrorMessage() }}</p>
+      }
+    </article>
+
     <form class="auth-card" [formGroup]="registerForm" (ngSubmit)="submitRegistration()">
       <p class="eyebrow">Inscription</p>
       <h2>Creer un compte</h2>

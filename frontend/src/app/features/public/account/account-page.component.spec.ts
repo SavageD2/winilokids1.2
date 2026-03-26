@@ -4,6 +4,7 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { of, throwError } from 'rxjs';
+import { GoogleIdentityService } from '../../../core/services/google-identity.service';
 import { ParentAuthService } from '../../../core/services/parent-auth.service';
 import { ParentRegistrationsService } from '../../../core/services/parent-registrations.service';
 import { ParentProfile } from '../../../shared/models/parent-auth.model';
@@ -20,6 +21,8 @@ describe('AccountPageComponent', () => {
     firstName: 'Camille',
     lastName: 'Martin',
     email: 'camille@example.com',
+    hasGoogleAccount: false,
+    hasPassword: true,
     phone: '0601020304',
   };
 
@@ -61,6 +64,8 @@ describe('AccountPageComponent', () => {
     isAuthenticated: isAuthenticatedSignal,
     register: vi.fn(),
     login: vi.fn(),
+    loginWithGoogle: vi.fn(),
+    setPassword: vi.fn(),
     updateProfile: vi.fn(),
     logout: vi.fn(),
   };
@@ -74,16 +79,24 @@ describe('AccountPageComponent', () => {
     navigateByUrl: vi.fn().mockResolvedValue(true),
   };
 
+  const googleIdentityServiceMock = {
+    isConfigured: vi.fn().mockReturnValue(true),
+    renderButton: vi.fn().mockResolvedValue(true),
+  };
+
   beforeEach(async () => {
     parentSignal.set(parent);
     isAuthenticatedSignal.set(true);
     parentAuthServiceMock.register.mockReset();
     parentAuthServiceMock.login.mockReset();
+    parentAuthServiceMock.loginWithGoogle.mockReset();
+    parentAuthServiceMock.setPassword.mockReset();
     parentAuthServiceMock.updateProfile.mockReset();
     parentAuthServiceMock.logout.mockReset();
     parentRegistrationsServiceMock.getMine.mockReset();
     parentRegistrationsServiceMock.cancel.mockReset();
     routerMock.navigateByUrl.mockClear();
+    googleIdentityServiceMock.renderButton.mockClear();
 
     await TestBed.configureTestingModule({
       imports: [AccountPageComponent],
@@ -94,6 +107,7 @@ describe('AccountPageComponent', () => {
           useValue: parentRegistrationsServiceMock,
         },
         { provide: Router, useValue: routerMock },
+        { provide: GoogleIdentityService, useValue: googleIdentityServiceMock },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -128,6 +142,24 @@ describe('AccountPageComponent', () => {
     });
   });
 
+  it('renders a clean display name when the parent has no last name', () => {
+    parentSignal.set({
+      ...parent,
+      firstName: 'Orewing',
+      lastName: '',
+      email: 'orewing20@gmail.com',
+      hasGoogleAccount: true,
+      hasPassword: false,
+    });
+    parentRegistrationsServiceMock.getMine.mockReturnValue(of([]));
+
+    const fixture = TestBed.createComponent(AccountPageComponent);
+    fixture.detectChanges();
+
+    const heading = fixture.nativeElement.querySelector('.connected-card h2');
+    expect(heading?.textContent?.trim()).toBe('Orewing');
+  });
+
   it('logs in, reloads reservations and redirects to the requested path', async () => {
     parentRegistrationsServiceMock.getMine.mockReturnValue(of(reservations));
     parentAuthServiceMock.login.mockReturnValue(
@@ -156,6 +188,33 @@ describe('AccountPageComponent', () => {
     expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/mon-compte');
     expect(component.loginSubmitting()).toBe(false);
     expect(component.loginErrorMessage()).toBeNull();
+  });
+
+  it('logs in with Google, reloads reservations and redirects to the requested path', async () => {
+    isAuthenticatedSignal.set(false);
+    parentSignal.set(null);
+    parentRegistrationsServiceMock.getMine.mockReturnValue(of(reservations));
+    parentAuthServiceMock.loginWithGoogle.mockReturnValue(
+      of({
+        accessToken: 'token',
+        parent,
+      }),
+    );
+
+    const fixture = TestBed.createComponent(AccountPageComponent);
+    const component = fixture.componentInstance as any;
+    fixture.detectChanges();
+
+    component.submitGoogleLogin('google-id-token');
+    await Promise.resolve();
+
+    expect(parentAuthServiceMock.loginWithGoogle).toHaveBeenCalledWith({
+      idToken: 'google-id-token',
+    });
+    expect(parentRegistrationsServiceMock.getMine).toHaveBeenCalledTimes(1);
+    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/mon-compte');
+    expect(component.googleSubmitting()).toBe(false);
+    expect(component.googleErrorMessage()).toBeNull();
   });
 
   it('updates a cancellable reservation after confirmation', () => {
@@ -219,5 +278,46 @@ describe('AccountPageComponent', () => {
       'Impossible de mettre a jour le profil pour le moment.',
     );
     expect(component.profileSuccessMessage()).toBeNull();
+  });
+
+  it('allows a Google-only parent to activate local password login', () => {
+    parentSignal.set({
+      ...parent,
+      firstName: 'Orewing',
+      lastName: '',
+      email: 'orewing20@gmail.com',
+      hasGoogleAccount: true,
+      hasPassword: false,
+    });
+    parentRegistrationsServiceMock.getMine.mockReturnValue(of([]));
+    parentAuthServiceMock.setPassword.mockReturnValue(
+      of({
+        id: 9,
+        firstName: 'Orewing',
+        lastName: '',
+        email: 'orewing20@gmail.com',
+        hasGoogleAccount: true,
+        hasPassword: true,
+        phone: '0601020304',
+      }),
+    );
+
+    const fixture = TestBed.createComponent(AccountPageComponent);
+    const component = fixture.componentInstance as any;
+    fixture.detectChanges();
+
+    component.passwordForm.setValue({
+      password: 'DemoParent123!',
+      confirmPassword: 'DemoParent123!',
+    });
+
+    component.setPassword();
+
+    expect(parentAuthServiceMock.setPassword).toHaveBeenCalledWith({
+      password: 'DemoParent123!',
+    });
+    expect(component.passwordSuccessMessage()).toBe(
+      'Connexion par mot de passe activee avec succes.',
+    );
   });
 });

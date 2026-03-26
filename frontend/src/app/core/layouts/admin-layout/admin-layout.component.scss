@@ -10,10 +10,8 @@
 }
 
 .admin-sidebar {
-  background:
-    radial-gradient(circle at top left, rgba(240, 141, 111, 0.16), transparent 32%),
-    linear-gradient(180deg, #fff9f1 0%, #f5e7d5 100%);
-  border-right: 1px solid rgba(196, 144, 94, 0.18);
+  background: var(--theme-gradient-sidebar);
+  border-right: 1px solid var(--theme-border-regular);
   display: grid;
   gap: 2rem;
   grid-template-rows: auto 1fr auto;
@@ -30,9 +28,9 @@
 
 .brand-mark {
   align-items: center;
-  background: linear-gradient(135deg, #f08d6f 0%, #c86741 100%);
+  background: var(--theme-gradient-admin-brand);
   border-radius: 1rem;
-  color: white;
+  color: var(--theme-text-on-accent);
   display: inline-flex;
   font-family: var(--font-display);
   font-size: 1rem;
@@ -68,7 +66,7 @@
 
 .admin-nav a.active,
 .admin-nav a:hover {
-  background: rgba(255, 255, 255, 0.86);
+  background: var(--theme-surface-card);
   color: var(--color-accent-dark);
 }
 
@@ -91,6 +89,14 @@
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+}
+
+.admin-topbar-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  justify-content: flex-end;
 }
 
 .eyebrow {
@@ -118,11 +124,15 @@
 
   .admin-sidebar {
     border-right: none;
-    border-bottom: 1px solid rgba(196, 144, 94, 0.18);
+    border-bottom: 1px solid var(--theme-border-regular);
   }
 
   .admin-topbar {
     align-items: start;
     flex-direction: column;
+  }
+
+  .admin-topbar-actions {
+    width: 100%;
   }
 }

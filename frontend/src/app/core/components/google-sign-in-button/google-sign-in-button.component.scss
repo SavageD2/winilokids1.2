@@ -1,0 +1,13 @@
+.google-sign-in {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.google-sign-in-host {
+  min-height: 44px;
+}
+
+.google-sign-in-note {
+  color: var(--color-muted);
+  margin: 0;
+}

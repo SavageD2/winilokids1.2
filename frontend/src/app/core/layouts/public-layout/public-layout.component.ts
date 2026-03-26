@@ -1,12 +1,19 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ChatbotWidgetComponent } from '../../components/chatbot-widget/chatbot-widget.component';
+import { ThemeSwitcherComponent } from '../../components/theme-switcher/theme-switcher.component';
 import { AdminAuthService } from '../../services/admin-auth.service';
 import { ParentAuthService } from '../../services/parent-auth.service';
 
 @Component({
   selector: 'app-public-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, ChatbotWidgetComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    ChatbotWidgetComponent,
+    ThemeSwitcherComponent,
+  ],
   templateUrl: './public-layout.component.html',
   styleUrl: './public-layout.component.scss',
 })

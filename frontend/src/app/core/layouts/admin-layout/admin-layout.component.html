@@ -33,7 +33,10 @@
         <p class="eyebrow">Back-office</p>
         <h1>Espace administrateur</h1>
       </div>
-      <a class="text-link" routerLink="/">Retour au site public</a>
+      <div class="admin-topbar-actions">
+        <app-theme-switcher label="Theme" [compact]="true"></app-theme-switcher>
+        <a class="text-link" routerLink="/">Retour au site public</a>
+      </div>
     </header>
 
     <main class="admin-content">
