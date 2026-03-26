@@ -1,71 +1,66 @@
 <section class="hero">
   <div class="hero-copy">
-    <p class="eyebrow">Ateliers bienveillants pour enfants curieux</p>
-    <h1>Winilo Kids aide les parents a trouver des moments joyeux, rassurants et vraiment utiles.</h1>
-    <p class="lead">
-      Des ateliers creatifs, sensoriels et ludiques, penses pour les enfants et presentes avec
-      clarte pour que les familles puissent choisir en confiance.
-    </p>
+    <p class="eyebrow">{{ 'home.hero.eyebrow' | translate }}</p>
+    <h1>{{ 'home.hero.title' | translate }}</h1>
+    <p class="lead">{{ 'home.hero.description' | translate }}</p>
     <div class="hero-actions">
-      <a class="button button-primary" routerLink="/ateliers">Voir les ateliers</a>
-      <a class="button button-secondary" routerLink="/contact">Poser une question</a>
+      <a class="button button-primary" routerLink="/ateliers">{{ 'home.hero.primaryCta' | translate }}</a>
+      <a class="button button-secondary" routerLink="/contact">{{ 'home.hero.secondaryCta' | translate }}</a>
     </div>
   </div>
 
   <aside class="hero-panel">
     <div class="hero-stickers">
-      <span>soleil</span>
-      <span>nuage</span>
-      <span>arc-en-ciel</span>
+      <span>{{ 'home.hero.stickers.sun' | translate }}</span>
+      <span>{{ 'home.hero.stickers.cloud' | translate }}</span>
+      <span>{{ 'home.hero.stickers.rainbow' | translate }}</span>
     </div>
-    <p class="panel-label">L experience Winilo Kids</p>
+    <p class="panel-label">{{ 'home.hero.panelLabel' | translate }}</p>
     <ul>
-      <li>Des informations claires sur l age, le lieu et les horaires</li>
-      <li>Une inscription simple en quelques minutes</li>
-      <li>Un ton rassurant et une organisation lisible pour les parents</li>
+      <li>{{ 'home.hero.panelItems.information' | translate }}</li>
+      <li>{{ 'home.hero.panelItems.registration' | translate }}</li>
+      <li>{{ 'home.hero.panelItems.reassurance' | translate }}</li>
     </ul>
   </aside>
 </section>
 
 <section class="values">
   <article class="value-card">
-    <p class="value-icon">livres</p>
-    <h2>Clarte</h2>
-    <p>Chaque atelier presente l essentiel: date, lieu, public recommande et disponibilite.</p>
+    <p class="value-icon">{{ 'home.values.clarity.icon' | translate }}</p>
+    <h2>{{ 'home.values.clarity.title' | translate }}</h2>
+    <p>{{ 'home.values.clarity.description' | translate }}</p>
   </article>
   <article class="value-card">
-    <p class="value-icon">coeur</p>
-    <h2>Confiance</h2>
-    <p>Le site est pense pour rassurer les parents et rendre les choix plus faciles.</p>
+    <p class="value-icon">{{ 'home.values.trust.icon' | translate }}</p>
+    <h2>{{ 'home.values.trust.title' | translate }}</h2>
+    <p>{{ 'home.values.trust.description' | translate }}</p>
   </article>
   <article class="value-card">
-    <p class="value-icon">train</p>
-    <h2>Joie</h2>
-    <p>Le projet met en avant des experiences vivantes, creatives et adaptees aux enfants.</p>
+    <p class="value-icon">{{ 'home.values.joy.icon' | translate }}</p>
+    <h2>{{ 'home.values.joy.title' | translate }}</h2>
+    <p>{{ 'home.values.joy.description' | translate }}</p>
   </article>
 </section>
 
 <section class="spotlight">
   <div class="section-heading">
     <div>
-      <p class="eyebrow">A venir</p>
-      <h2>Les prochains ateliers</h2>
+      <p class="eyebrow">{{ 'home.spotlight.eyebrow' | translate }}</p>
+      <h2>{{ 'home.spotlight.title' | translate }}</h2>
     </div>
-    <a class="text-link" routerLink="/ateliers">Tout voir</a>
+    <a class="text-link" routerLink="/ateliers">{{ 'home.spotlight.viewAll' | translate }}</a>
   </div>
 
   @if (loading()) {
-    <p class="empty-state">Chargement des ateliers...</p>
+    <p class="empty-state">{{ 'home.spotlight.loading' | translate }}</p>
   } @else if (featuredWorkshops().length === 0) {
-    <p class="empty-state">
-      Les prochains ateliers apparaitront ici des qu ils seront publies depuis l espace admin.
-    </p>
+    <p class="empty-state">{{ 'home.spotlight.empty' | translate }}</p>
   } @else {
     <div class="workshop-grid">
       @for (workshop of featuredWorkshops(); track workshop.id) {
         <article class="workshop-card">
           <p class="workshop-meta">
-            {{ workshop.startAt | date: 'fullDate':'':'fr' }} a
+            {{ workshop.startAt | date: 'fullDate' }} {{ 'time.at' | translate }}
             {{ workshop.startAt | date: 'HH:mm' }}
           </p>
           <h3>{{ workshop.title }}</h3>
@@ -74,10 +69,12 @@
             <span>{{ workshop.location }}</span>
             <span>{{ ageLabel(workshop) }}</span>
             @if (workshop.availablePlaces !== null) {
-              <span>{{ workshop.availablePlaces }} place(s) restantes</span>
+              <span>{{ availablePlacesLabel(workshop.availablePlaces) }}</span>
             }
           </div>
-          <a class="text-link" [routerLink]="['/ateliers', workshop.slug]">Voir le detail</a>
+          <a class="text-link" [routerLink]="['/ateliers', workshop.slug]">
+            {{ 'home.spotlight.viewDetail' | translate }}
+          </a>
         </article>
       }
     </div>

@@ -4,38 +4,57 @@
       <span class="brand-mark">WK</span>
       <span>
         <strong>Winilo Kids</strong>
-        <small>Administration</small>
+        <small>{{ 'layout.admin.brandSubtitle' | translate }}</small>
       </span>
     </a>
 
     <nav class="admin-nav">
-      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
-      <a routerLink="/admin/ateliers" routerLinkActive="active">Ateliers</a>
-      <a routerLink="/admin/inscriptions" routerLinkActive="active">Inscriptions</a>
-      <a routerLink="/admin/contacts" routerLinkActive="active">Contacts</a>
-      <a routerLink="/admin/chatbot" routerLinkActive="active">Chatbot</a>
-      <a routerLink="/admin/faq" routerLinkActive="active">FAQ</a>
+      <a routerLink="/admin/dashboard" routerLinkActive="active">
+        {{ 'layout.admin.nav.dashboard' | translate }}
+      </a>
+      <a routerLink="/admin/ateliers" routerLinkActive="active">
+        {{ 'layout.admin.nav.workshops' | translate }}
+      </a>
+      <a routerLink="/admin/inscriptions" routerLinkActive="active">
+        {{ 'layout.admin.nav.registrations' | translate }}
+      </a>
+      <a routerLink="/admin/contacts" routerLinkActive="active">
+        {{ 'layout.admin.nav.contacts' | translate }}
+      </a>
+      <a routerLink="/admin/chatbot" routerLinkActive="active">
+        {{ 'layout.admin.nav.chatbot' | translate }}
+      </a>
+      <a routerLink="/admin/faq" routerLinkActive="active">
+        {{ 'layout.admin.nav.faq' | translate }}
+      </a>
     </nav>
 
     <div class="admin-sidebar-footer">
       @if (admin(); as currentAdmin) {
         <p class="admin-user">
-          Connecte en tant que <strong>{{ currentAdmin.firstName }} {{ currentAdmin.lastName }}</strong>
+          {{ 'layout.admin.connectedAs' | translate }}
+          <strong>{{ currentAdmin.firstName }} {{ currentAdmin.lastName }}</strong>
         </p>
       }
-      <button class="button button-secondary" type="button" (click)="logout()">Se deconnecter</button>
+      <button class="button button-secondary" type="button" (click)="logout()">
+        {{ 'layout.admin.logout' | translate }}
+      </button>
     </div>
   </aside>
 
   <div class="admin-main">
     <header class="admin-topbar">
       <div>
-        <p class="eyebrow">Back-office</p>
-        <h1>Espace administrateur</h1>
+        <p class="eyebrow">{{ 'layout.admin.eyebrow' | translate }}</p>
+        <h1>{{ 'layout.admin.title' | translate }}</h1>
       </div>
       <div class="admin-topbar-actions">
-        <app-theme-switcher label="Theme" [compact]="true"></app-theme-switcher>
-        <a class="text-link" routerLink="/">Retour au site public</a>
+        <app-language-switcher
+          [label]="'common.language' | translate"
+          [compact]="true"
+        ></app-language-switcher>
+        <app-theme-switcher [label]="'common.theme' | translate" [compact]="true"></app-theme-switcher>
+        <a class="text-link" routerLink="/">{{ 'layout.admin.backToPublic' | translate }}</a>
       </div>
     </header>
 

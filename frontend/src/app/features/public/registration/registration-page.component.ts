@@ -2,7 +2,9 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
+import { I18nService } from '../../../core/services/i18n.service';
 import { ParentAuthService } from '../../../core/services/parent-auth.service';
 import { RegistrationsService } from '../../../core/services/registrations.service';
 import { WorkshopsService } from '../../../core/services/workshops.service';
@@ -10,12 +12,13 @@ import { Workshop } from '../../../shared/models/workshop.model';
 
 @Component({
   selector: 'app-registration-page',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18nService = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
   private readonly workshopsService = inject(WorkshopsService);
   private readonly registrationsService = inject(RegistrationsService);
@@ -63,7 +66,9 @@ export class RegistrationPageComponent {
           this.registrationForm.patchValue({ workshopId: initialWorkshopId });
         },
         error: () => {
-          this.errorMessage.set('Impossible de charger la liste des ateliers.');
+          this.errorMessage.set(
+            this.i18nService.translateInstant('registration.error.workshops'),
+          );
           this.loadingWorkshops.set(false);
         },
       });
@@ -93,7 +98,9 @@ export class RegistrationPageComponent {
       .subscribe({
         next: (registration) => {
           this.successMessage.set(
-            `Demande enregistree pour l atelier "${registration.workshop.title}". Nous reviendrons vers vous rapidement.`,
+            this.i18nService.translateInstant('registration.success', {
+              workshopTitle: registration.workshop.title,
+            }),
           );
           this.registrationForm.patchValue({
             childFirstName: '',
@@ -103,7 +110,7 @@ export class RegistrationPageComponent {
         },
         error: () => {
           this.errorMessage.set(
-            'Impossible d envoyer l inscription pour le moment. Merci de reessayer dans quelques instants.',
+            this.i18nService.translateInstant('registration.error.submit'),
           );
         },
       });

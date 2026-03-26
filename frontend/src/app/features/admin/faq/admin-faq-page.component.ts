@@ -1,18 +1,21 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 import { AdminFaqService } from '../../../core/services/admin-faq.service';
+import { I18nService } from '../../../core/services/i18n.service';
 import { CreateFaqEntryPayload, FaqEntry } from '../../../shared/models/faq.model';
 
 @Component({
   selector: 'app-admin-faq-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe],
   templateUrl: './admin-faq-page.component.html',
   styleUrl: './admin-faq-page.component.scss',
 })
 export class AdminFaqPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18nService = inject(I18nService);
   private readonly faqService = inject(AdminFaqService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -51,6 +54,7 @@ export class AdminFaqPageComponent {
   protected submit() {
     if (this.faqForm.invalid) {
       this.faqForm.markAllAsTouched();
+      this.errorMessage.set(this.i18nService.translateInstant('adminFaq.errors.invalidForm'));
       return;
     }
 
@@ -75,15 +79,15 @@ export class AdminFaqPageComponent {
       .subscribe({
         next: () => {
           this.successMessage.set(
-            faqEntryId ? 'Reponse FAQ mise a jour avec succes.' : 'Reponse FAQ creee avec succes.',
+            this.i18nService.translateInstant(
+              faqEntryId ? 'adminFaq.success.updated' : 'adminFaq.success.created',
+            ),
           );
           this.loadEntries();
           this.resetForm();
         },
         error: () => {
-          this.errorMessage.set(
-            "Impossible d enregistrer cette reponse FAQ pour le moment.",
-          );
+          this.errorMessage.set(this.i18nService.translateInstant('adminFaq.errors.save'));
         },
       });
   }
@@ -106,7 +110,11 @@ export class AdminFaqPageComponent {
   }
 
   protected removeEntry(entry: FaqEntry) {
-    const confirmed = confirm(`Supprimer la question FAQ "${entry.question}" ?`);
+    const confirmed = confirm(
+      this.i18nService.translateInstant('adminFaq.delete.confirm', {
+        question: entry.question,
+      }),
+    );
 
     if (!confirmed) {
       return;
@@ -126,14 +134,14 @@ export class AdminFaqPageComponent {
       )
       .subscribe({
         next: () => {
-          this.successMessage.set('Reponse FAQ supprimee avec succes.');
+          this.successMessage.set(this.i18nService.translateInstant('adminFaq.success.deleted'));
           if (this.editingEntryId() === entry.id) {
             this.resetForm();
           }
           this.loadEntries();
         },
         error: () => {
-          this.errorMessage.set("Impossible de supprimer cette reponse FAQ.");
+          this.errorMessage.set(this.i18nService.translateInstant('adminFaq.errors.delete'));
         },
       });
   }
@@ -155,7 +163,7 @@ export class AdminFaqPageComponent {
           this.loading.set(false);
         },
         error: () => {
-          this.errorMessage.set('Impossible de charger la FAQ admin.');
+          this.errorMessage.set(this.i18nService.translateInstant('adminFaq.errors.load'));
           this.loading.set(false);
         },
       });

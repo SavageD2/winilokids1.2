@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { AdminContactsService } from '../../../core/services/admin-contacts.service';
 import { AdminContactsPageComponent } from './admin-contacts-page.component';
@@ -32,8 +33,44 @@ describe('AdminContactsPageComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [AdminContactsPageComponent],
-      providers: [{ provide: AdminContactsService, useValue: contactsServiceMock }],
+      providers: [
+        ...provideTranslateService({
+          fallbackLang: 'fr',
+          lang: 'fr',
+        }),
+        { provide: AdminContactsService, useValue: contactsServiceMock },
+      ],
     }).compileComponents();
+
+    const translateService = TestBed.inject(TranslateService);
+    translateService.setTranslation(
+      'fr',
+      {
+        adminContacts: {
+          status: {
+            new: 'Nouveau',
+            inProgress: 'En cours',
+            resolved: 'Traité',
+            archived: 'Archivé',
+          },
+          summary: {
+            total: '{{count}} message(s) trouvé(s)',
+            page: 'page {{page}} / {{totalPages}}',
+          },
+          success: {
+            statusUpdated: 'Statut du message mis à jour.',
+            noteSaved: 'Note interne enregistrée.',
+          },
+          errors: {
+            load: 'Impossible de charger les messages de contact.',
+            updateStatus: 'Impossible de mettre à jour ce message pour le moment.',
+            saveNote: "Impossible d'enregistrer la note interne.",
+          },
+        },
+      },
+      true,
+    );
+    translateService.use('fr');
   });
 
   it('loads contacts with the default filters', () => {
@@ -89,7 +126,7 @@ describe('AdminContactsPageComponent', () => {
       status: 'IN_PROGRESS',
       handledAt: '2026-03-26T09:00:00.000Z',
     });
-    expect(component.successMessage()).toBe('Statut du message mis a jour.');
+    expect(component.successMessage()).toBe('Statut du message mis à jour.');
   });
 
   it('trims and saves internal notes', () => {
@@ -119,6 +156,6 @@ describe('AdminContactsPageComponent', () => {
       adminNotes: 'Parent rappele, dossier a suivre.',
     });
     expect(component.draftNotes()[1]).toBe('Parent rappele, dossier a suivre.');
-    expect(component.successMessage()).toBe('Note interne enregistree.');
+    expect(component.successMessage()).toBe('Note interne enregistrée.');
   });
 });

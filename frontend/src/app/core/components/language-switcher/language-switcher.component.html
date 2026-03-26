@@ -1,0 +1,23 @@
+<div class="language-switcher" [class.language-switcher-compact]="compact">
+  @if (!compact) {
+    <label class="language-switcher-label" [attr.for]="selectId">{{ label }}</label>
+  }
+
+  <div class="language-switcher-field">
+    @if (compact) {
+      <span class="language-switcher-prefix" aria-hidden="true">{{ label }}</span>
+    }
+
+    <select
+      class="language-switcher-select"
+      [id]="selectId"
+      [value]="language()"
+      [attr.aria-label]="compact ? label : null"
+      (change)="updateLanguage($event)"
+    >
+      @for (option of options; track option.code) {
+        <option [value]="option.code">{{ option.labelKey | translate }}</option>
+      }
+    </select>
+  </div>
+</div>

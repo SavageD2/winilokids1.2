@@ -1,33 +1,33 @@
 @if (loading()) {
-  <p class="panel">Chargement du detail de l atelier...</p>
+  <p class="panel">{{ 'workshopDetail.loading' | translate }}</p>
 } @else if (error()) {
   <div class="panel panel-error">
     <p>{{ error() }}</p>
-    <a class="text-link" routerLink="/ateliers">Revenir a la liste</a>
+    <a class="text-link" routerLink="/ateliers">{{ 'workshopDetail.backToList' | translate }}</a>
   </div>
 } @else if (workshop(); as item) {
   <section class="detail-layout">
     <article class="detail-main">
-      <p class="eyebrow">Detail atelier</p>
+      <p class="eyebrow">{{ 'workshopDetail.eyebrow' | translate }}</p>
       <h1>{{ item.title }}</h1>
       <p class="intro">{{ item.shortDescription }}</p>
 
       <div class="description-card">
-        <h2>Ce que les parents doivent savoir</h2>
+        <h2>{{ 'workshopDetail.descriptionTitle' | translate }}</h2>
         <p>{{ item.description }}</p>
       </div>
     </article>
 
     <aside class="detail-aside">
       <div class="info-card">
-        <h2>Informations pratiques</h2>
+        <h2>{{ 'workshopDetail.infoTitle' | translate }}</h2>
         <dl>
           <div>
-            <dt>Date</dt>
-            <dd>{{ item.startAt | date: 'fullDate':'':'fr' }}</dd>
+            <dt>{{ 'workshopDetail.labels.date' | translate }}</dt>
+            <dd>{{ item.startAt | date: 'fullDate' }}</dd>
           </div>
           <div>
-            <dt>Horaire</dt>
+            <dt>{{ 'workshopDetail.labels.time' | translate }}</dt>
             <dd>
               {{ item.startAt | date: 'HH:mm' }}
               @if (item.endAt) {
@@ -36,22 +36,16 @@
             </dd>
           </div>
           <div>
-            <dt>Lieu</dt>
+            <dt>{{ 'workshopDetail.labels.location' | translate }}</dt>
             <dd>{{ item.location }}</dd>
           </div>
           <div>
-            <dt>Age recommande</dt>
+            <dt>{{ 'workshopDetail.labels.age' | translate }}</dt>
             <dd>{{ ageLabel(item) }}</dd>
           </div>
           <div>
-            <dt>Places</dt>
-            <dd>
-              @if (item.availablePlaces !== null) {
-                {{ item.availablePlaces }} place(s) restante(s)
-              } @else {
-                Disponibilite sur demande
-              }
-            </dd>
+            <dt>{{ 'workshopDetail.labels.places' | translate }}</dt>
+            <dd>{{ availabilityLabel(item) }}</dd>
           </div>
         </dl>
 
@@ -61,9 +55,16 @@
             [routerLink]="[reservationLink(item)]"
             [queryParams]="reservationQueryParams(item)"
           >
-            {{ isParentAuthenticated() ? 'Reserver cet atelier' : 'Se connecter pour reserver' }}
+            {{
+              (isParentAuthenticated()
+                ? 'workshopDetail.actions.reserve'
+                : 'workshopDetail.actions.loginToReserve'
+              ) | translate
+            }}
           </a>
-          <a class="button button-secondary" routerLink="/contact">Poser une question</a>
+          <a class="button button-secondary" routerLink="/contact">
+            {{ 'workshopDetail.actions.askQuestion' | translate }}
+          </a>
         </div>
       </div>
     </aside>

@@ -1,25 +1,26 @@
 <section class="login-shell">
   <article class="login-copy">
-    <p class="eyebrow">Administration</p>
-    <h1>Un acces simple et securise pour gerer les ateliers Winilo Kids.</h1>
-    <p>
-      Connecte-toi pour acceder au tableau de bord, publier les ateliers et suivre les demandes
-      d inscription.
-    </p>
-    <a class="text-link" routerLink="/">Retour au site public</a>
+    <p class="eyebrow">{{ 'adminLogin.hero.eyebrow' | translate }}</p>
+    <h1>{{ 'adminLogin.hero.title' | translate }}</h1>
+    <p>{{ 'adminLogin.hero.description' | translate }}</p>
+    <a class="text-link" routerLink="/">{{ 'adminLogin.hero.backToPublic' | translate }}</a>
   </article>
 
   <form class="login-card" [formGroup]="loginForm" (ngSubmit)="submit()">
-    <h2>Connexion admin</h2>
+    <h2>{{ 'adminLogin.form.title' | translate }}</h2>
 
     <label>
-      <span>Email</span>
+      <span>{{ 'adminLogin.form.email' | translate }}</span>
       <input type="email" formControlName="email" placeholder="admin@winilo-kids.fr" />
     </label>
 
     <label>
-      <span>Mot de passe</span>
-      <input type="password" formControlName="password" placeholder="Mot de passe admin" />
+      <span>{{ 'adminLogin.form.password' | translate }}</span>
+      <input
+        type="password"
+        formControlName="password"
+        [placeholder]="'adminLogin.form.passwordPlaceholder' | translate"
+      />
     </label>
 
     @if (errorMessage()) {
@@ -28,9 +29,9 @@
 
     <button class="button button-primary" type="submit" [disabled]="submitting()">
       @if (submitting()) {
-        Connexion...
+        {{ 'adminLogin.form.submitting' | translate }}
       } @else {
-        Se connecter
+        {{ 'adminLogin.form.submit' | translate }}
       }
     </button>
   </form>

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { AdminWorkshopsService } from '../../../core/services/admin-workshops.service';
 import { Workshop } from '../../../shared/models/workshop.model';
@@ -39,8 +40,75 @@ describe('AdminWorkshopsPageComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [AdminWorkshopsPageComponent],
-      providers: [{ provide: AdminWorkshopsService, useValue: workshopsServiceMock }],
+      providers: [
+        ...provideTranslateService({
+          fallbackLang: 'fr',
+          lang: 'fr',
+        }),
+        { provide: AdminWorkshopsService, useValue: workshopsServiceMock },
+      ],
     }).compileComponents();
+
+    const translateService = TestBed.inject(TranslateService);
+    translateService.setTranslation(
+      'fr',
+      {
+        adminWorkshops: {
+          success: {
+            created: 'Atelier créé avec succès.',
+            updated: 'Atelier mis à jour avec succès.',
+            deleted: 'Atelier supprimé avec succès.',
+          },
+          errors: {
+            invalidForm:
+              'Certains champs sont incomplets ou invalides. Vérifie les messages sous le formulaire.',
+            load: 'Impossible de charger les ateliers.',
+            delete: "Impossible de supprimer l'atelier pour le moment.",
+            slugConflict:
+              'Un atelier avec ce slug existe déjà. Modifie le titre ou le slug puis réessaie.',
+            invalidPayload:
+              'Les données envoyées sont invalides. Vérifie le slug, les dates et les champs numériques.',
+            save:
+              "Impossible d'enregistrer cet atelier pour le moment. Réessaie dans quelques instants.",
+          },
+          delete: {
+            confirm: 'Supprimer l’atelier "{{title}}" ?',
+          },
+          age: {
+            unspecified: 'Âge non précisé',
+            range: '{{min}} à {{max}} ans',
+            min: 'À partir de {{min}} ans',
+            max: 'Jusqu’à {{max}} ans',
+          },
+          calendar: {
+            status: {
+              synced: 'Google Calendar synchronisé',
+              failed: 'Google Calendar en erreur',
+              disabled: 'Google Calendar non configuré',
+              pending: 'Google Calendar en attente',
+              inactive: 'Google Calendar inactif',
+            },
+            detail: {
+              failed: 'La synchronisation a échoué. Vérifie la configuration backend.',
+              disabled:
+                'Renseigne GOOGLE_CALENDAR_ID et le compte de service Google côté backend pour activer la sync.',
+              inactive: 'La synchronisation ne démarre que pour les ateliers publiés.',
+              pending:
+                "La publication de cet atelier déclenche la création ou mise à jour de l'événement.",
+              syncedAt: 'Dernière sync: {{date}}',
+            },
+          },
+          validation: {
+            required: 'Ce champ est obligatoire.',
+            minlength: 'Minimum {{count}} caractères.',
+            pattern: 'Utilise seulement des lettres minuscules, chiffres et tirets.',
+            invalid: 'Valeur invalide.',
+          },
+        },
+      },
+      true,
+    );
+    translateService.use('fr');
   });
 
   it('generates a clean slug from the current title', () => {
@@ -93,7 +161,7 @@ describe('AdminWorkshopsPageComponent', () => {
       capacity: null,
       isPublished: false,
     });
-    expect(component.successMessage()).toBe('Atelier cree avec succes.');
+    expect(component.successMessage()).toBe('Atelier créé avec succès.');
     expect(component.editingWorkshopId()).toBeNull();
   });
 

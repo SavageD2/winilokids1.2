@@ -3,8 +3,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 import { AdminWorkshopsService } from '../../../core/services/admin-workshops.service';
+import { I18nService } from '../../../core/services/i18n.service';
 import {
   CreateWorkshopPayload,
   Workshop,
@@ -13,12 +15,13 @@ import {
 
 @Component({
   selector: 'app-admin-workshops-page',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, TranslatePipe],
   templateUrl: './admin-workshops-page.component.html',
   styleUrl: './admin-workshops-page.component.scss',
 })
 export class AdminWorkshopsPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18nService = inject(I18nService);
   private readonly workshopsService = inject(AdminWorkshopsService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -56,14 +59,18 @@ export class AdminWorkshopsPageComponent {
   }
 
   protected submit() {
-    if (!this.workshopForm.controls.slug.getRawValue().trim()) {
+    const normalizedSlug = this.slugify(this.workshopForm.controls.slug.getRawValue());
+
+    if (normalizedSlug) {
+      this.workshopForm.controls.slug.setValue(normalizedSlug);
+    } else {
       this.generateSlug();
     }
 
     if (this.workshopForm.invalid) {
       this.workshopForm.markAllAsTouched();
       this.errorMessage.set(
-        'Certains champs sont incomplets ou invalides. Verifie les messages sous le formulaire.',
+        this.i18nService.translateInstant('adminWorkshops.errors.invalidForm'),
       );
       return;
     }
@@ -89,7 +96,9 @@ export class AdminWorkshopsPageComponent {
       .subscribe({
         next: () => {
           this.successMessage.set(
-            workshopId ? 'Atelier mis a jour avec succes.' : 'Atelier cree avec succes.',
+            this.i18nService.translateInstant(
+              workshopId ? 'adminWorkshops.success.updated' : 'adminWorkshops.success.created',
+            ),
           );
           this.loadWorkshops();
           this.resetForm();
@@ -133,7 +142,11 @@ export class AdminWorkshopsPageComponent {
   }
 
   protected removeWorkshop(workshop: Workshop) {
-    const confirmed = confirm(`Supprimer l atelier "${workshop.title}" ?`);
+    const confirmed = confirm(
+      this.i18nService.translateInstant('adminWorkshops.delete.confirm', {
+        title: workshop.title,
+      }),
+    );
 
     if (!confirmed) {
       return;
@@ -153,47 +166,54 @@ export class AdminWorkshopsPageComponent {
       )
       .subscribe({
         next: () => {
-          this.successMessage.set('Atelier supprime avec succes.');
+          this.successMessage.set(this.i18nService.translateInstant('adminWorkshops.success.deleted'));
           if (this.editingWorkshopId() === workshop.id) {
             this.resetForm();
           }
           this.loadWorkshops();
         },
         error: () => {
-          this.errorMessage.set('Impossible de supprimer l atelier pour le moment.');
+          this.errorMessage.set(this.i18nService.translateInstant('adminWorkshops.errors.delete'));
         },
       });
   }
 
   protected ageLabel(workshop: Workshop): string {
     if (workshop.recommendedAgeMin === null && workshop.recommendedAgeMax === null) {
-      return 'Age non precise';
+      return this.i18nService.translateInstant('adminWorkshops.age.unspecified');
     }
 
     if (workshop.recommendedAgeMin !== null && workshop.recommendedAgeMax !== null) {
-      return `${workshop.recommendedAgeMin} a ${workshop.recommendedAgeMax} ans`;
+      return this.i18nService.translateInstant('adminWorkshops.age.range', {
+        min: workshop.recommendedAgeMin,
+        max: workshop.recommendedAgeMax,
+      });
     }
 
     if (workshop.recommendedAgeMin !== null) {
-      return `A partir de ${workshop.recommendedAgeMin} ans`;
+      return this.i18nService.translateInstant('adminWorkshops.age.min', {
+        min: workshop.recommendedAgeMin,
+      });
     }
 
-    return `Jusqu a ${workshop.recommendedAgeMax} ans`;
+    return this.i18nService.translateInstant('adminWorkshops.age.max', {
+      max: workshop.recommendedAgeMax,
+    });
   }
 
   protected calendarSyncLabel(workshop: Workshop) {
     switch (workshop.googleCalendarSyncStatus) {
       case 'SYNCED':
-        return 'Google Calendar synchronise';
+        return this.i18nService.translateInstant('adminWorkshops.calendar.status.synced');
       case 'FAILED':
-        return 'Google Calendar en erreur';
+        return this.i18nService.translateInstant('adminWorkshops.calendar.status.failed');
       case 'DISABLED':
-        return 'Google Calendar non configure';
+        return this.i18nService.translateInstant('adminWorkshops.calendar.status.disabled');
       case 'PENDING':
-        return 'Google Calendar en attente';
+        return this.i18nService.translateInstant('adminWorkshops.calendar.status.pending');
       case 'INACTIVE':
       default:
-        return 'Google Calendar inactif';
+        return this.i18nService.translateInstant('adminWorkshops.calendar.status.inactive');
     }
   }
 
@@ -201,23 +221,25 @@ export class AdminWorkshopsPageComponent {
     if (workshop.googleCalendarSyncStatus === 'FAILED') {
       return (
         workshop.googleCalendarSyncError ??
-        'La synchronisation a echoue. Verifie la configuration backend.'
+        this.i18nService.translateInstant('adminWorkshops.calendar.detail.failed')
       );
     }
 
     if (workshop.googleCalendarSyncStatus === 'SYNCED' && workshop.googleCalendarSyncedAt) {
-      return `Derniere sync: ${new Date(workshop.googleCalendarSyncedAt).toLocaleString('fr-FR')}`;
+      return this.i18nService.translateInstant('adminWorkshops.calendar.detail.syncedAt', {
+        date: new Date(workshop.googleCalendarSyncedAt).toLocaleString(this.i18nService.locale()),
+      });
     }
 
     if (workshop.googleCalendarSyncStatus === 'DISABLED') {
-      return 'Renseigne GOOGLE_CALENDAR_ID et le compte de service Google cote backend pour activer la sync.';
+      return this.i18nService.translateInstant('adminWorkshops.calendar.detail.disabled');
     }
 
     if (workshop.googleCalendarSyncStatus === 'INACTIVE') {
-      return 'La synchronisation ne demarre que pour les ateliers publies.';
+      return this.i18nService.translateInstant('adminWorkshops.calendar.detail.inactive');
     }
 
-    return 'La publication de cet atelier declenche la creation ou mise a jour de l evenement.';
+    return this.i18nService.translateInstant('adminWorkshops.calendar.detail.pending');
   }
 
   protected calendarSyncClass(workshop: Workshop): string {
@@ -232,18 +254,20 @@ export class AdminWorkshopsPageComponent {
     }
 
     if (control.errors['required']) {
-      return 'Ce champ est obligatoire.';
+      return this.i18nService.translateInstant('adminWorkshops.validation.required');
     }
 
     if (control.errors['minlength']) {
-      return `Minimum ${control.errors['minlength'].requiredLength} caracteres.`;
+      return this.i18nService.translateInstant('adminWorkshops.validation.minlength', {
+        count: control.errors['minlength'].requiredLength,
+      });
     }
 
     if (control.errors['pattern']) {
-      return 'Utilise seulement des lettres minuscules, chiffres et tirets.';
+      return this.i18nService.translateInstant('adminWorkshops.validation.pattern');
     }
 
-    return 'Valeur invalide.';
+    return this.i18nService.translateInstant('adminWorkshops.validation.invalid');
   }
 
   private loadWorkshops() {
@@ -258,7 +282,7 @@ export class AdminWorkshopsPageComponent {
           this.loading.set(false);
         },
         error: () => {
-          this.errorMessage.set('Impossible de charger les ateliers.');
+          this.errorMessage.set(this.i18nService.translateInstant('adminWorkshops.errors.load'));
           this.loading.set(false);
         },
       });
@@ -309,7 +333,7 @@ export class AdminWorkshopsPageComponent {
 
   private getSaveErrorMessage(error: HttpErrorResponse) {
     if (error.status === 409) {
-      return 'Un atelier avec ce slug existe deja. Modifie le titre ou le slug puis reessaie.';
+      return this.i18nService.translateInstant('adminWorkshops.errors.slugConflict');
     }
 
     if (error.status === 400) {
@@ -323,10 +347,10 @@ export class AdminWorkshopsPageComponent {
         return backendMessage;
       }
 
-      return 'Les donnees envoyees sont invalides. Verifie le slug, les dates et les champs numeriques.';
+      return this.i18nService.translateInstant('adminWorkshops.errors.invalidPayload');
     }
 
-    return 'Impossible d enregistrer cet atelier pour le moment. Reessaie dans quelques instants.';
+    return this.i18nService.translateInstant('adminWorkshops.errors.save');
   }
 
   private slugify(value: string) {

@@ -1,44 +1,41 @@
 <section class="page-hero">
-  <p class="eyebrow">Contact</p>
-  <h1>Une question de parent merite une reponse simple et rapide.</h1>
-  <p>
-    Utilise ce formulaire pour demander une precision sur un atelier, une tranche d age, une
-    disponibilite ou une organisation particuliere.
-  </p>
+  <p class="eyebrow">{{ 'contact.hero.eyebrow' | translate }}</p>
+  <h1>{{ 'contact.hero.title' | translate }}</h1>
+  <p>{{ 'contact.hero.description' | translate }}</p>
 </section>
 
 <section class="contact-layout">
   <article class="contact-side">
-    <h2>Ce formulaire est utile si...</h2>
+    <h2>{{ 'contact.side.title' | translate }}</h2>
     <ul>
-      <li>tu hesites entre plusieurs ateliers</li>
-      <li>tu veux verifier l adaptation a l age de ton enfant</li>
-      <li>tu as besoin d un retour avant de finaliser une inscription</li>
+      <li>{{ 'contact.side.item1' | translate }}</li>
+      <li>{{ 'contact.side.item2' | translate }}</li>
+      <li>{{ 'contact.side.item3' | translate }}</li>
     </ul>
   </article>
 
   <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="submit()">
     <label>
-      <span>Nom</span>
-      <input type="text" formControlName="name" placeholder="Claire Dupont" />
+      <span>{{ 'contact.form.name' | translate }}</span>
+      <input type="text" formControlName="name" [placeholder]="'contact.form.namePlaceholder' | translate" />
     </label>
 
     <label>
-      <span>Email</span>
+      <span>{{ 'contact.form.email' | translate }}</span>
       <input type="email" formControlName="email" placeholder="claire@example.com" />
     </label>
 
     <label>
-      <span>Telephone</span>
+      <span>{{ 'contact.form.phone' | translate }}</span>
       <input type="tel" formControlName="phone" placeholder="0611223344" />
     </label>
 
     <label>
-      <span>Message</span>
+      <span>{{ 'contact.form.message' | translate }}</span>
       <textarea
         rows="6"
         formControlName="message"
-        placeholder="Bonjour, je souhaite en savoir plus sur les ateliers du samedi."
+        [placeholder]="'contact.form.messagePlaceholder' | translate"
       ></textarea>
     </label>
 
@@ -52,9 +49,9 @@
 
     <button class="button button-primary" type="submit" [disabled]="submitting()">
       @if (submitting()) {
-        Envoi en cours...
+        {{ 'contact.form.sending' | translate }}
       } @else {
-        Envoyer le message
+        {{ 'contact.form.submit' | translate }}
       }
     </button>
   </form>

@@ -1,45 +1,45 @@
 @if (loading()) {
-  <p class="panel">Chargement du tableau de bord...</p>
+  <p class="panel">{{ 'adminDashboard.loading' | translate }}</p>
 } @else if (error()) {
   <p class="panel panel-error">{{ error() }}</p>
 } @else if (summary(); as data) {
   <section class="stats-grid">
     <article class="stat-card">
-      <p>Ateliers</p>
+      <p>{{ 'adminDashboard.stats.workshops' | translate }}</p>
       <strong>{{ data.workshopsCount }}</strong>
     </article>
     <article class="stat-card">
-      <p>Publies</p>
+      <p>{{ 'adminDashboard.stats.published' | translate }}</p>
       <strong>{{ data.publishedWorkshopsCount }}</strong>
     </article>
     <article class="stat-card">
-      <p>Brouillons</p>
+      <p>{{ 'adminDashboard.stats.drafts' | translate }}</p>
       <strong>{{ data.draftWorkshopsCount }}</strong>
     </article>
     <article class="stat-card">
-      <p>Inscriptions</p>
+      <p>{{ 'adminDashboard.stats.registrations' | translate }}</p>
       <strong>{{ data.registrationsCount }}</strong>
     </article>
     <article class="stat-card stat-card-accent">
-      <p>En attente</p>
+      <p>{{ 'adminDashboard.stats.pending' | translate }}</p>
       <strong>{{ data.pendingRegistrationsCount }}</strong>
     </article>
     <article class="stat-card">
-      <p>Confirmees</p>
+      <p>{{ 'adminDashboard.stats.confirmed' | translate }}</p>
       <strong>{{ data.confirmedRegistrationsCount }}</strong>
     </article>
     <article class="stat-card">
-      <p>Messages contact</p>
+      <p>{{ 'adminDashboard.stats.contacts' | translate }}</p>
       <strong>{{ data.contactsCount }}</strong>
-      <a class="text-link" routerLink="/admin/contacts">Ouvrir la boite de reception</a>
+      <a class="text-link" routerLink="/admin/contacts">{{ 'adminDashboard.stats.openInbox' | translate }}</a>
     </article>
     <article class="stat-card">
-      <p>Messages chatbot</p>
+      <p>{{ 'adminDashboard.stats.chatbotMessages' | translate }}</p>
       <strong>{{ data.chatbotMessagesCount }}</strong>
-      <a class="text-link" routerLink="/admin/chatbot">Ouvrir le suivi</a>
+      <a class="text-link" routerLink="/admin/chatbot">{{ 'adminDashboard.stats.openTracking' | translate }}</a>
     </article>
     <article class="stat-card">
-      <p>Prochains ateliers</p>
+      <p>{{ 'adminDashboard.stats.upcoming' | translate }}</p>
       <strong>{{ data.upcomingWorkshops.length }}</strong>
     </article>
   </section>
@@ -47,27 +47,27 @@
   <section class="section-card">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">Suivi inscriptions</p>
-        <h2>Statuts actuels</h2>
+        <p class="eyebrow">{{ 'adminDashboard.registrations.eyebrow' | translate }}</p>
+        <h2>{{ 'adminDashboard.registrations.title' | translate }}</h2>
       </div>
-      <a class="text-link" routerLink="/admin/inscriptions">Ouvrir les inscriptions</a>
+      <a class="text-link" routerLink="/admin/inscriptions">{{ 'adminDashboard.registrations.cta' | translate }}</a>
     </div>
 
     <div class="status-grid">
       <article class="status-card">
-        <p>En attente</p>
+        <p>{{ 'adminDashboard.registrations.pending' | translate }}</p>
         <strong>{{ data.pendingRegistrationsCount }}</strong>
       </article>
       <article class="status-card">
-        <p>Confirmees</p>
+        <p>{{ 'adminDashboard.registrations.confirmed' | translate }}</p>
         <strong>{{ data.confirmedRegistrationsCount }}</strong>
       </article>
       <article class="status-card">
-        <p>Annulees</p>
+        <p>{{ 'adminDashboard.registrations.cancelled' | translate }}</p>
         <strong>{{ data.cancelledRegistrationsCount }}</strong>
       </article>
       <article class="status-card">
-        <p>Presences</p>
+        <p>{{ 'adminDashboard.registrations.attended' | translate }}</p>
         <strong>{{ data.attendedRegistrationsCount }}</strong>
       </article>
     </div>
@@ -76,27 +76,27 @@
   <section class="section-card">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">Assistant parents</p>
-        <h2>Usage du chatbot</h2>
+        <p class="eyebrow">{{ 'adminDashboard.chatbot.eyebrow' | translate }}</p>
+        <h2>{{ 'adminDashboard.chatbot.title' | translate }}</h2>
       </div>
-      <a class="text-link" routerLink="/admin/chatbot">Voir le detail</a>
+      <a class="text-link" routerLink="/admin/chatbot">{{ 'adminDashboard.chatbot.cta' | translate }}</a>
     </div>
 
     <div class="status-grid">
       <article class="status-card">
-        <p>Total messages</p>
+        <p>{{ 'adminDashboard.chatbot.total' | translate }}</p>
         <strong>{{ data.chatbotMessagesCount }}</strong>
       </article>
       <article class="status-card">
-        <p>Fallback contact</p>
+        <p>{{ 'adminDashboard.chatbot.fallback' | translate }}</p>
         <strong>{{ data.chatbotFallbackCount }}</strong>
       </article>
       <article class="status-card">
-        <p>Reponses FAQ</p>
+        <p>{{ 'adminDashboard.chatbot.faq' | translate }}</p>
         <strong>{{ data.chatbotFaqMessagesCount }}</strong>
       </article>
       <article class="status-card">
-        <p>Reco ateliers</p>
+        <p>{{ 'adminDashboard.chatbot.workshops' | translate }}</p>
         <strong>{{ data.chatbotWorkshopMessagesCount }}</strong>
       </article>
     </div>
@@ -105,14 +105,14 @@
   <section class="section-card">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">A venir</p>
-        <h2>Les prochains ateliers</h2>
+        <p class="eyebrow">{{ 'adminDashboard.upcoming.eyebrow' | translate }}</p>
+        <h2>{{ 'adminDashboard.upcoming.title' | translate }}</h2>
       </div>
-      <a class="text-link" routerLink="/admin/ateliers">Gerer les ateliers</a>
+      <a class="text-link" routerLink="/admin/ateliers">{{ 'adminDashboard.upcoming.cta' | translate }}</a>
     </div>
 
     @if (data.upcomingWorkshops.length === 0) {
-      <p class="panel">Aucun atelier a venir pour le moment.</p>
+      <p class="panel">{{ 'adminDashboard.upcoming.empty' | translate }}</p>
     } @else {
       <div class="upcoming-list">
         @for (workshop of data.upcomingWorkshops; track workshop.id) {
@@ -120,7 +120,7 @@
             <div>
               <h3>{{ workshop.title }}</h3>
               <p>
-                {{ workshop.startAt | date: 'EEEE d MMMM':'':'fr' }} ·
+                {{ workshop.startAt | date: 'EEEE d MMMM' }} ·
                 {{ workshop.startAt | date: 'HH:mm' }}
               </p>
             </div>
@@ -133,7 +133,7 @@
                 }
               </span>
               @if (workshop.availablePlaces !== null) {
-                <span>{{ workshop.availablePlaces }} place(s) restantes</span>
+                <span>{{ remainingPlacesLabel(workshop.availablePlaces) }}</span>
               }
             </div>
           </article>

@@ -1,17 +1,20 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
+import { I18nService } from '../../../core/services/i18n.service';
 import { ContactsService } from '../../../core/services/contacts.service';
 
 @Component({
   selector: 'app-contact-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe],
   templateUrl: './contact-page.component.html',
   styleUrl: './contact-page.component.scss',
 })
 export class ContactPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18nService = inject(I18nService);
   private readonly contactsService = inject(ContactsService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -49,9 +52,7 @@ export class ContactPageComponent {
       )
       .subscribe({
         next: () => {
-          this.successMessage.set(
-            'Message envoye. L equipe Winilo Kids te repondra des que possible.',
-          );
+          this.successMessage.set(this.i18nService.translateInstant('contact.success'));
           this.contactForm.reset({
             name: '',
             email: '',
@@ -60,9 +61,7 @@ export class ContactPageComponent {
           });
         },
         error: () => {
-          this.errorMessage.set(
-            "Impossible d envoyer le message pour le moment. Merci de reessayer un peu plus tard.",
-          );
+          this.errorMessage.set(this.i18nService.translateInstant('contact.error'));
         },
       });
   }

@@ -1,0 +1,753 @@
+{
+  "common": {
+    "theme": "Apparence",
+    "language": "Langue",
+    "admin": "Admin"
+  },
+  "language": {
+    "option": {
+      "fr": "FR",
+      "en": "EN"
+    }
+  },
+  "time": {
+    "at": "a"
+  },
+  "theme": {
+    "option": {
+      "default": "Par défaut",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "hint": {
+      "system": "Le thème suit actuellement le système en mode {{mode}}.",
+      "default": "Utilise l'apparence éditoriale actuelle de l'application.",
+      "active": "Apparence {{mode}} activée sur cet appareil."
+    }
+  },
+  "layout": {
+    "public": {
+      "brandTagline": "Ateliers pour enfants et familles",
+      "menu": {
+        "open": "Ouvrir le menu",
+        "close": "Fermer le menu"
+      },
+      "nav": {
+        "home": "Accueil",
+        "workshops": "Ateliers",
+        "faq": "FAQ",
+        "account": "Mon compte",
+        "signup": "Inscription / Connexion",
+        "contact": "Contact",
+        "admin": "Admin"
+      },
+      "footer": {
+        "description": "Une expérience simple et rassurante pour aider les parents à réserver les bons ateliers.",
+        "workshops": "Voir les ateliers",
+        "faq": "FAQ",
+        "account": "Mon compte",
+        "signup": "Inscription / Connexion",
+        "contact": "Contact"
+      }
+    },
+    "admin": {
+      "brandSubtitle": "Administration",
+      "nav": {
+        "dashboard": "Dashboard",
+        "workshops": "Ateliers",
+        "registrations": "Inscriptions",
+        "contacts": "Contacts",
+        "chatbot": "Chatbot",
+        "faq": "FAQ"
+      },
+      "connectedAs": "Connecté en tant que",
+      "logout": "Se déconnecter",
+      "eyebrow": "Back-office",
+      "title": "Espace administrateur",
+      "backToPublic": "Retour au site public"
+    }
+  },
+  "chatbot": {
+    "toggle": {
+      "open": "Assistant parents",
+      "close": "Fermer l'assistant"
+    },
+    "panel": {
+      "ariaLabel": "Assistant conversationnel Winilo Kids",
+      "eyebrow": "Assistant parents",
+      "title": "Besoin d'aide pour choisir ou réserver ?",
+      "close": "Fermer"
+    },
+    "message": {
+      "assistant": "Assistant Winilo Kids",
+      "user": "Vous"
+    },
+    "initialMessage": "Je peux aider à choisir un atelier, expliquer l'inscription et répondre aux questions fréquentes.",
+    "starter": {
+      "workshop": "Je cherche un atelier pour 5 ans",
+      "registration": "Comment se passe l'inscription ?",
+      "contact": "Quand faut-il utiliser le contact ?"
+    },
+    "suggestion": {
+      "workshops": "Voir les ateliers",
+      "faq": "Consulter la FAQ",
+      "account": "Inscription / Connexion"
+    },
+    "form": {
+      "question": "Votre question",
+      "placeholder": "Exemple : je cherche un atelier pour 6 ans ou comment fonctionne l'inscription ?",
+      "helper": "L'assistant s'appuie sur la FAQ et les ateliers publiés. Pour un besoin spécifique, il vous orientera vers le contact.",
+      "send": "Envoyer",
+      "sending": "Réponse en cours..."
+    },
+    "error": {
+      "unavailable": "Impossible d'obtenir une réponse pour le moment. Tu peux toujours utiliser le formulaire de contact."
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Ateliers bienveillants pour enfants curieux",
+      "title": "Winilo Kids aide les parents à trouver des moments joyeux, rassurants et vraiment utiles.",
+      "description": "Des ateliers créatifs, sensoriels et ludiques, pensés pour les enfants et présentés avec clarté pour que les familles puissent choisir en confiance.",
+      "primaryCta": "Voir les ateliers",
+      "secondaryCta": "Poser une question",
+      "stickers": {
+        "sun": "soleil",
+        "cloud": "nuage",
+        "rainbow": "arc-en-ciel"
+      },
+      "panelLabel": "L'expérience Winilo Kids",
+      "panelItems": {
+        "information": "Des informations claires sur l'âge, le lieu et les horaires",
+        "registration": "Une inscription simple en quelques minutes",
+        "reassurance": "Un ton rassurant et une organisation lisible pour les parents"
+      }
+    },
+    "values": {
+      "clarity": {
+        "icon": "livres",
+        "title": "Clarté",
+        "description": "Chaque atelier présente l'essentiel : date, lieu, public recommandé et disponibilité."
+      },
+      "trust": {
+        "icon": "coeur",
+        "title": "Confiance",
+        "description": "Le site est pensé pour rassurer les parents et rendre les choix plus faciles."
+      },
+      "joy": {
+        "icon": "train",
+        "title": "Joie",
+        "description": "Le projet met en avant des expériences vivantes, créatives et adaptées aux enfants."
+      }
+    },
+    "spotlight": {
+      "eyebrow": "À venir",
+      "title": "Les prochains ateliers",
+      "viewAll": "Tout voir",
+      "loading": "Chargement des ateliers...",
+      "empty": "Les prochains ateliers apparaîtront ici dès qu'ils seront publiés depuis l'espace admin.",
+      "viewDetail": "Voir le détail",
+      "remainingPlaces": "place(s) restantes",
+      "age": {
+        "free": "Âge libre selon l'atelier",
+        "range": "{{min}} à {{max}} ans",
+        "min": "À partir de {{min}} ans",
+        "max": "Jusqu'à {{max}} ans"
+      }
+    }
+  },
+  "workshops": {
+    "list": {
+      "hero": {
+        "eyebrow": "Programme",
+        "title": "Des ateliers clairs à parcourir, sans chercher l'information partout.",
+        "description": "Chaque fiche regroupe l'essentiel pour aider les parents à choisir facilement : contenu, âge recommandé, lieu, horaire et disponibilité."
+      },
+      "loading": "Chargement des ateliers...",
+      "empty": "Aucun atelier n'est encore publié.",
+      "error": {
+        "unavailable": "Impossible de charger les ateliers pour le moment."
+      },
+      "labels": {
+        "location": "Lieu",
+        "age": "Âge",
+        "availability": "Disponibilité"
+      },
+      "availability": {
+        "remaining": "place(s) restante(s)",
+        "onRequest": "Sur demande"
+      },
+      "actions": {
+        "detail": "Voir le détail",
+        "reserve": "Réserver cet atelier",
+        "loginToReserve": "Se connecter pour réserver"
+      },
+      "age": {
+        "free": "Âge à définir",
+        "range": "{{min}} à {{max}} ans",
+        "min": "À partir de {{min}} ans",
+        "max": "Jusqu'à {{max}} ans"
+      }
+    }
+  },
+  "workshopDetail": {
+    "loading": "Chargement du détail de l'atelier...",
+    "error": {
+      "unavailable": "Atelier introuvable ou indisponible."
+    },
+    "backToList": "Revenir à la liste",
+    "eyebrow": "Détail atelier",
+    "descriptionTitle": "Ce que les parents doivent savoir",
+    "infoTitle": "Informations pratiques",
+    "labels": {
+      "date": "Date",
+      "time": "Horaire",
+      "location": "Lieu",
+      "age": "Âge recommandé",
+      "places": "Places"
+    },
+    "actions": {
+      "reserve": "Réserver cet atelier",
+      "loginToReserve": "Se connecter pour réserver",
+      "askQuestion": "Poser une question"
+    },
+    "availability": {
+      "remaining": "place(s) restante(s)",
+      "onRequest": "Disponibilité sur demande"
+    },
+    "age": {
+      "free": "Âge communiqué sur demande",
+      "range": "{{min}} à {{max}} ans",
+      "min": "À partir de {{min}} ans",
+      "max": "Jusqu'à {{max}} ans"
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contact",
+      "title": "Une question de parent mérite une réponse simple et rapide.",
+      "description": "Utilise ce formulaire pour demander une précision sur un atelier, une tranche d'âge, une disponibilité ou une organisation particulière."
+    },
+    "side": {
+      "title": "Ce formulaire est utile si...",
+      "item1": "tu hésites entre plusieurs ateliers",
+      "item2": "tu veux vérifier l'adaptation à l'âge de ton enfant",
+      "item3": "tu as besoin d'un retour avant de finaliser une inscription"
+    },
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "Claire Dupont",
+      "email": "Email",
+      "phone": "Téléphone",
+      "message": "Message",
+      "messagePlaceholder": "Bonjour, je souhaite en savoir plus sur les ateliers du samedi.",
+      "sending": "Envoi en cours...",
+      "submit": "Envoyer le message"
+    },
+    "success": "Message envoyé. L'équipe Winilo Kids te répondra dès que possible.",
+    "error": "Impossible d'envoyer le message pour le moment. Merci de réessayer un peu plus tard."
+  },
+  "faq": {
+    "hero": {
+      "eyebrow": "FAQ",
+      "title": "Des réponses simples pour aider les parents à choisir et réserver sereinement.",
+      "description": "Cette FAQ rassemble les informations les plus utiles sur les ateliers, l'inscription et l'organisation générale. Si ta question sort de ce cadre, le formulaire de contact prend le relais."
+    },
+    "loading": "Chargement de la FAQ...",
+    "empty": "La FAQ publique sera disponible dès qu'une première réponse sera publiée.",
+    "error": "Impossible de charger la FAQ pour le moment.",
+    "defaultCategory": "Questions fréquentes",
+    "groupEyebrow": "Thème",
+    "side": {
+      "title": "Tu n'as pas trouvé ta réponse ?",
+      "description": "Certaines demandes méritent une réponse plus humaine, surtout si elles concernent un besoin particulier, une hésitation forte entre plusieurs ateliers ou un contexte familial spécifique.",
+      "cta": "Poser une question"
+    }
+  },
+  "account": {
+    "hero": {
+      "eyebrow": "Compte parent",
+      "title": "Connecte-toi ou crée ton compte avant de réserver un atelier.",
+      "description": "Le compte parent permet de retrouver un parcours plus clair, de centraliser les réservations et de sécuriser l'inscription aux ateliers."
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "password": "Mot de passe"
+    },
+    "placeholders": {
+      "firstName": "Camille",
+      "lastName": "Martin",
+      "email": "camille@example.com",
+      "phone": "0612345678",
+      "password": "Au moins 8 caractères"
+    },
+    "connected": {
+      "eyebrow": "Session active",
+      "activeMethod": "Méthode active",
+      "continue": "Continuer",
+      "logout": "Se déconnecter"
+    },
+    "auth": {
+      "methods": {
+        "password": "mot de passe",
+        "google": "Google",
+        "parentLogin": "connexion parent"
+      },
+      "google": {
+        "eyebrow": "Connexion Google",
+        "title": "Continuer avec Google",
+        "description": "Utilise le même bouton pour créer ton compte parent ou retrouver un compte existant par email. Les administrateurs continuent à se connecter uniquement sur l'espace dédié.",
+        "unavailable": "Ajoute GOOGLE_CLIENT_ID côté frontend et backend pour activer Google.",
+        "submitting": "Connexion Google en cours..."
+      },
+      "register": {
+        "eyebrow": "Inscription",
+        "title": "Créer un compte",
+        "submitting": "Création...",
+        "submit": "Créer mon compte"
+      },
+      "login": {
+        "eyebrow": "Connexion",
+        "title": "Accéder à mon compte",
+        "passwordPlaceholder": "Votre mot de passe",
+        "submitting": "Connexion...",
+        "submit": "Me connecter"
+      },
+      "errors": {
+        "register": "Création du compte impossible pour le moment. Vérifie les informations et réessaie.",
+        "login": "Connexion impossible. Vérifie ton email et ton mot de passe.",
+        "google": "Connexion Google impossible pour le moment. Vérifie la configuration et réessaie."
+      }
+    },
+    "profile": {
+      "eyebrow": "Mon profil",
+      "title": "Informations du parent",
+      "saving": "Enregistrement...",
+      "submit": "Mettre à jour le profil",
+      "success": "Profil mis à jour avec succès.",
+      "error": "Impossible de mettre à jour le profil pour le moment."
+    },
+    "password": {
+      "eyebrow": "Connexion locale",
+      "title": "Ajouter un mot de passe",
+      "description": "Ton compte Google est déjà actif. Tu peux aussi définir un mot de passe pour te connecter plus tard avec ton email.",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirmer le mot de passe",
+      "activating": "Activation...",
+      "submit": "Activer la connexion par mot de passe",
+      "success": "Connexion par mot de passe activée avec succès.",
+      "placeholders": {
+        "password": "Au moins 8 caractères",
+        "confirm": "Ressaisir le mot de passe"
+      },
+      "errors": {
+        "mismatch": "Les deux mots de passe doivent être identiques.",
+        "unavailable": "Impossible d'activer le mot de passe pour le moment."
+      }
+    },
+    "reservations": {
+      "eyebrow": "Mes réservations",
+      "title": "Suivi des ateliers",
+      "loading": "Chargement des réservations...",
+      "empty": "Aucune réservation enregistrée pour le moment.",
+      "error": "Impossible de charger tes réservations pour le moment.",
+      "childSummary": "Enfant: {{childFirstName}} · {{childAge}} ans",
+      "status": {
+        "pending": "En attente",
+        "confirmed": "Confirmée",
+        "cancelled": "Annulée",
+        "attended": "Présente"
+      },
+      "cancel": {
+        "button": "Annuler la réservation",
+        "inProgress": "Annulation...",
+        "confirm": "Annuler la réservation pour \"{{workshopTitle}}\" au nom de {{childFirstName}} ?",
+        "error": "Impossible d'annuler cette réservation pour le moment."
+      }
+    }
+  },
+  "registration": {
+    "hero": {
+      "eyebrow": "Réservation atelier",
+      "title": "Finalise la réservation de ton enfant depuis ton compte parent.",
+      "description": "Le compte parent reste la base du dossier, puis tu ajoutes ici uniquement les informations utiles à la réservation."
+    },
+    "info": {
+      "accountTitle": "Compte utilisé",
+      "beforeSubmitTitle": "Avant de valider",
+      "item1": "Choisis l'atelier qui correspond le mieux à ton enfant",
+      "item2": "Ajoute l'âge de l'enfant pour faciliter le traitement",
+      "item3": "Précise un message si tu veux partager un besoin particulier",
+      "helper": "Si tu as un doute sur un atelier, tu peux aussi utiliser le formulaire de contact.",
+      "contact": "Contacter Winilo Kids"
+    },
+    "form": {
+      "childFirstName": "Prénom de l'enfant",
+      "childFirstNamePlaceholder": "Lina",
+      "childAge": "Âge de l'enfant",
+      "workshop": "Atelier",
+      "chooseWorkshop": "Choisir un atelier",
+      "message": "Message complémentaire",
+      "messagePlaceholder": "Exemple : mon enfant préfère les activités manuelles.",
+      "submitting": "Envoi en cours...",
+      "submit": "Confirmer la réservation"
+    },
+    "success": "Demande enregistrée pour l'atelier \"{{workshopTitle}}\". Nous reviendrons vers vous rapidement.",
+    "error": {
+      "workshops": "Impossible de charger la liste des ateliers.",
+      "submit": "Impossible d'envoyer l'inscription pour le moment. Merci de réessayer dans quelques instants."
+    }
+  },
+  "adminDashboard": {
+    "loading": "Chargement du tableau de bord...",
+    "error": "Impossible de charger le tableau de bord.",
+    "stats": {
+      "workshops": "Ateliers",
+      "published": "Publiés",
+      "drafts": "Brouillons",
+      "registrations": "Inscriptions",
+      "pending": "En attente",
+      "confirmed": "Confirmées",
+      "contacts": "Messages contact",
+      "openInbox": "Ouvrir la boîte de réception",
+      "chatbotMessages": "Messages chatbot",
+      "openTracking": "Ouvrir le suivi",
+      "upcoming": "Prochains ateliers"
+    },
+    "registrations": {
+      "eyebrow": "Suivi inscriptions",
+      "title": "Statuts actuels",
+      "cta": "Ouvrir les inscriptions",
+      "pending": "En attente",
+      "confirmed": "Confirmées",
+      "cancelled": "Annulées",
+      "attended": "Présences"
+    },
+    "chatbot": {
+      "eyebrow": "Assistant parents",
+      "title": "Usage du chatbot",
+      "cta": "Voir le détail",
+      "total": "Total messages",
+      "fallback": "Fallback contact",
+      "faq": "Réponses FAQ",
+      "workshops": "Reco ateliers"
+    },
+    "upcoming": {
+      "eyebrow": "À venir",
+      "title": "Les prochains ateliers",
+      "cta": "Gérer les ateliers",
+      "empty": "Aucun atelier à venir pour le moment.",
+      "remainingPlaces": "place(s) restantes"
+    }
+  },
+  "adminRegistrations": {
+    "hero": {
+      "eyebrow": "Lecture rapide",
+      "title": "Inscriptions",
+      "description": "Recherche, filtre et pagination sont maintenant gérés côté serveur pour garder l'admin fluide."
+    },
+    "filters": {
+      "search": "Recherche",
+      "searchPlaceholder": "Nom du parent, email ou prénom enfant",
+      "status": "Statut",
+      "allStatuses": "Tous",
+      "workshop": "Atelier",
+      "allWorkshops": "Tous les ateliers"
+    },
+    "summary": {
+      "total": "{{count}} inscription(s) trouvée(s)",
+      "page": "page {{page}} / {{totalPages}}"
+    },
+    "loading": "Chargement des inscriptions...",
+    "empty": "Aucune inscription ne correspond aux filtres actuels.",
+    "group": {
+      "count": "{{count}} inscription(s)"
+    },
+    "registration": {
+      "child": "Enfant: {{childFirstName}} · {{childAge}} ans",
+      "phone": "Téléphone: {{phone}}",
+      "changeStatus": "Changer le statut"
+    },
+    "pagination": {
+      "ariaLabel": "Pagination inscriptions",
+      "previous": "Page précédente",
+      "current": "Page {{page}} sur {{totalPages}}",
+      "next": "Page suivante"
+    },
+    "status": {
+      "pending": "En attente",
+      "confirmed": "Confirmée",
+      "cancelled": "Annulée",
+      "attended": "Présente"
+    },
+    "errors": {
+      "load": "Impossible de charger les inscriptions.",
+      "workshops": "Impossible de charger les ateliers.",
+      "updateStatus": "Impossible de mettre à jour le statut pour le moment."
+    }
+  },
+  "adminContacts": {
+    "hero": {
+      "eyebrow": "Boîte de réception",
+      "title": "Messages de contact",
+      "description": "Retrouve ici les demandes envoyées depuis le site public, avec recherche rapide par parent, email, téléphone ou contenu."
+    },
+    "filters": {
+      "search": "Recherche",
+      "searchPlaceholder": "Nom, email, téléphone ou extrait du message",
+      "status": "Statut",
+      "allStatuses": "Tous les statuts"
+    },
+    "summary": {
+      "total": "{{count}} message(s) trouvé(s)",
+      "page": "page {{page}} / {{totalPages}}"
+    },
+    "loading": "Chargement des messages...",
+    "empty": "Aucun message ne correspond à la recherche actuelle.",
+    "card": {
+      "receivedAt": "Reçu le {{date}}",
+      "handledAt": "traité le {{date}}"
+    },
+    "management": {
+      "adminStatus": "Statut admin",
+      "internalNote": "Note interne",
+      "notePlaceholder": "Suivi interne, relance, réponse faite, besoin spécifique..."
+    },
+    "actions": {
+      "savingNote": "Enregistrement...",
+      "saveNote": "Enregistrer la note"
+    },
+    "pagination": {
+      "ariaLabel": "Pagination contacts",
+      "previous": "Page précédente",
+      "current": "Page {{page}} sur {{totalPages}}",
+      "next": "Page suivante"
+    },
+    "status": {
+      "new": "Nouveau",
+      "inProgress": "En cours",
+      "resolved": "Traité",
+      "archived": "Archivé"
+    },
+    "success": {
+      "statusUpdated": "Statut du message mis à jour.",
+      "noteSaved": "Note interne enregistrée."
+    },
+    "errors": {
+      "load": "Impossible de charger les messages de contact.",
+      "updateStatus": "Impossible de mettre à jour ce message pour le moment.",
+      "saveNote": "Impossible d'enregistrer la note interne."
+    }
+  },
+  "adminFaq": {
+    "catalog": {
+      "eyebrow": "Base de connaissance",
+      "title": "FAQ",
+      "new": "Nouvelle réponse",
+      "search": "Recherche",
+      "searchPlaceholder": "Question, thème ou contenu de réponse",
+      "loading": "Chargement de la FAQ...",
+      "empty": "Aucune entrée FAQ ne correspond à la recherche actuelle."
+    },
+    "entry": {
+      "defaultCategory": "Questions fréquentes",
+      "published": "Publié",
+      "draft": "Brouillon",
+      "order": "Ordre {{value}}",
+      "freeCategory": "Catégorie libre"
+    },
+    "editor": {
+      "eyebrow": "Édition",
+      "editTitle": "Modifier une réponse",
+      "createTitle": "Créer une réponse"
+    },
+    "fields": {
+      "question": "Question",
+      "answer": "Réponse",
+      "category": "Catégorie",
+      "categoryPlaceholder": "Choisir un atelier",
+      "displayOrder": "Ordre d'affichage",
+      "publish": "Publier cette réponse"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "deleting": "Suppression...",
+      "saving": "Enregistrement...",
+      "update": "Mettre à jour",
+      "create": "Créer la réponse",
+      "reset": "Réinitialiser"
+    },
+    "success": {
+      "created": "Réponse FAQ créée avec succès.",
+      "updated": "Réponse FAQ mise à jour avec succès.",
+      "deleted": "Réponse FAQ supprimée avec succès."
+    },
+    "errors": {
+      "invalidForm": "Le formulaire FAQ est incomplet ou invalide.",
+      "load": "Impossible de charger la FAQ admin.",
+      "save": "Impossible d'enregistrer cette réponse FAQ pour le moment.",
+      "delete": "Impossible de supprimer cette réponse FAQ."
+    },
+    "delete": {
+      "confirm": "Supprimer la question FAQ \"{{question}}\" ?"
+    }
+  },
+  "adminChatbot": {
+    "stats": {
+      "messages": "Messages",
+      "faq": "FAQ",
+      "workshops": "Recommandations ateliers",
+      "fallback": "Fallback vers contact"
+    },
+    "hero": {
+      "eyebrow": "Observation produit",
+      "title": "Messages du chatbot",
+      "description": "Ce suivi aide à identifier les vraies questions des parents et les cas que le bot couvre encore mal."
+    },
+    "filters": {
+      "search": "Recherche",
+      "searchPlaceholder": "Message, réponse ou route",
+      "sourceType": "Type de réponse",
+      "allSources": "Tous",
+      "contactFallback": "Orientation contact",
+      "all": "Tous",
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "summary": {
+      "total": "{{count}} message(s) trouvé(s)",
+      "page": "page {{page}} / {{totalPages}}"
+    },
+    "loading": "Chargement des messages du chatbot...",
+    "empty": "Aucun message ne correspond aux filtres actuels.",
+    "log": {
+      "fallbackToContact": "Vers contact",
+      "parentQuestion": "Question parent",
+      "botReply": "Réponse du bot"
+    },
+    "pagination": {
+      "ariaLabel": "Pagination chatbot",
+      "previous": "Page précédente",
+      "current": "Page {{page}} sur {{totalPages}}",
+      "next": "Page suivante"
+    },
+    "source": {
+      "faq": "FAQ",
+      "workshop": "Atelier",
+      "guidance": "Guidage",
+      "fallback": "Fallback"
+    },
+    "errors": {
+      "summary": "Impossible de charger le résumé du chatbot.",
+      "logs": "Impossible de charger les messages du chatbot."
+    }
+  },
+  "adminWorkshops": {
+    "catalog": {
+      "eyebrow": "Catalogue admin",
+      "title": "Ateliers",
+      "new": "Nouvel atelier",
+      "loading": "Chargement des ateliers...",
+      "empty": "Aucun atelier créé pour le moment.",
+      "published": "Publié",
+      "draft": "Brouillon"
+    },
+    "editor": {
+      "eyebrow": "Édition",
+      "editTitle": "Modifier un atelier",
+      "createTitle": "Créer un atelier",
+      "generateSlug": "Générer le slug"
+    },
+    "fields": {
+      "title": "Titre",
+      "slug": "Slug",
+      "shortDescription": "Description courte",
+      "description": "Description complète",
+      "startAt": "Début",
+      "endAt": "Fin",
+      "location": "Lieu",
+      "ageMin": "Âge minimum",
+      "ageMax": "Âge maximum",
+      "capacity": "Capacité",
+      "publish": "Publier cet atelier"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "deleting": "Suppression...",
+      "saving": "Enregistrement...",
+      "update": "Mettre à jour",
+      "create": "Créer l'atelier",
+      "reset": "Réinitialiser"
+    },
+    "success": {
+      "created": "Atelier créé avec succès.",
+      "updated": "Atelier mis à jour avec succès.",
+      "deleted": "Atelier supprimé avec succès."
+    },
+    "errors": {
+      "invalidForm": "Certains champs sont incomplets ou invalides. Vérifie les messages sous le formulaire.",
+      "load": "Impossible de charger les ateliers.",
+      "delete": "Impossible de supprimer l'atelier pour le moment.",
+      "slugConflict": "Un atelier avec ce slug existe déjà. Modifie le titre ou le slug puis réessaie.",
+      "invalidPayload": "Les données envoyées sont invalides. Vérifie le slug, les dates et les champs numériques.",
+      "save": "Impossible d'enregistrer cet atelier pour le moment. Réessaie dans quelques instants."
+    },
+    "delete": {
+      "confirm": "Supprimer l'atelier \"{{title}}\" ?"
+    },
+    "age": {
+      "unspecified": "Âge non précisé",
+      "range": "{{min}} à {{max}} ans",
+      "min": "À partir de {{min}} ans",
+      "max": "Jusqu'à {{max}} ans"
+    },
+    "calendar": {
+      "open": "Ouvrir dans Google Calendar",
+      "status": {
+        "synced": "Google Calendar synchronisé",
+        "failed": "Google Calendar en erreur",
+        "disabled": "Google Calendar non configuré",
+        "pending": "Google Calendar en attente",
+        "inactive": "Google Calendar inactif"
+      },
+      "detail": {
+        "failed": "La synchronisation a échoué. Vérifie la configuration backend.",
+        "syncedAt": "Dernière sync: {{date}}",
+        "disabled": "Renseigne GOOGLE_CALENDAR_ID et le compte de service Google côté backend pour activer la sync.",
+        "inactive": "La synchronisation ne démarre que pour les ateliers publiés.",
+        "pending": "La publication de cet atelier déclenche la création ou mise à jour de l'événement."
+      }
+    },
+    "validation": {
+      "required": "Ce champ est obligatoire.",
+      "minlength": "Minimum {{count}} caractères.",
+      "pattern": "Utilise seulement des lettres minuscules, chiffres et tirets.",
+      "invalid": "Valeur invalide."
+    }
+  },
+  "adminLogin": {
+    "hero": {
+      "eyebrow": "Administration",
+      "title": "Un accès simple et sécurisé pour gérer les ateliers Winilo Kids.",
+      "description": "Connecte-toi pour accéder au tableau de bord, publier les ateliers et suivre les demandes d'inscription.",
+      "backToPublic": "Retour au site public"
+    },
+    "form": {
+      "title": "Connexion admin",
+      "email": "Email",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Mot de passe admin",
+      "submitting": "Connexion...",
+      "submit": "Se connecter"
+    },
+    "error": {
+      "invalidCredentials": "Connexion impossible. Vérifie l'email et le mot de passe admin."
+    }
+  }
+}

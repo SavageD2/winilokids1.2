@@ -2,17 +2,20 @@ import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AdminDashboardService } from '../../../core/services/admin-dashboard.service';
+import { I18nService } from '../../../core/services/i18n.service';
 import { AdminDashboardSummary } from '../../../shared/models/admin-dashboard.model';
 
 @Component({
   selector: 'app-admin-dashboard-page',
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, TranslatePipe],
   templateUrl: './admin-dashboard-page.component.html',
   styleUrl: './admin-dashboard-page.component.scss',
 })
 export class AdminDashboardPageComponent {
   private readonly dashboardService = inject(AdminDashboardService);
+  private readonly i18nService = inject(I18nService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly summary = signal<AdminDashboardSummary | null>(null);
@@ -29,9 +32,13 @@ export class AdminDashboardPageComponent {
           this.loading.set(false);
         },
         error: () => {
-          this.error.set('Impossible de charger le tableau de bord.');
+          this.error.set(this.i18nService.translateInstant('adminDashboard.error'));
           this.loading.set(false);
         },
       });
+  }
+
+  protected remainingPlacesLabel(availablePlaces: number) {
+    return `${availablePlaces} ${this.i18nService.translateInstant('adminDashboard.upcoming.remainingPlaces')}`;
   }
 }

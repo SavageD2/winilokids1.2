@@ -3,20 +3,23 @@ import { Component, DestroyRef, computed, effect, inject, signal } from '@angula
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 import { GoogleSignInButtonComponent } from '../../../core/components/google-sign-in-button/google-sign-in-button.component';
+import { I18nService } from '../../../core/services/i18n.service';
 import { ParentAuthService } from '../../../core/services/parent-auth.service';
 import { ParentRegistrationsService } from '../../../core/services/parent-registrations.service';
 import { RegistrationRecord, RegistrationStatus } from '../../../shared/models/registration.model';
 
 @Component({
   selector: 'app-account-page',
-  imports: [ReactiveFormsModule, DatePipe, GoogleSignInButtonComponent],
+  imports: [ReactiveFormsModule, DatePipe, GoogleSignInButtonComponent, TranslatePipe],
   templateUrl: './account-page.component.html',
   styleUrl: './account-page.component.scss',
 })
 export class AccountPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18nService = inject(I18nService);
   private readonly parentAuthService = inject(ParentAuthService);
   private readonly parentRegistrationsService = inject(ParentRegistrationsService);
   private readonly router = inject(Router);
@@ -42,6 +45,8 @@ export class AccountPageComponent {
   protected readonly settingPassword = signal(false);
   protected readonly reservations = signal<RegistrationRecord[]>([]);
   protected readonly authMethodsLabel = computed(() => {
+    this.i18nService.language();
+
     const parent = this.parent();
 
     if (!parent) {
@@ -51,14 +56,16 @@ export class AccountPageComponent {
     const methods: string[] = [];
 
     if (parent.hasPassword) {
-      methods.push('mot de passe');
+      methods.push(this.i18nService.translateInstant('account.auth.methods.password'));
     }
 
     if (parent.hasGoogleAccount) {
-      methods.push('Google');
+      methods.push(this.i18nService.translateInstant('account.auth.methods.google'));
     }
 
-    return methods.length > 0 ? methods.join(' + ') : 'connexion parent';
+    return methods.length > 0
+      ? methods.join(' + ')
+      : this.i18nService.translateInstant('account.auth.methods.parentLogin');
   });
   protected readonly connectedParentDisplayName = computed(() => {
     const parent = this.parent();
@@ -127,7 +134,7 @@ export class AccountPageComponent {
         },
         error: () => {
           this.registerErrorMessage.set(
-            'Creation du compte impossible pour le moment. Verifie les informations et reessaie.',
+            this.i18nService.translateInstant('account.auth.errors.register'),
           );
         },
       });
@@ -156,9 +163,7 @@ export class AccountPageComponent {
           void this.redirectAfterAuth();
         },
         error: () => {
-          this.loginErrorMessage.set(
-            'Connexion impossible. Verifie ton email et ton mot de passe.',
-          );
+          this.loginErrorMessage.set(this.i18nService.translateInstant('account.auth.errors.login'));
         },
       });
   }
@@ -199,7 +204,7 @@ export class AccountPageComponent {
         },
         error: () => {
           this.googleErrorMessage.set(
-            'Connexion Google impossible pour le moment. Verifie la configuration et reessaie.',
+            this.i18nService.translateInstant('account.auth.errors.google'),
           );
         },
       });
@@ -212,13 +217,13 @@ export class AccountPageComponent {
   protected statusLabel(status: RegistrationStatus): string {
     switch (status) {
       case 'PENDING':
-        return 'En attente';
+        return this.i18nService.translateInstant('account.reservations.status.pending');
       case 'CONFIRMED':
-        return 'Confirmee';
+        return this.i18nService.translateInstant('account.reservations.status.confirmed');
       case 'CANCELLED':
-        return 'Annulee';
+        return this.i18nService.translateInstant('account.reservations.status.cancelled');
       case 'ATTENDED':
-        return 'Presente';
+        return this.i18nService.translateInstant('account.reservations.status.attended');
     }
   }
 
@@ -232,7 +237,10 @@ export class AccountPageComponent {
     }
 
     const confirmed = confirm(
-      `Annuler la reservation pour "${reservation.workshop.title}" au nom de ${reservation.childFirstName} ?`,
+      this.i18nService.translateInstant('account.reservations.cancel.confirm', {
+        workshopTitle: reservation.workshop.title,
+        childFirstName: reservation.childFirstName,
+      }),
     );
 
     if (!confirmed) {
@@ -260,7 +268,7 @@ export class AccountPageComponent {
         },
         error: () => {
           this.reservationsErrorMessage.set(
-            'Impossible d annuler cette reservation pour le moment.',
+            this.i18nService.translateInstant('account.reservations.cancel.error'),
           );
         },
       });
@@ -310,10 +318,14 @@ export class AccountPageComponent {
       )
       .subscribe({
         next: () => {
-          this.profileSuccessMessage.set('Profil mis a jour avec succes.');
+          this.profileSuccessMessage.set(
+            this.i18nService.translateInstant('account.profile.success'),
+          );
         },
         error: () => {
-          this.profileErrorMessage.set('Impossible de mettre a jour le profil pour le moment.');
+          this.profileErrorMessage.set(
+            this.i18nService.translateInstant('account.profile.error'),
+          );
         },
       });
   }
@@ -327,7 +339,9 @@ export class AccountPageComponent {
     const { password, confirmPassword } = this.passwordForm.getRawValue();
 
     if (password !== confirmPassword) {
-      this.passwordErrorMessage.set('Les deux mots de passe doivent etre identiques.');
+      this.passwordErrorMessage.set(
+        this.i18nService.translateInstant('account.password.errors.mismatch'),
+      );
       this.passwordSuccessMessage.set(null);
       return;
     }
@@ -350,12 +364,23 @@ export class AccountPageComponent {
             password: '',
             confirmPassword: '',
           });
-          this.passwordSuccessMessage.set('Connexion par mot de passe activee avec succes.');
+          this.passwordSuccessMessage.set(
+            this.i18nService.translateInstant('account.password.success'),
+          );
         },
         error: () => {
-          this.passwordErrorMessage.set('Impossible d activer le mot de passe pour le moment.');
+          this.passwordErrorMessage.set(
+            this.i18nService.translateInstant('account.password.errors.unavailable'),
+          );
         },
       });
+  }
+
+  protected childSummary(registration: RegistrationRecord) {
+    return this.i18nService.translateInstant('account.reservations.childSummary', {
+      childFirstName: registration.childFirstName,
+      childAge: registration.childAge,
+    });
   }
 
   private redirectAfterAuth() {
@@ -389,7 +414,7 @@ export class AccountPageComponent {
         },
         error: () => {
           this.reservationsErrorMessage.set(
-            'Impossible de charger tes reservations pour le moment.',
+            this.i18nService.translateInstant('account.reservations.error'),
           );
         },
       });

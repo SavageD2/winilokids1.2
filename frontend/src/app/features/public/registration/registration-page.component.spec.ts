@@ -1,6 +1,7 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { ParentAuthService } from '../../../core/services/parent-auth.service';
 import { RegistrationsService } from '../../../core/services/registrations.service';
@@ -64,6 +65,10 @@ describe('RegistrationPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [RegistrationPageComponent],
       providers: [
+        ...provideTranslateService({
+          fallbackLang: 'fr',
+          lang: 'fr',
+        }),
         provideRouter([]),
         {
           provide: ParentAuthService,
@@ -87,6 +92,24 @@ describe('RegistrationPageComponent', () => {
         },
       ],
     }).compileComponents();
+
+    const translateService = TestBed.inject(TranslateService);
+    translateService.setTranslation(
+      'fr',
+      {
+        registration: {
+          success:
+            'Demande enregistrée pour l\'atelier "{{workshopTitle}}". Nous reviendrons vers vous rapidement.',
+          error: {
+            workshops: 'Impossible de charger la liste des ateliers.',
+            submit:
+              "Impossible d'envoyer l'inscription pour le moment. Merci de réessayer dans quelques instants.",
+          },
+        },
+      },
+      true,
+    );
+    translateService.use('fr');
   });
 
   it('prefills the workshop from the query string after loading workshops', () => {

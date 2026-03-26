@@ -2,16 +2,19 @@ import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
+import { I18nService } from '../../../core/services/i18n.service';
 import { WorkshopsService } from '../../../core/services/workshops.service';
 import { Workshop } from '../../../shared/models/workshop.model';
 
 @Component({
   selector: 'app-home-page',
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, TranslatePipe],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
 export class HomePageComponent {
+  private readonly i18nService = inject(I18nService);
   private readonly workshopsService = inject(WorkshopsService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -36,17 +39,28 @@ export class HomePageComponent {
 
   protected ageLabel(workshop: Workshop): string {
     if (workshop.recommendedAgeMin === null && workshop.recommendedAgeMax === null) {
-      return 'Age libre selon l atelier';
+      return this.i18nService.translateInstant('home.spotlight.age.free');
     }
 
     if (workshop.recommendedAgeMin !== null && workshop.recommendedAgeMax !== null) {
-      return `${workshop.recommendedAgeMin} a ${workshop.recommendedAgeMax} ans`;
+      return this.i18nService.translateInstant('home.spotlight.age.range', {
+        min: workshop.recommendedAgeMin,
+        max: workshop.recommendedAgeMax,
+      });
     }
 
     if (workshop.recommendedAgeMin !== null) {
-      return `A partir de ${workshop.recommendedAgeMin} ans`;
+      return this.i18nService.translateInstant('home.spotlight.age.min', {
+        min: workshop.recommendedAgeMin,
+      });
     }
 
-    return `Jusqu a ${workshop.recommendedAgeMax} ans`;
+    return this.i18nService.translateInstant('home.spotlight.age.max', {
+      max: workshop.recommendedAgeMax,
+    });
+  }
+
+  protected availablePlacesLabel(availablePlaces: number) {
+    return `${availablePlaces} ${this.i18nService.translateInstant('home.spotlight.remainingPlaces')}`;
   }
 }

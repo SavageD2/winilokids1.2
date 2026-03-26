@@ -1,29 +1,71 @@
 <div class="app-shell">
-  <header class="site-header">
-    <a class="brand" routerLink="/">
+  <header class="site-header" [class.site-header-menu-open]="isMenuOpen()">
+    <a class="brand" routerLink="/" (click)="closeMenu()">
       <span class="brand-mark">W</span>
       <span>
         <strong>Winilo Kids</strong>
-        <small>Ateliers pour enfants et familles</small>
+        <small>{{ 'layout.public.brandTagline' | translate }}</small>
       </span>
     </a>
 
-    <div class="header-actions">
+    <button
+      class="menu-toggle"
+      type="button"
+      [attr.aria-expanded]="isMenuOpen()"
+      [attr.aria-controls]="menuPanelId"
+      (click)="toggleMenu()"
+    >
+      <span class="menu-toggle-label">
+        {{ (isMenuOpen() ? 'layout.public.menu.close' : 'layout.public.menu.open') | translate }}
+      </span>
+      <span class="menu-toggle-icon" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <div
+      class="header-actions"
+      [class.header-actions-open]="isMenuOpen()"
+      [id]="menuPanelId"
+    >
       <nav class="site-nav">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          Accueil
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMenu()"
+        >
+          {{ 'layout.public.nav.home' | translate }}
         </a>
-        <a routerLink="/ateliers" routerLinkActive="active">Ateliers</a>
-        <a routerLink="/faq" routerLinkActive="active">FAQ</a>
-        <a routerLink="/inscription" routerLinkActive="active">
-          {{ isParentAuthenticated() ? 'Mon compte' : 'Inscription / Connexion' }}
+        <a routerLink="/ateliers" routerLinkActive="active" (click)="closeMenu()">
+          {{ 'layout.public.nav.workshops' | translate }}
         </a>
-        <a routerLink="/contact" routerLinkActive="active">Contact</a>
-        <app-theme-switcher label="Theme" [compact]="true"></app-theme-switcher>
-        @if (isAdminAuthenticated()) {
-          <a routerLink="/admin/dashboard" routerLinkActive="active">Admin</a>
-        }
+        <a routerLink="/faq" routerLinkActive="active" (click)="closeMenu()">
+          {{ 'layout.public.nav.faq' | translate }}
+        </a>
+        <a routerLink="/inscription" routerLinkActive="active" (click)="closeMenu()">
+          {{
+            (isParentAuthenticated() ? 'layout.public.nav.account' : 'layout.public.nav.signup')
+              | translate
+          }}
+        </a>
+        <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">
+          {{ 'layout.public.nav.contact' | translate }}
+        </a>
       </nav>
+
+      <div class="site-tools">
+        <app-language-switcher
+          [label]="'common.language' | translate"
+          [compact]="true"
+        ></app-language-switcher>
+        <app-theme-switcher
+          [label]="'common.theme' | translate"
+          [compact]="true"
+        ></app-theme-switcher>
+      </div>
     </div>
   </header>
 
@@ -34,13 +76,18 @@
   <footer class="site-footer">
     <div>
       <strong>Winilo Kids</strong>
-      <p>Une experience simple et rassurante pour aider les parents a reserver les bons ateliers.</p>
+      <p>{{ 'layout.public.footer.description' | translate }}</p>
     </div>
     <div class="footer-links">
-      <a routerLink="/ateliers">Voir les ateliers</a>
-      <a routerLink="/faq">FAQ</a>
-      <a routerLink="/inscription">{{ isParentAuthenticated() ? 'Mon compte' : 'Inscription / Connexion' }}</a>
-      <a routerLink="/contact">Contact</a>
+      <a routerLink="/ateliers">{{ 'layout.public.footer.workshops' | translate }}</a>
+      <a routerLink="/faq">{{ 'layout.public.footer.faq' | translate }}</a>
+      <a routerLink="/inscription">
+        {{
+          (isParentAuthenticated() ? 'layout.public.footer.account' : 'layout.public.footer.signup')
+            | translate
+        }}
+      </a>
+      <a routerLink="/contact">{{ 'layout.public.footer.contact' | translate }}</a>
     </div>
   </footer>
 </div>

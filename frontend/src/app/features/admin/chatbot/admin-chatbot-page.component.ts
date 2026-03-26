@@ -2,8 +2,10 @@ import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { AdminChatbotService } from '../../../core/services/admin-chatbot.service';
+import { I18nService } from '../../../core/services/i18n.service';
 import {
   AdminChatbotSourceType,
   AdminChatbotSummary,
@@ -12,12 +14,13 @@ import {
 
 @Component({
   selector: 'app-admin-chatbot-page',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, TranslatePipe],
   templateUrl: './admin-chatbot-page.component.html',
   styleUrl: './admin-chatbot-page.component.scss',
 })
 export class AdminChatbotPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18nService = inject(I18nService);
   private readonly chatbotService = inject(AdminChatbotService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -73,14 +76,25 @@ export class AdminChatbotPageComponent {
   protected sourceLabel(sourceType: AdminChatbotSourceType) {
     switch (sourceType) {
       case 'FAQ':
-        return 'FAQ';
+        return this.i18nService.translateInstant('adminChatbot.source.faq');
       case 'WORKSHOP':
-        return 'Atelier';
+        return this.i18nService.translateInstant('adminChatbot.source.workshop');
       case 'GUIDANCE':
-        return 'Guidage';
+        return this.i18nService.translateInstant('adminChatbot.source.guidance');
       case 'FALLBACK':
-        return 'Fallback';
+        return this.i18nService.translateInstant('adminChatbot.source.fallback');
     }
+  }
+
+  protected summaryLabel(count: number) {
+    return this.i18nService.translateInstant('adminChatbot.summary.total', { count });
+  }
+
+  protected pageSummaryLabel() {
+    return this.i18nService.translateInstant('adminChatbot.summary.page', {
+      page: this.page(),
+      totalPages: this.totalPages(),
+    });
   }
 
   private loadSummary() {
@@ -92,7 +106,7 @@ export class AdminChatbotPageComponent {
           this.summary.set(summary);
         },
         error: () => {
-          this.error.set('Impossible de charger le resume du chatbot.');
+          this.error.set(this.i18nService.translateInstant('adminChatbot.errors.summary'));
         },
       });
   }
@@ -120,7 +134,7 @@ export class AdminChatbotPageComponent {
           this.loading.set(false);
         },
         error: () => {
-          this.error.set('Impossible de charger les messages du chatbot.');
+          this.error.set(this.i18nService.translateInstant('adminChatbot.errors.logs'));
           this.loading.set(false);
         },
       });

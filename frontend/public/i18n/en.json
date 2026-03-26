@@ -1,0 +1,753 @@
+{
+  "common": {
+    "theme": "Theme",
+    "language": "Language",
+    "admin": "Admin"
+  },
+  "language": {
+    "option": {
+      "fr": "FR",
+      "en": "EN"
+    }
+  },
+  "time": {
+    "at": "at"
+  },
+  "theme": {
+    "option": {
+      "default": "Default",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "hint": {
+      "system": "The theme currently follows your system in {{mode}} mode.",
+      "default": "Uses the current editorial appearance of the application.",
+      "active": "{{mode}} appearance is active on this device."
+    }
+  },
+  "layout": {
+    "public": {
+      "brandTagline": "Workshops for children and families",
+      "menu": {
+        "open": "Open menu",
+        "close": "Close menu"
+      },
+      "nav": {
+        "home": "Home",
+        "workshops": "Workshops",
+        "faq": "FAQ",
+        "account": "My account",
+        "signup": "Sign up / Log in",
+        "contact": "Contact",
+        "admin": "Admin"
+      },
+      "footer": {
+        "description": "A simple and reassuring experience to help parents book the right workshops.",
+        "workshops": "Browse workshops",
+        "faq": "FAQ",
+        "account": "My account",
+        "signup": "Sign up / Log in",
+        "contact": "Contact"
+      }
+    },
+    "admin": {
+      "brandSubtitle": "Administration",
+      "nav": {
+        "dashboard": "Dashboard",
+        "workshops": "Workshops",
+        "registrations": "Registrations",
+        "contacts": "Contacts",
+        "chatbot": "Chatbot",
+        "faq": "FAQ"
+      },
+      "connectedAs": "Signed in as",
+      "logout": "Log out",
+      "eyebrow": "Back office",
+      "title": "Admin workspace",
+      "backToPublic": "Back to public site"
+    }
+  },
+  "chatbot": {
+    "toggle": {
+      "open": "Parent assistant",
+      "close": "Close assistant"
+    },
+    "panel": {
+      "ariaLabel": "Winilo Kids conversational assistant",
+      "eyebrow": "Parent assistant",
+      "title": "Need help choosing or booking?",
+      "close": "Close"
+    },
+    "message": {
+      "assistant": "Winilo Kids assistant",
+      "user": "You"
+    },
+    "initialMessage": "I can help you choose a workshop, explain registration, and answer common questions.",
+    "starter": {
+      "workshop": "I am looking for a workshop for a 5-year-old",
+      "registration": "How does registration work?",
+      "contact": "When should I use the contact form?"
+    },
+    "suggestion": {
+      "workshops": "Browse workshops",
+      "faq": "Read the FAQ",
+      "account": "Sign up / Log in"
+    },
+    "form": {
+      "question": "Your question",
+      "placeholder": "Example: I am looking for a workshop for a 6-year-old or how does registration work?",
+      "helper": "The assistant relies on the FAQ and published workshops. For a specific need, it will direct you to the contact form.",
+      "send": "Send",
+      "sending": "Reply in progress..."
+    },
+    "error": {
+      "unavailable": "Unable to get an answer right now. You can still use the contact form."
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Thoughtful workshops for curious children",
+      "title": "Winilo Kids helps parents find joyful, reassuring, and genuinely useful moments.",
+      "description": "Creative, sensory, and playful workshops designed for children and presented clearly so families can choose with confidence.",
+      "primaryCta": "Browse workshops",
+      "secondaryCta": "Ask a question",
+      "stickers": {
+        "sun": "sun",
+        "cloud": "cloud",
+        "rainbow": "rainbow"
+      },
+      "panelLabel": "The Winilo Kids experience",
+      "panelItems": {
+        "information": "Clear information about age range, location, and schedule",
+        "registration": "A simple registration flow in just a few minutes",
+        "reassurance": "A reassuring tone and an easy-to-read experience for parents"
+      }
+    },
+    "values": {
+      "clarity": {
+        "icon": "books",
+        "title": "Clarity",
+        "description": "Each workshop highlights the essentials: date, location, recommended audience, and availability."
+      },
+      "trust": {
+        "icon": "heart",
+        "title": "Trust",
+        "description": "The site is designed to reassure parents and make decisions easier."
+      },
+      "joy": {
+        "icon": "train",
+        "title": "Joy",
+        "description": "The project showcases lively, creative experiences tailored to children."
+      }
+    },
+    "spotlight": {
+      "eyebrow": "Coming up",
+      "title": "Upcoming workshops",
+      "viewAll": "View all",
+      "loading": "Loading workshops...",
+      "empty": "Upcoming workshops will appear here as soon as they are published from the admin area.",
+      "viewDetail": "View details",
+      "remainingPlaces": "spot(s) left",
+      "age": {
+        "free": "Flexible age depending on the workshop",
+        "range": "{{min}} to {{max}} years old",
+        "min": "From {{min}} years old",
+        "max": "Up to {{max}} years old"
+      }
+    }
+  },
+  "workshops": {
+    "list": {
+      "hero": {
+        "eyebrow": "Programme",
+        "title": "Clear workshop listings without having to search everywhere for the right info.",
+        "description": "Each page gathers the essentials to help parents choose easily: content, recommended age, location, schedule, and availability."
+      },
+      "loading": "Loading workshops...",
+      "empty": "No workshops have been published yet.",
+      "error": {
+        "unavailable": "Unable to load workshops right now."
+      },
+      "labels": {
+        "location": "Location",
+        "age": "Age",
+        "availability": "Availability"
+      },
+      "availability": {
+        "remaining": "spot(s) left",
+        "onRequest": "On request"
+      },
+      "actions": {
+        "detail": "View details",
+        "reserve": "Book this workshop",
+        "loginToReserve": "Log in to book"
+      },
+      "age": {
+        "free": "Age to be confirmed",
+        "range": "{{min}} to {{max}} years old",
+        "min": "From {{min}} years old",
+        "max": "Up to {{max}} years old"
+      }
+    }
+  },
+  "workshopDetail": {
+    "loading": "Loading workshop details...",
+    "error": {
+      "unavailable": "Workshop not found or unavailable."
+    },
+    "backToList": "Back to the list",
+    "eyebrow": "Workshop details",
+    "descriptionTitle": "What parents should know",
+    "infoTitle": "Practical information",
+    "labels": {
+      "date": "Date",
+      "time": "Time",
+      "location": "Location",
+      "age": "Recommended age",
+      "places": "Places"
+    },
+    "actions": {
+      "reserve": "Book this workshop",
+      "loginToReserve": "Log in to book",
+      "askQuestion": "Ask a question"
+    },
+    "availability": {
+      "remaining": "spot(s) left",
+      "onRequest": "Availability on request"
+    },
+    "age": {
+      "free": "Age shared on request",
+      "range": "{{min}} to {{max}} years old",
+      "min": "From {{min}} years old",
+      "max": "Up to {{max}} years old"
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contact",
+      "title": "A parent question deserves a simple and quick answer.",
+      "description": "Use this form to ask for more details about a workshop, an age group, availability, or a specific organisation need."
+    },
+    "side": {
+      "title": "This form is useful if...",
+      "item1": "you are hesitating between several workshops",
+      "item2": "you want to check whether it fits your child's age",
+      "item3": "you need an answer before completing a registration"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Claire Dupont",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "messagePlaceholder": "Hello, I would like to know more about the Saturday workshops.",
+      "sending": "Sending...",
+      "submit": "Send message"
+    },
+    "success": "Message sent. The Winilo Kids team will get back to you as soon as possible.",
+    "error": "Unable to send the message right now. Please try again a little later."
+  },
+  "faq": {
+    "hero": {
+      "eyebrow": "FAQ",
+      "title": "Clear answers to help parents choose and book with confidence.",
+      "description": "This FAQ gathers the most useful information about workshops, registration, and overall organisation. If your question falls outside this scope, the contact form takes over."
+    },
+    "loading": "Loading FAQ...",
+    "empty": "The public FAQ will be available as soon as a first answer is published.",
+    "error": "Unable to load the FAQ right now.",
+    "defaultCategory": "Frequently asked questions",
+    "groupEyebrow": "Topic",
+    "side": {
+      "title": "Didn't find your answer?",
+      "description": "Some requests deserve a more human answer, especially when they involve a specific need, a strong hesitation between several workshops, or a particular family context.",
+      "cta": "Ask a question"
+    }
+  },
+  "account": {
+    "hero": {
+      "eyebrow": "Parent account",
+      "title": "Log in or create your account before booking a workshop.",
+      "description": "The parent account gives you a clearer journey, centralises bookings, and secures workshop registration."
+    },
+    "fields": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "password": "Password"
+    },
+    "placeholders": {
+      "firstName": "Camille",
+      "lastName": "Martin",
+      "email": "camille@example.com",
+      "phone": "0612345678",
+      "password": "At least 8 characters"
+    },
+    "connected": {
+      "eyebrow": "Active session",
+      "activeMethod": "Active method",
+      "continue": "Continue",
+      "logout": "Log out"
+    },
+    "auth": {
+      "methods": {
+        "password": "password",
+        "google": "Google",
+        "parentLogin": "parent login"
+      },
+      "google": {
+        "eyebrow": "Google sign-in",
+        "title": "Continue with Google",
+        "description": "Use the same button to create your parent account or recover an existing account by email. Administrators still sign in only through the dedicated area.",
+        "unavailable": "Add GOOGLE_CLIENT_ID on both frontend and backend to enable Google.",
+        "submitting": "Google sign-in in progress..."
+      },
+      "register": {
+        "eyebrow": "Sign up",
+        "title": "Create an account",
+        "submitting": "Creating...",
+        "submit": "Create my account"
+      },
+      "login": {
+        "eyebrow": "Log in",
+        "title": "Access my account",
+        "passwordPlaceholder": "Your password",
+        "submitting": "Signing in...",
+        "submit": "Log me in"
+      },
+      "errors": {
+        "register": "Unable to create the account right now. Check the information and try again.",
+        "login": "Unable to sign in. Check your email and password.",
+        "google": "Google sign-in is unavailable right now. Check the configuration and try again."
+      }
+    },
+    "profile": {
+      "eyebrow": "My profile",
+      "title": "Parent information",
+      "saving": "Saving...",
+      "submit": "Update profile",
+      "success": "Profile updated successfully.",
+      "error": "Unable to update the profile right now."
+    },
+    "password": {
+      "eyebrow": "Local sign-in",
+      "title": "Add a password",
+      "description": "Your Google account is already active. You can also set a password to sign in later with your email.",
+      "new": "New password",
+      "confirm": "Confirm password",
+      "activating": "Activating...",
+      "submit": "Enable password sign-in",
+      "success": "Password sign-in enabled successfully.",
+      "placeholders": {
+        "password": "At least 8 characters",
+        "confirm": "Re-enter the password"
+      },
+      "errors": {
+        "mismatch": "Both passwords must match.",
+        "unavailable": "Unable to enable the password right now."
+      }
+    },
+    "reservations": {
+      "eyebrow": "My bookings",
+      "title": "Workshop tracking",
+      "loading": "Loading bookings...",
+      "empty": "No booking has been recorded yet.",
+      "error": "Unable to load your bookings right now.",
+      "childSummary": "Child: {{childFirstName}} · {{childAge}} years old",
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled",
+        "attended": "Attended"
+      },
+      "cancel": {
+        "button": "Cancel booking",
+        "inProgress": "Cancelling...",
+        "confirm": "Cancel the booking for \"{{workshopTitle}}\" on behalf of {{childFirstName}}?",
+        "error": "Unable to cancel this booking right now."
+      }
+    }
+  },
+  "registration": {
+    "hero": {
+      "eyebrow": "Workshop booking",
+      "title": "Complete your child's booking from your parent account.",
+      "description": "The parent account remains the base of the record, then you only add the information useful for the booking."
+    },
+    "info": {
+      "accountTitle": "Account used",
+      "beforeSubmitTitle": "Before confirming",
+      "item1": "Choose the workshop that best matches your child",
+      "item2": "Add your child's age to help with processing",
+      "item3": "Add a message if you want to share a specific need",
+      "helper": "If you are unsure about a workshop, you can also use the contact form.",
+      "contact": "Contact Winilo Kids"
+    },
+    "form": {
+      "childFirstName": "Child's first name",
+      "childFirstNamePlaceholder": "Lina",
+      "childAge": "Child's age",
+      "workshop": "Workshop",
+      "chooseWorkshop": "Choose a workshop",
+      "message": "Additional message",
+      "messagePlaceholder": "Example: my child prefers hands-on activities.",
+      "submitting": "Sending...",
+      "submit": "Confirm booking"
+    },
+    "success": "Request recorded for the workshop \"{{workshopTitle}}\". We will get back to you quickly.",
+    "error": {
+      "workshops": "Unable to load the workshop list.",
+      "submit": "Unable to send the registration right now. Please try again in a few moments."
+    }
+  },
+  "adminDashboard": {
+    "loading": "Loading dashboard...",
+    "error": "Unable to load the dashboard.",
+    "stats": {
+      "workshops": "Workshops",
+      "published": "Published",
+      "drafts": "Drafts",
+      "registrations": "Registrations",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "contacts": "Contact messages",
+      "openInbox": "Open inbox",
+      "chatbotMessages": "Chatbot messages",
+      "openTracking": "Open tracking",
+      "upcoming": "Upcoming workshops"
+    },
+    "registrations": {
+      "eyebrow": "Registration tracking",
+      "title": "Current statuses",
+      "cta": "Open registrations",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "attended": "Attendance"
+    },
+    "chatbot": {
+      "eyebrow": "Parent assistant",
+      "title": "Chatbot usage",
+      "cta": "View details",
+      "total": "Total messages",
+      "fallback": "Contact fallback",
+      "faq": "FAQ replies",
+      "workshops": "Workshop recs"
+    },
+    "upcoming": {
+      "eyebrow": "Coming up",
+      "title": "Upcoming workshops",
+      "cta": "Manage workshops",
+      "empty": "No upcoming workshop for now.",
+      "remainingPlaces": "spot(s) left"
+    }
+  },
+  "adminRegistrations": {
+    "hero": {
+      "eyebrow": "Quick review",
+      "title": "Registrations",
+      "description": "Search, filtering, and pagination are now handled server-side to keep the admin area responsive."
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Parent name, email, or child first name",
+      "status": "Status",
+      "allStatuses": "All",
+      "workshop": "Workshop",
+      "allWorkshops": "All workshops"
+    },
+    "summary": {
+      "total": "{{count}} registration(s) found",
+      "page": "page {{page}} / {{totalPages}}"
+    },
+    "loading": "Loading registrations...",
+    "empty": "No registration matches the current filters.",
+    "group": {
+      "count": "{{count}} registration(s)"
+    },
+    "registration": {
+      "child": "Child: {{childFirstName}} · {{childAge}} years old",
+      "phone": "Phone: {{phone}}",
+      "changeStatus": "Change status"
+    },
+    "pagination": {
+      "ariaLabel": "Registration pagination",
+      "previous": "Previous page",
+      "current": "Page {{page}} of {{totalPages}}",
+      "next": "Next page"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "attended": "Attended"
+    },
+    "errors": {
+      "load": "Unable to load registrations.",
+      "workshops": "Unable to load workshops.",
+      "updateStatus": "Unable to update the status right now."
+    }
+  },
+  "adminContacts": {
+    "hero": {
+      "eyebrow": "Inbox",
+      "title": "Contact messages",
+      "description": "Find requests sent from the public site here, with quick search by parent, email, phone, or message content."
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Name, email, phone, or message excerpt",
+      "status": "Status",
+      "allStatuses": "All statuses"
+    },
+    "summary": {
+      "total": "{{count}} message(s) found",
+      "page": "page {{page}} / {{totalPages}}"
+    },
+    "loading": "Loading messages...",
+    "empty": "No message matches the current search.",
+    "card": {
+      "receivedAt": "Received on {{date}}",
+      "handledAt": "handled on {{date}}"
+    },
+    "management": {
+      "adminStatus": "Admin status",
+      "internalNote": "Internal note",
+      "notePlaceholder": "Internal follow-up, callback, reply sent, specific need..."
+    },
+    "actions": {
+      "savingNote": "Saving...",
+      "saveNote": "Save note"
+    },
+    "pagination": {
+      "ariaLabel": "Contacts pagination",
+      "previous": "Previous page",
+      "current": "Page {{page}} of {{totalPages}}",
+      "next": "Next page"
+    },
+    "status": {
+      "new": "New",
+      "inProgress": "In progress",
+      "resolved": "Resolved",
+      "archived": "Archived"
+    },
+    "success": {
+      "statusUpdated": "Message status updated.",
+      "noteSaved": "Internal note saved."
+    },
+    "errors": {
+      "load": "Unable to load contact messages.",
+      "updateStatus": "Unable to update this message right now.",
+      "saveNote": "Unable to save the internal note."
+    }
+  },
+  "adminFaq": {
+    "catalog": {
+      "eyebrow": "Knowledge base",
+      "title": "FAQ",
+      "new": "New answer",
+      "search": "Search",
+      "searchPlaceholder": "Question, topic, or answer content",
+      "loading": "Loading FAQ...",
+      "empty": "No FAQ entry matches the current search."
+    },
+    "entry": {
+      "defaultCategory": "Frequently asked questions",
+      "published": "Published",
+      "draft": "Draft",
+      "order": "Order {{value}}",
+      "freeCategory": "Free category"
+    },
+    "editor": {
+      "eyebrow": "Editing",
+      "editTitle": "Edit an answer",
+      "createTitle": "Create an answer"
+    },
+    "fields": {
+      "question": "Question",
+      "answer": "Answer",
+      "category": "Category",
+      "categoryPlaceholder": "Choose a workshop",
+      "displayOrder": "Display order",
+      "publish": "Publish this answer"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "saving": "Saving...",
+      "update": "Update",
+      "create": "Create answer",
+      "reset": "Reset"
+    },
+    "success": {
+      "created": "FAQ answer created successfully.",
+      "updated": "FAQ answer updated successfully.",
+      "deleted": "FAQ answer deleted successfully."
+    },
+    "errors": {
+      "invalidForm": "The FAQ form is incomplete or invalid.",
+      "load": "Unable to load the admin FAQ.",
+      "save": "Unable to save this FAQ answer right now.",
+      "delete": "Unable to delete this FAQ answer."
+    },
+    "delete": {
+      "confirm": "Delete the FAQ question \"{{question}}\"?"
+    }
+  },
+  "adminChatbot": {
+    "stats": {
+      "messages": "Messages",
+      "faq": "FAQ",
+      "workshops": "Workshop recommendations",
+      "fallback": "Fallback to contact"
+    },
+    "hero": {
+      "eyebrow": "Product observation",
+      "title": "Chatbot messages",
+      "description": "This tracking helps identify what parents really ask and where the bot still falls short."
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Message, reply, or route",
+      "sourceType": "Reply type",
+      "allSources": "All",
+      "contactFallback": "Contact routing",
+      "all": "All",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "summary": {
+      "total": "{{count}} message(s) found",
+      "page": "page {{page}} / {{totalPages}}"
+    },
+    "loading": "Loading chatbot messages...",
+    "empty": "No message matches the current filters.",
+    "log": {
+      "fallbackToContact": "To contact",
+      "parentQuestion": "Parent question",
+      "botReply": "Bot reply"
+    },
+    "pagination": {
+      "ariaLabel": "Chatbot pagination",
+      "previous": "Previous page",
+      "current": "Page {{page}} of {{totalPages}}",
+      "next": "Next page"
+    },
+    "source": {
+      "faq": "FAQ",
+      "workshop": "Workshop",
+      "guidance": "Guidance",
+      "fallback": "Fallback"
+    },
+    "errors": {
+      "summary": "Unable to load the chatbot summary.",
+      "logs": "Unable to load chatbot messages."
+    }
+  },
+  "adminWorkshops": {
+    "catalog": {
+      "eyebrow": "Admin catalogue",
+      "title": "Workshops",
+      "new": "New workshop",
+      "loading": "Loading workshops...",
+      "empty": "No workshop has been created yet.",
+      "published": "Published",
+      "draft": "Draft"
+    },
+    "editor": {
+      "eyebrow": "Editing",
+      "editTitle": "Edit a workshop",
+      "createTitle": "Create a workshop",
+      "generateSlug": "Generate slug"
+    },
+    "fields": {
+      "title": "Title",
+      "slug": "Slug",
+      "shortDescription": "Short description",
+      "description": "Full description",
+      "startAt": "Start",
+      "endAt": "End",
+      "location": "Location",
+      "ageMin": "Minimum age",
+      "ageMax": "Maximum age",
+      "capacity": "Capacity",
+      "publish": "Publish this workshop"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "saving": "Saving...",
+      "update": "Update",
+      "create": "Create workshop",
+      "reset": "Reset"
+    },
+    "success": {
+      "created": "Workshop created successfully.",
+      "updated": "Workshop updated successfully.",
+      "deleted": "Workshop deleted successfully."
+    },
+    "errors": {
+      "invalidForm": "Some fields are incomplete or invalid. Check the messages below the form.",
+      "load": "Unable to load workshops.",
+      "delete": "Unable to delete the workshop right now.",
+      "slugConflict": "A workshop with this slug already exists. Change the title or slug and try again.",
+      "invalidPayload": "The submitted data is invalid. Check the slug, dates, and numeric fields.",
+      "save": "Unable to save this workshop right now. Try again in a moment."
+    },
+    "delete": {
+      "confirm": "Delete the workshop \"{{title}}\"?"
+    },
+    "age": {
+      "unspecified": "Age not specified",
+      "range": "{{min}} to {{max}} years old",
+      "min": "From {{min}} years old",
+      "max": "Up to {{max}} years old"
+    },
+    "calendar": {
+      "open": "Open in Google Calendar",
+      "status": {
+        "synced": "Google Calendar synced",
+        "failed": "Google Calendar error",
+        "disabled": "Google Calendar not configured",
+        "pending": "Google Calendar pending",
+        "inactive": "Google Calendar inactive"
+      },
+      "detail": {
+        "failed": "Synchronization failed. Check the backend configuration.",
+        "syncedAt": "Last sync: {{date}}",
+        "disabled": "Set GOOGLE_CALENDAR_ID and the Google service account on the backend to enable sync.",
+        "inactive": "Synchronization only starts for published workshops.",
+        "pending": "Publishing this workshop triggers creation or update of the event."
+      }
+    },
+    "validation": {
+      "required": "This field is required.",
+      "minlength": "Minimum {{count}} characters.",
+      "pattern": "Use only lowercase letters, digits, and hyphens.",
+      "invalid": "Invalid value."
+    }
+  },
+  "adminLogin": {
+    "hero": {
+      "eyebrow": "Administration",
+      "title": "Simple and secure access to manage Winilo Kids workshops.",
+      "description": "Log in to access the dashboard, publish workshops, and follow registration requests.",
+      "backToPublic": "Back to public site"
+    },
+    "form": {
+      "title": "Admin login",
+      "email": "Email",
+      "password": "Password",
+      "passwordPlaceholder": "Admin password",
+      "submitting": "Signing in...",
+      "submit": "Log in"
+    },
+    "error": {
+      "invalidCredentials": "Unable to sign in. Check the admin email and password."
+    }
+  }
+}

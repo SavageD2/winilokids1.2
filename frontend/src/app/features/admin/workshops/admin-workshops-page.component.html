@@ -2,18 +2,18 @@
   <div class="catalog-panel">
     <div class="panel-heading">
       <div>
-        <p class="eyebrow">Catalogue admin</p>
-        <h2>Ateliers</h2>
+        <p class="eyebrow">{{ 'adminWorkshops.catalog.eyebrow' | translate }}</p>
+        <h2>{{ 'adminWorkshops.catalog.title' | translate }}</h2>
       </div>
       <button class="button button-secondary" type="button" (click)="createNewWorkshop()">
-        Nouvel atelier
+        {{ 'adminWorkshops.catalog.new' | translate }}
       </button>
     </div>
 
     @if (loading()) {
-      <p class="panel">Chargement des ateliers...</p>
+      <p class="panel">{{ 'adminWorkshops.catalog.loading' | translate }}</p>
     } @else if (workshops().length === 0) {
-      <p class="panel">Aucun atelier cree pour le moment.</p>
+      <p class="panel">{{ 'adminWorkshops.catalog.empty' | translate }}</p>
     } @else {
       <div class="workshop-list">
         @for (workshop of workshops(); track workshop.id) {
@@ -22,12 +22,16 @@
               <div>
                 <h3>{{ workshop.title }}</h3>
                 <p>
-                  {{ workshop.startAt | date: 'd MMMM y' : '' : 'fr' }} ·
+                  {{ workshop.startAt | date: 'd MMMM y' }} ·
                   {{ workshop.startAt | date: 'HH:mm' }}
                 </p>
               </div>
               <span class="status-pill" [class.status-pill-live]="workshop.isPublished">
-                {{ workshop.isPublished ? 'Publie' : 'Brouillon' }}
+                {{
+                  (workshop.isPublished
+                    ? 'adminWorkshops.catalog.published'
+                    : 'adminWorkshops.catalog.draft') | translate
+                }}
               </span>
             </div>
 
@@ -58,7 +62,7 @@
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Ouvrir dans Google Calendar
+                  {{ 'adminWorkshops.calendar.open' | translate }}
                 </a>
               }
             </div>
@@ -69,7 +73,7 @@
                 type="button"
                 (click)="editWorkshop(workshop)"
               >
-                Modifier
+                {{ 'adminWorkshops.actions.edit' | translate }}
               </button>
               <button
                 class="button button-secondary danger"
@@ -78,9 +82,9 @@
                 (click)="removeWorkshop(workshop)"
               >
                 @if (deletingId() === workshop.id) {
-                  Suppression...
+                  {{ 'adminWorkshops.actions.deleting' | translate }}
                 } @else {
-                  Supprimer
+                  {{ 'adminWorkshops.actions.delete' | translate }}
                 }
               </button>
             </div>
@@ -93,16 +97,18 @@
   <form class="editor-panel" [formGroup]="workshopForm" (ngSubmit)="submit()">
     <div class="panel-heading">
       <div>
-        <p class="eyebrow">Edition</p>
+        <p class="eyebrow">{{ 'adminWorkshops.editor.eyebrow' | translate }}</p>
         <h2>
           @if (editingWorkshopId()) {
-            Modifier un atelier
+            {{ 'adminWorkshops.editor.editTitle' | translate }}
           } @else {
-            Creer un atelier
+            {{ 'adminWorkshops.editor.createTitle' | translate }}
           }
         </h2>
       </div>
-      <button class="text-link" type="button" (click)="generateSlug()">Generer le slug</button>
+      <button class="text-link" type="button" (click)="generateSlug()">
+        {{ 'adminWorkshops.editor.generateSlug' | translate }}
+      </button>
     </div>
 
     @if (errorMessage()) {
@@ -115,7 +121,7 @@
 
     <div class="form-grid">
       <label class="full-width">
-        <span>Titre</span>
+        <span>{{ 'adminWorkshops.fields.title' | translate }}</span>
         <input type="text" formControlName="title" />
         @if (fieldErrorMessage('title'); as message) {
           <small class="field-error">{{ message }}</small>
@@ -123,7 +129,7 @@
       </label>
 
       <label class="full-width">
-        <span>Slug</span>
+        <span>{{ 'adminWorkshops.fields.slug' | translate }}</span>
         <input type="text" formControlName="slug" />
         @if (fieldErrorMessage('slug'); as message) {
           <small class="field-error">{{ message }}</small>
@@ -131,7 +137,7 @@
       </label>
 
       <label class="full-width">
-        <span>Description courte</span>
+        <span>{{ 'adminWorkshops.fields.shortDescription' | translate }}</span>
         <textarea rows="3" formControlName="shortDescription"></textarea>
         @if (fieldErrorMessage('shortDescription'); as message) {
           <small class="field-error">{{ message }}</small>
@@ -139,7 +145,7 @@
       </label>
 
       <label class="full-width">
-        <span>Description complete</span>
+        <span>{{ 'adminWorkshops.fields.description' | translate }}</span>
         <textarea rows="5" formControlName="description"></textarea>
         @if (fieldErrorMessage('description'); as message) {
           <small class="field-error">{{ message }}</small>
@@ -147,7 +153,7 @@
       </label>
 
       <label>
-        <span>Debut</span>
+        <span>{{ 'adminWorkshops.fields.startAt' | translate }}</span>
         <input type="datetime-local" formControlName="startAt" />
         @if (fieldErrorMessage('startAt'); as message) {
           <small class="field-error">{{ message }}</small>
@@ -155,12 +161,12 @@
       </label>
 
       <label>
-        <span>Fin</span>
+        <span>{{ 'adminWorkshops.fields.endAt' | translate }}</span>
         <input type="datetime-local" formControlName="endAt" />
       </label>
 
       <label class="full-width">
-        <span>Lieu</span>
+        <span>{{ 'adminWorkshops.fields.location' | translate }}</span>
         <input type="text" formControlName="location" />
         @if (fieldErrorMessage('location'); as message) {
           <small class="field-error">{{ message }}</small>
@@ -168,43 +174,38 @@
       </label>
 
       <label>
-        <span>Age minimum</span>
+        <span>{{ 'adminWorkshops.fields.ageMin' | translate }}</span>
         <input type="number" min="0" max="17" formControlName="recommendedAgeMin" />
       </label>
 
       <label>
-        <span>Age maximum</span>
+        <span>{{ 'adminWorkshops.fields.ageMax' | translate }}</span>
         <input type="number" min="0" max="17" formControlName="recommendedAgeMax" />
       </label>
 
       <label>
-        <span>Capacite</span>
+        <span>{{ 'adminWorkshops.fields.capacity' | translate }}</span>
         <input type="number" min="1" formControlName="capacity" />
       </label>
 
       <label class="checkbox-field">
         <input type="checkbox" formControlName="isPublished" />
-        <span>Publier cet atelier</span>
+        <span>{{ 'adminWorkshops.fields.publish' | translate }}</span>
       </label>
     </div>
-
-    <p class="calendar-sync-note">
-      Les ateliers publies sont synchronises vers Google Calendar si le backend dispose d un
-      `GOOGLE_CALENDAR_ID` et d un compte de service Google valides.
-    </p>
 
     <div class="form-actions">
       <button class="button button-primary" type="submit" [disabled]="saving()">
         @if (saving()) {
-          Enregistrement...
+          {{ 'adminWorkshops.actions.saving' | translate }}
         } @else if (editingWorkshopId()) {
-          Mettre a jour
+          {{ 'adminWorkshops.actions.update' | translate }}
         } @else {
-          Creer l atelier
+          {{ 'adminWorkshops.actions.create' | translate }}
         }
       </button>
       <button class="button button-secondary" type="button" (click)="createNewWorkshop()">
-        Reinitialiser
+        {{ 'adminWorkshops.actions.reset' | translate }}
       </button>
     </div>
   </form>
