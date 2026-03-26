@@ -1,6 +1,7 @@
+import { ContactStatus } from '@prisma/client';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
 
 export class ListContactsQueryDto {
   @ApiPropertyOptional({ example: 'camille' })
@@ -8,6 +9,11 @@ export class ListContactsQueryDto {
   @IsString()
   @MaxLength(120)
   search?: string;
+
+  @ApiPropertyOptional({ enum: ContactStatus, example: ContactStatus.NEW })
+  @IsOptional()
+  @IsEnum(ContactStatus)
+  status?: ContactStatus;
 
   @ApiPropertyOptional({ example: 1, default: 1 })
   @IsOptional()

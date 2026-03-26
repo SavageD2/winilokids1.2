@@ -44,6 +44,13 @@ h3 {
   margin-top: 1rem;
 }
 
+.status-filter {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  max-width: 16rem;
+}
+
 .results-summary {
   color: var(--color-muted);
   margin: 1rem 0 0;
@@ -54,7 +61,9 @@ h3 {
   font-weight: 600;
 }
 
-input {
+input,
+select,
+textarea {
   background: #fffaf2;
   border: 1px solid rgba(196, 144, 94, 0.25);
   border-radius: 1rem;
@@ -63,7 +72,14 @@ input {
   padding: 0.9rem 1rem;
 }
 
-input:focus {
+textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
   border-color: rgba(200, 103, 65, 0.55);
   box-shadow: 0 0 0 0.18rem rgba(200, 103, 65, 0.12);
   outline: none;
@@ -77,6 +93,10 @@ input:focus {
 
 .panel-error {
   color: #7a2b1c;
+}
+
+.panel-success {
+  color: #24553c;
 }
 
 .contacts-list {
@@ -131,12 +151,69 @@ input:focus {
   justify-items: end;
 }
 
+.status-pill {
+  background: #fff2d0;
+  border-radius: 999px;
+  color: var(--color-accent-dark);
+  display: inline-flex;
+  font-size: 0.85rem;
+  font-weight: 700;
+  justify-content: center;
+  min-width: 7rem;
+  padding: 0.35rem 0.75rem;
+}
+
+.status-pill[data-status='IN_PROGRESS'] {
+  background: #fff0cc;
+  color: #8a5300;
+}
+
+.status-pill[data-status='RESOLVED'] {
+  background: #e5f7ea;
+  color: #24553c;
+}
+
+.status-pill[data-status='ARCHIVED'] {
+  background: #ececf2;
+  color: #4a4b66;
+}
+
 .message {
   background: #fff7ec;
   border-radius: 1rem;
   line-height: 1.7;
   margin: 1rem 0 0;
   padding: 1rem 1.1rem;
+}
+
+.management-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+  margin-top: 1rem;
+}
+
+.status-field,
+.notes-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.status-field span,
+.notes-field span {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.management-actions {
+  align-items: end;
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+}
+
+.management-actions .button {
+  min-width: 13rem;
 }
 
 @media (max-width: 900px) {
@@ -149,5 +226,17 @@ input:focus {
 
   .contact-actions {
     justify-items: start;
+  }
+
+  .management-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .management-actions {
+    justify-content: stretch;
+  }
+
+  .management-actions .button {
+    width: 100%;
   }
 }

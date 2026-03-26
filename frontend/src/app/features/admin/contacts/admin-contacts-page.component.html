@@ -19,6 +19,16 @@
     />
   </label>
 
+  <label class="status-filter">
+    <span>Statut</span>
+    <select formControlName="status">
+      <option value="ALL">Tous les statuts</option>
+      @for (status of contactStatuses; track status) {
+        <option [value]="status">{{ statusLabel(status) }}</option>
+      }
+    </select>
+  </label>
+
   <p class="results-summary">
     {{ total() }} message(s) trouve(s)
     @if (totalPages() > 0) {
@@ -26,6 +36,10 @@
     }
   </p>
 </section>
+
+@if (successMessage()) {
+  <p class="panel panel-success">{{ successMessage() }}</p>
+}
 
 @if (loading()) {
   <p class="panel">Chargement des messages...</p>
@@ -40,10 +54,18 @@
         <div class="contact-head">
           <div>
             <h3>{{ contact.name }}</h3>
-            <p>{{ contact.createdAt | date: 'd MMM y, HH:mm':'':'fr' }}</p>
+            <p>
+              Recu le {{ contact.createdAt | date: 'd MMM y, HH:mm':'':'fr' }}
+              @if (contact.handledAt) {
+                <span>· traite le {{ contact.handledAt | date: 'd MMM y, HH:mm':'':'fr' }}</span>
+              }
+            </p>
           </div>
 
           <div class="contact-actions">
+            <span class="status-pill" [attr.data-status]="contact.status">
+              {{ statusLabel(contact.status) }}
+            </span>
             <a class="text-link" [href]="'mailto:' + contact.email">{{ contact.email }}</a>
             @if (contact.phone) {
               <a class="text-link" [href]="phoneHref(contact.phone)">{{ contact.phone }}</a>
@@ -52,6 +74,47 @@
         </div>
 
         <p class="message">{{ contact.message }}</p>
+
+        <div class="management-grid">
+          <label class="status-field">
+            <span>Statut admin</span>
+            <select
+              [value]="contact.status"
+              [disabled]="updatingContactId() === contact.id"
+              (change)="updateStatus(contact, $any($event.target).value)"
+            >
+              @for (status of contactStatuses; track status) {
+                <option [value]="status">{{ statusLabel(status) }}</option>
+              }
+            </select>
+          </label>
+
+          <label class="notes-field">
+            <span>Note interne</span>
+            <textarea
+              rows="4"
+              [value]="draftNotes()[contact.id]"
+              [disabled]="updatingContactId() === contact.id"
+              placeholder="Suivi interne, relance, reponse faite, besoin specifique..."
+              (input)="updateNotesDraft(contact.id, $event)"
+            ></textarea>
+          </label>
+
+          <div class="management-actions">
+            <button
+              class="button button-secondary"
+              type="button"
+              [disabled]="updatingContactId() === contact.id"
+              (click)="saveNotes(contact)"
+            >
+              @if (updatingContactId() === contact.id) {
+                Enregistrement...
+              } @else {
+                Enregistrer la note
+              }
+            </button>
+          </div>
+        </div>
       </article>
     }
   </section>

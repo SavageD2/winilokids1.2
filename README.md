@@ -101,7 +101,7 @@ Ce seed charge un jeu de donnees de demonstration complet :
 - 1 atelier en brouillon pour le back-office admin
 - 3 comptes parents de test
 - 4 reservations avec plusieurs statuts
-- 3 messages de contact
+- 4 messages de contact avec plusieurs statuts de suivi
 - 6 entrees FAQ dont 5 publiees
 
 ### 5. Lancer le backend
@@ -202,7 +202,47 @@ npm run seed:demo
 ```bash
 cd frontend
 npm run build
+npm test -- --watch=false
+npm run e2e
 npm start -- --host 127.0.0.1 --port 4200
+```
+
+## E2E
+
+Les tests E2E utilisent Playwright et couvrent actuellement :
+
+- connexion admin puis suivi d un message de contact
+- connexion parent puis reservation d un atelier
+
+Commande standard :
+
+```bash
+cd frontend
+npm run e2e
+```
+
+Si les serveurs tournent deja et que tu veux reutiliser l environnement existant sans relancer le setup automatique :
+
+```bash
+cd frontend
+PLAYWRIGHT_SKIP_WEBSERVER=1 PLAYWRIGHT_SKIP_GLOBAL_SETUP=1 npm run e2e
+```
+
+## Preparation deploiement
+
+Le depot contient maintenant une base de deploiement Docker :
+
+- [backend/Dockerfile](/home/Savage/git/win1.2/backend/Dockerfile)
+- [frontend/Dockerfile](/home/Savage/git/win1.2/frontend/Dockerfile)
+- [frontend/nginx/default.conf.template](/home/Savage/git/win1.2/frontend/nginx/default.conf.template)
+- [docker-compose.prod.yml](/home/Savage/git/win1.2/docker-compose.prod.yml)
+- [.env.prod.example](/home/Savage/git/win1.2/.env.prod.example)
+
+Lancement type :
+
+```bash
+cp .env.prod.example .env.prod
+docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
 ```
 
 ## Etat actuel
@@ -216,7 +256,10 @@ Le projet est fonctionnel en local avec :
 - FAQ dynamique cote public et cote admin
 - assistant conversationnel public base sur la FAQ et les ateliers publies
 - suivi admin des messages du chatbot avec stats legeres
+- suivi admin des messages de contact avec statuts et notes internes
 - espace admin complet pour le MVP
+- base E2E Playwright pour les parcours critiques
+- configuration runtime de l URL API frontend pour le deploiement
 
 ## Notes
 

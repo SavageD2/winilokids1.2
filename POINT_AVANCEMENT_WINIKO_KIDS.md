@@ -1,6 +1,6 @@
 # Point d'avancement Winiko Kids
 
-Date du point: 25 mars 2026
+Date du point: 26 mars 2026
 
 ## Vision du projet
 
@@ -52,6 +52,8 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
   - consultation des messages recus
   - recherche rapide
   - liens directs mail / telephone
+  - statuts de suivi
+  - notes internes
 - gestion de la FAQ
   - liste
   - creation
@@ -82,6 +84,7 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - module contacts
   - endpoint public de creation
   - endpoint admin de consultation
+  - endpoint admin de mise a jour du suivi
 - module FAQ
   - endpoint public des reponses publiees
   - endpoints admin CRUD
@@ -107,6 +110,8 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - seed de demonstration enrichi present
 - seed FAQ de demonstration present
 - `docker-compose.yml` pour Postgres local
+- `docker-compose.prod.yml` pour une base de deploiement
+- `Dockerfile` backend et frontend presents
 - `.env` backend local deja configure
 
 ## Validation faite aujourd'hui
@@ -115,12 +120,16 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - `npm run prisma:migrate:deploy` dans `backend/` : OK
 - `npm run seed:admin` dans `backend/` : OK
 - `npm run build` dans `frontend/` : OK
+- `npm test -- --watch=false` dans `frontend/` : OK
 - `npm run build` dans `backend/` : OK
 - `npm test -- --watch=false` dans `backend/` : OK
+- `docker compose -f docker-compose.prod.yml --env-file .env.prod.example config` : OK
 - backend lance sur `http://localhost:3000`
 - frontend lance sur `http://127.0.0.1:4200`
 - verification HTTP backend : `GET /api/health` retourne `{"status":"ok","service":"winilo-kids-api"}`
 - verification HTTP frontend : reponse `200 OK`
+- installation Playwright + Chromium : OK
+- execution E2E Playwright dans cet environnement : bloquee par dependances systeme manquantes du navigateur
 
 ## Apercu du rendu actuel
 
@@ -133,13 +142,13 @@ Je n'ai pas pu produire de capture d'ecran graphique directement depuis ce termi
 
 ## Points d'attention
 
-- les tests frontend sont encore tres legers
-- la gestion admin des contacts est en lecture seule pour le moment
+- la couverture frontend couvre maintenant plusieurs parcours publics et admins, mais reste encore partielle
+- les E2E sont poses, mais leur execution depend encore des bibliotheques systeme requises par Chromium selon l environnement
 - il reste a valider le rendu plus finement avec davantage de cas de contenu si l on vise une preproduction
 
 ## Prochaines suites logiques
 
-1. Renforcer les tests frontend et ajouter des tests E2E.
-2. Completer l'admin avec des actions supplementaires sur les messages de contact si besoin.
-3. Preparer la configuration de deploiement et les variables d'environnement par environnement.
+1. Finir la validation E2E sur une machine disposant des dependances systeme Chromium.
+2. Etendre encore les tests admin aux inscriptions et au dashboard si besoin.
+3. Affiner la strategie de deploiement ciblee selon l hebergeur retenu.
 4. Ajouter des donnees de demonstration encore plus riches si besoin pour les recettes produit.

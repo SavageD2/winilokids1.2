@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PrismaClient, RegistrationStatus } from '@prisma/client';
+import { ContactStatus, PrismaClient, RegistrationStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { createPrismaClientOptions } from '../src/prisma/prisma-client-options';
 
@@ -112,6 +112,10 @@ async function main() {
       phone: '0611223344',
       message:
         'Bonjour, je voudrais savoir si vous proposez un accompagnement pour les enfants un peu timides lors du premier atelier.',
+      status: ContactStatus.IN_PROGRESS,
+      adminNotes:
+        'Echange telephone prevu pour rassurer la famille sur le deroule du premier accueil.',
+      handledAt: addDays(today, -1),
     },
     {
       name: 'Sophie Leroy',
@@ -119,6 +123,9 @@ async function main() {
       phone: '0699001122',
       message:
         'Bonjour, avez-vous deja les dates prevues pour les ateliers des vacances de printemps et faut-il prevoir une tenue particuliere ?',
+      status: ContactStatus.NEW,
+      adminNotes: null,
+      handledAt: null,
     },
     {
       name: 'Julien Robert',
@@ -126,6 +133,20 @@ async function main() {
       phone: '0622334455',
       message:
         'Bonjour, mon fils a une sensibilite au bruit. Pouvez-vous me dire combien d enfants sont accueillis en moyenne sur les ateliers musique ?',
+      status: ContactStatus.RESOLVED,
+      adminNotes:
+        'Reponse envoyee par email avec le nombre moyen de participants et proposition de place plus calme.',
+      handledAt: addDays(today, -2),
+    },
+    {
+      name: 'Nora Bernard',
+      email: 'nora.bernard@example.com',
+      phone: '0677889900',
+      message:
+        'Bonjour, je cherche un atelier plutot en fin de journee pour ma fille apres l ecole. Avez-vous deja des options a venir ?',
+      status: ContactStatus.ARCHIVED,
+      adminNotes: 'Demande archivee apres reponse et orientation vers les prochaines ouvertures.',
+      handledAt: addDays(today, -6),
     },
   ];
 
