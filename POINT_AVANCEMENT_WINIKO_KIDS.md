@@ -12,6 +12,7 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 ## Stack actuelle
 
 - Frontend: Angular 21 standalone
+- i18n frontend: `@ngx-translate/core` + fichiers JSON `fr/en`
 - Backend: NestJS 11
 - Base de donnees: PostgreSQL 16 via Docker
 - ORM: Prisma
@@ -33,11 +34,14 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - page compte parent avec inscription locale, connexion locale, bouton Google et activation optionnelle d un mot de passe local apres premier login Google
 - formulaire de contact
 - systeme d apparence global avec modes `default`, `light`, `dark` et `system`
+- systeme de langue frontend avec preference locale `fr/en` et selecteur de langue
 - routage public propre avec layout dedie
+- i18n deja branchee sur le layout public, le chatbot, le switch theme, l accueil, le catalogue ateliers, le detail atelier, la FAQ, le contact, le compte parent et la reservation atelier
 
 ### Frontend admin
 
 - page de connexion admin
+- i18n deja branchee sur le layout admin, l ecran de connexion admin, le dashboard, la gestion des inscriptions, des ateliers, des contacts, de la FAQ et du suivi chatbot
 - session admin stockee localement
 - guard d'acces et interception du token
 - systeme d apparence partage avec le site public
@@ -146,6 +150,9 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - `npm run seed:admin` dans `backend/` : OK
 - `npm run build` dans `frontend/` : OK
 - `npm test -- --watch=false` dans `frontend/` : OK
+- validation du systeme i18n frontend `fr/en` sur les layouts, le chatbot, les pages publiques principales, le compte parent, la reservation atelier, le login admin, le dashboard, les inscriptions admin, les ateliers admin, les contacts admin, la FAQ admin et le suivi chatbot admin : OK
+- `npx ng test frontend --watch=false --include='src/app/features/admin/contacts/admin-contacts-page.component.spec.ts' --include='src/app/features/admin/faq/admin-faq-page.component.spec.ts' --include='src/app/features/admin/chatbot/admin-chatbot-page.component.spec.ts' --include='src/app/features/admin/workshops/admin-workshops-page.component.spec.ts'` dans `frontend/` : OK
+- `npm run build` dans `frontend/` apres i18n admin contacts/faq/chatbot : OK
 - `npm run build` dans `backend/` : OK
 - `npm test -- --watch=false` dans `backend/` : OK
 - `npm run prisma:generate` dans `backend/` apres extension Google : OK
@@ -184,6 +191,8 @@ Je n'ai pas pu produire de capture d'ecran graphique directement depuis ce termi
 - la branche `login` est consideree comme stabilisee et prete a servir de base a la suite
 - le stockage de session parent reste en bearer token local pour limiter le risque de regression MVP
 - la couverture frontend couvre maintenant plusieurs parcours publics et admins, y compris le systeme de theme et la fermeture du chatbot, mais reste encore partielle
+- l i18n frontend couvre maintenant les layouts, le chatbot, les principaux ecrans publics, le compte parent, la reservation atelier et l ensemble des ecrans admin actuellement en place, mais une validation manuelle `fr/en` multi-breakpoints reste encore a refaire
+- le bundle frontend depasse actuellement le budget Angular initial d environ 36.5 kB et `public-layout.component.scss` depasse encore son budget de 1.11 kB
 - les E2E sont poses, mais leur execution depend encore des bibliotheques systeme requises par Chromium selon l environnement
 - il reste a valider le rendu plus finement avec davantage de cas de contenu si l on vise une preproduction
 - la cle du compte de service Google utilisee localement doit etre regeneree si elle a ete exposee hors du cadre de travail
@@ -193,4 +202,6 @@ Je n'ai pas pu produire de capture d'ecran graphique directement depuis ce termi
 1. Reporter la configuration Google validee localement vers les variables de prod (`GOOGLE_CLIENT_ID`, `GOOGLE_CALENDAR_ID`, compte de service, `WINILO_GOOGLE_CLIENT_ID`).
 2. Decider si le planning doit rester en mode `app -> Google Calendar` ou evoluer vers une synchronisation bidirectionnelle / une source de verite Google Calendar.
 3. Finir la validation E2E sur une machine disposant des dependances systeme Chromium.
-4. A moyen terme, preparer une persistance serveur des preferences d apparence si l experience parent/admin devient multi-appareil.
+4. Faire une validation manuelle `fr/en` sur desktop + tablette/mobile, notamment sur le header/menu mobile et les nouveaux ecrans admin traduits.
+5. Evaluer une petite optimisation bundle frontend et CSS public layout si l on souhaite repasser sous les budgets Angular par defaut.
+6. A moyen terme, preparer une persistance serveur des preferences d apparence et de langue si l experience parent/admin devient multi-appareil.

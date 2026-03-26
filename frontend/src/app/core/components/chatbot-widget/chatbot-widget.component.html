@@ -1,15 +1,17 @@
 <button class="chatbot-toggle" type="button" (click)="toggleOpen()" [attr.aria-expanded]="isOpen()">
-  {{ isOpen() ? 'Fermer l assistant' : 'Assistant parents' }}
+  {{ (isOpen() ? 'chatbot.toggle.close' : 'chatbot.toggle.open') | translate }}
 </button>
 
 @if (isOpen()) {
-  <section class="chatbot-panel" aria-label="Assistant conversationnel Winilo Kids">
+  <section class="chatbot-panel" [attr.aria-label]="'chatbot.panel.ariaLabel' | translate">
     <header class="chatbot-header">
       <div>
-        <p class="eyebrow">Assistant parents</p>
-        <h2>Besoin d aide pour choisir ou reserver ?</h2>
+        <p class="eyebrow">{{ 'chatbot.panel.eyebrow' | translate }}</p>
+        <h2>{{ 'chatbot.panel.title' | translate }}</h2>
       </div>
-      <button class="close-button" type="button" (click)="close()">Fermer</button>
+      <button class="close-button" type="button" (click)="close()">
+        {{ 'chatbot.panel.close' | translate }}
+      </button>
     </header>
 
     <div class="chatbot-body">
@@ -17,7 +19,10 @@
         @for (message of messages(); track message.id) {
           <article class="message-bubble" [class.message-bubble-user]="message.author === 'user'">
             <p class="message-author">
-              {{ message.author === 'assistant' ? 'Assistant Winilo Kids' : 'Vous' }}
+              {{
+                (message.author === 'assistant' ? 'chatbot.message.assistant' : 'chatbot.message.user')
+                  | translate
+              }}
             </p>
             <p class="message-text">{{ message.text }}</p>
 
@@ -36,7 +41,7 @@
 
       @if (messages().length === 1) {
         <div class="starter-prompts">
-          @for (prompt of starterPrompts; track prompt) {
+          @for (prompt of starterPrompts(); track prompt) {
             <button type="button" (click)="useStarterPrompt(prompt)">{{ prompt }}</button>
           }
         </div>
@@ -49,24 +54,21 @@
 
     <form class="chatbot-form" [formGroup]="messageForm" (ngSubmit)="submit()">
       <label>
-        <span>Votre question</span>
+        <span>{{ 'chatbot.form.question' | translate }}</span>
         <textarea
           rows="3"
           formControlName="message"
-          placeholder="Exemple : je cherche un atelier pour 6 ans ou comment fonctionne l inscription ?"
+          [placeholder]="'chatbot.form.placeholder' | translate"
         ></textarea>
       </label>
 
       <div class="chatbot-actions">
-        <p class="helper-text">
-          L assistant s appuie sur la FAQ et les ateliers publies. Pour un besoin specifique, il
-          vous orientera vers le contact.
-        </p>
+        <p class="helper-text">{{ 'chatbot.form.helper' | translate }}</p>
         <button class="button button-primary" type="submit" [disabled]="sending()">
           @if (sending()) {
-            Reponse en cours...
+            {{ 'chatbot.form.sending' | translate }}
           } @else {
-            Envoyer
+            {{ 'chatbot.form.send' | translate }}
           }
         </button>
       </div>

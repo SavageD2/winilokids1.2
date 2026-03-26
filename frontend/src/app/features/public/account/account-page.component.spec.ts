@@ -3,6 +3,7 @@ import localeFr from '@angular/common/locales/fr';
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { GoogleIdentityService } from '../../../core/services/google-identity.service';
 import { ParentAuthService } from '../../../core/services/parent-auth.service';
@@ -101,6 +102,10 @@ describe('AccountPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AccountPageComponent],
       providers: [
+        ...provideTranslateService({
+          fallbackLang: 'fr',
+          lang: 'fr',
+        }),
         { provide: ParentAuthService, useValue: parentAuthServiceMock },
         {
           provide: ParentRegistrationsService,
@@ -118,6 +123,57 @@ describe('AccountPageComponent', () => {
         },
       ],
     }).compileComponents();
+
+    const translateService = TestBed.inject(TranslateService);
+    translateService.setTranslation(
+      'fr',
+      {
+        account: {
+          auth: {
+            methods: {
+              password: 'mot de passe',
+              google: 'Google',
+              parentLogin: 'connexion parent',
+            },
+            errors: {
+              register:
+                'Création du compte impossible pour le moment. Vérifie les informations et réessaie.',
+              login: 'Connexion impossible. Vérifie ton email et ton mot de passe.',
+              google:
+                'Connexion Google impossible pour le moment. Vérifie la configuration et réessaie.',
+            },
+          },
+          profile: {
+            success: 'Profil mis à jour avec succès.',
+            error: 'Impossible de mettre à jour le profil pour le moment.',
+          },
+          password: {
+            success: 'Connexion par mot de passe activée avec succès.',
+            errors: {
+              mismatch: 'Les deux mots de passe doivent être identiques.',
+              unavailable: "Impossible d'activer le mot de passe pour le moment.",
+            },
+          },
+          reservations: {
+            error: 'Impossible de charger tes réservations pour le moment.',
+            childSummary: 'Enfant: {{childFirstName}} · {{childAge}} ans',
+            status: {
+              pending: 'En attente',
+              confirmed: 'Confirmée',
+              cancelled: 'Annulée',
+              attended: 'Présente',
+            },
+            cancel: {
+              confirm:
+                'Annuler la réservation pour "{{workshopTitle}}" au nom de {{childFirstName}} ?',
+              error: "Impossible d'annuler cette réservation pour le moment.",
+            },
+          },
+        },
+      },
+      true,
+    );
+    translateService.use('fr');
   });
 
   afterEach(() => {
@@ -275,7 +331,7 @@ describe('AccountPageComponent', () => {
     });
     expect(component.savingProfile()).toBe(false);
     expect(component.profileErrorMessage()).toBe(
-      'Impossible de mettre a jour le profil pour le moment.',
+      'Impossible de mettre à jour le profil pour le moment.',
     );
     expect(component.profileSuccessMessage()).toBeNull();
   });
@@ -317,7 +373,7 @@ describe('AccountPageComponent', () => {
       password: 'DemoParent123!',
     });
     expect(component.passwordSuccessMessage()).toBe(
-      'Connexion par mot de passe activee avec succes.',
+      'Connexion par mot de passe activée avec succès.',
     );
   });
 });

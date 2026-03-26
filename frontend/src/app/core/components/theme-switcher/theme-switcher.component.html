@@ -23,12 +23,20 @@
       (change)="updatePreference($event)"
     >
       @for (option of options; track option.value) {
-        <option [value]="option.value">{{ option.label }}</option>
+        <option [value]="option.value">{{ option.labelKey | translate }}</option>
       }
     </select>
   </div>
 
   @if (showHint) {
-    <p class="theme-switcher-hint" [id]="hintId">{{ hint() }}</p>
+    <p class="theme-switcher-hint" [id]="hintId">
+      {{
+        hintTranslation().key
+          | translate
+            : {
+                mode: (hintTranslation().params['modeKey'] | translate)
+              }
+      }}
+    </p>
   }
 </div>

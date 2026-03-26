@@ -1,24 +1,21 @@
 <section class="page-hero">
-  <p class="eyebrow">Programme</p>
-  <h1>Des ateliers clairs a parcourir, sans chercher l information partout.</h1>
-  <p>
-    Chaque fiche regroupe l essentiel pour aider les parents a choisir facilement: contenu, age
-    recommande, lieu, horaire et disponibilite.
-  </p>
+  <p class="eyebrow">{{ 'workshops.list.hero.eyebrow' | translate }}</p>
+  <h1>{{ 'workshops.list.hero.title' | translate }}</h1>
+  <p>{{ 'workshops.list.hero.description' | translate }}</p>
 </section>
 
 @if (loading()) {
-  <p class="panel">Chargement des ateliers...</p>
+  <p class="panel">{{ 'workshops.list.loading' | translate }}</p>
 } @else if (error()) {
   <p class="panel panel-error">{{ error() }}</p>
 } @else if (workshops().length === 0) {
-  <p class="panel">Aucun atelier n est encore publie.</p>
+  <p class="panel">{{ 'workshops.list.empty' | translate }}</p>
 } @else {
   <section class="catalog-grid">
     @for (workshop of workshops(); track workshop.id) {
       <article class="catalog-card">
         <p class="meta">
-          {{ workshop.startAt | date: 'EEEE d MMMM':'':'fr' }} ·
+          {{ workshop.startAt | date: 'EEEE d MMMM' }} ·
           {{ workshop.startAt | date: 'HH:mm' }}
         </p>
         <h2>{{ workshop.title }}</h2>
@@ -26,35 +23,34 @@
 
         <dl class="details">
           <div>
-            <dt>Lieu</dt>
+            <dt>{{ 'workshops.list.labels.location' | translate }}</dt>
             <dd>{{ workshop.location }}</dd>
           </div>
           <div>
-            <dt>Age</dt>
+            <dt>{{ 'workshops.list.labels.age' | translate }}</dt>
             <dd>{{ ageLabel(workshop) }}</dd>
           </div>
           <div>
-            <dt>Disponibilite</dt>
-            <dd>
-              @if (workshop.availablePlaces !== null) {
-                {{ workshop.availablePlaces }} place(s) restante(s)
-              } @else {
-                Sur demande
-              }
-            </dd>
+            <dt>{{ 'workshops.list.labels.availability' | translate }}</dt>
+            <dd>{{ availabilityLabel(workshop) }}</dd>
           </div>
         </dl>
 
         <div class="card-actions">
           <a class="button button-secondary" [routerLink]="['/ateliers', workshop.slug]">
-            Voir le detail
+            {{ 'workshops.list.actions.detail' | translate }}
           </a>
           <a
             class="text-link"
             [routerLink]="[reservationLink(workshop)]"
             [queryParams]="reservationQueryParams(workshop)"
           >
-            {{ isParentAuthenticated() ? 'Reserver cet atelier' : 'Se connecter pour reserver' }}
+            {{
+              (isParentAuthenticated()
+                ? 'workshops.list.actions.reserve'
+                : 'workshops.list.actions.loginToReserve'
+              ) | translate
+            }}
           </a>
         </div>
       </article>

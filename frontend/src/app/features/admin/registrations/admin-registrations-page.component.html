@@ -1,22 +1,22 @@
 <section class="filters-card" [formGroup]="filtersForm">
   <div class="filters-heading">
     <div>
-      <p class="eyebrow">Lecture rapide</p>
-      <h2>Inscriptions</h2>
+      <p class="eyebrow">{{ 'adminRegistrations.hero.eyebrow' | translate }}</p>
+      <h2>{{ 'adminRegistrations.hero.title' | translate }}</h2>
     </div>
-    <p>Recherche, filtre et pagination sont maintenant geres cote serveur pour garder l'admin fluide.</p>
+    <p>{{ 'adminRegistrations.hero.description' | translate }}</p>
   </div>
 
   <div class="filters-grid">
     <label>
-      <span>Recherche</span>
-      <input type="text" formControlName="search" placeholder="Nom du parent, email ou prenom enfant" />
+      <span>{{ 'adminRegistrations.filters.search' | translate }}</span>
+      <input type="text" formControlName="search" [placeholder]="'adminRegistrations.filters.searchPlaceholder' | translate" />
     </label>
 
     <label>
-      <span>Statut</span>
+      <span>{{ 'adminRegistrations.filters.status' | translate }}</span>
       <select formControlName="status">
-        <option value="ALL">Tous</option>
+        <option value="ALL">{{ 'adminRegistrations.filters.allStatuses' | translate }}</option>
         @for (status of statuses; track status) {
           <option [value]="status">{{ statusLabel(status) }}</option>
         }
@@ -24,9 +24,9 @@
     </label>
 
     <label>
-      <span>Atelier</span>
+      <span>{{ 'adminRegistrations.filters.workshop' | translate }}</span>
       <select formControlName="workshopId">
-        <option value="ALL">Tous les ateliers</option>
+        <option value="ALL">{{ 'adminRegistrations.filters.allWorkshops' | translate }}</option>
         @for (workshop of workshops(); track workshop.id) {
           <option [value]="workshop.id">{{ workshop.title }}</option>
         }
@@ -35,19 +35,19 @@
   </div>
 
   <p class="results-summary">
-    {{ total() }} inscription(s) trouvee(s)
+    {{ summaryLabel(total()) }}
     @if (totalPages() > 0) {
-      <span>· page {{ page() }} / {{ totalPages() }}</span>
+      <span>· {{ pageSummaryLabel() }}</span>
     }
   </p>
 </section>
 
 @if (loading()) {
-  <p class="panel">Chargement des inscriptions...</p>
+  <p class="panel">{{ 'adminRegistrations.loading' | translate }}</p>
 } @else if (error()) {
   <p class="panel panel-error">{{ error() }}</p>
 } @else if (registrations().length === 0) {
-  <p class="panel">Aucune inscription ne correspond aux filtres actuels.</p>
+  <p class="panel">{{ 'adminRegistrations.empty' | translate }}</p>
 } @else {
   <section class="accordion-list">
     @for (group of groups(); track group.workshop.id) {
@@ -56,11 +56,11 @@
           <div>
             <h3>{{ group.workshop.title }}</h3>
             <p>
-              {{ group.workshop.startAt | date: 'EEEE d MMMM':'':'fr' }} ·
+              {{ group.workshop.startAt | date: 'EEEE d MMMM' }} ·
               {{ group.workshop.startAt | date: 'HH:mm' }} · {{ group.workshop.location }}
             </p>
           </div>
-          <span class="summary-pill">{{ group.registrations.length }} inscription(s)</span>
+          <span class="summary-pill">{{ registrationsCountLabel(group.registrations.length) }}</span>
         </summary>
 
         <div class="registration-list">
@@ -70,11 +70,9 @@
                 <div>
                   <h4>{{ registration.parentName }}</h4>
                   <p>{{ registration.parentEmail }}</p>
-                  <p>
-                    Enfant: {{ registration.childFirstName }} · {{ registration.childAge }} ans
-                  </p>
+                  <p>{{ childSummary(registration) }}</p>
                   @if (registration.parentPhone) {
-                    <p>Telephone: {{ registration.parentPhone }}</p>
+                    <p>{{ phoneSummary(registration.parentPhone) }}</p>
                   }
                   @if (registration.message) {
                     <p class="message">{{ registration.message }}</p>
@@ -83,12 +81,12 @@
 
                 <div class="registration-meta">
                   <span class="status-chip">{{ statusLabel(registration.status) }}</span>
-                  <small>{{ registration.createdAt | date: 'd MMM y, HH:mm':'':'fr' }}</small>
+                  <small>{{ registration.createdAt | date: 'd MMM y, HH:mm' }}</small>
                 </div>
               </div>
 
               <label class="status-editor">
-                <span>Changer le statut</span>
+                <span>{{ 'adminRegistrations.registration.changeStatus' | translate }}</span>
                 <select
                   [value]="registration.status"
                   [disabled]="updatingRegistrationId() === registration.id"
@@ -107,13 +105,13 @@
   </section>
 
   @if (totalPages() > 1) {
-    <nav class="pagination-card" aria-label="Pagination inscriptions">
+    <nav class="pagination-card" [attr.aria-label]="'adminRegistrations.pagination.ariaLabel' | translate">
       <button type="button" [disabled]="!hasPreviousPage()" (click)="changePage(page() - 1)">
-        Page precedente
+        {{ 'adminRegistrations.pagination.previous' | translate }}
       </button>
-      <span>Page {{ page() }} sur {{ totalPages() }}</span>
+      <span>{{ 'adminRegistrations.pagination.current' | translate : { page: page(), totalPages: totalPages() } }}</span>
       <button type="button" [disabled]="!hasNextPage()" (click)="changePage(page() + 1)">
-        Page suivante
+        {{ 'adminRegistrations.pagination.next' | translate }}
       </button>
     </nav>
   }

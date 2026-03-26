@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { of, Subject, throwError } from 'rxjs';
 import { ChatbotService } from '../../services/chatbot.service';
 import { ChatbotMessageResponse } from '../../../shared/models/chatbot.model';
@@ -22,10 +23,41 @@ describe('ChatbotWidgetComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ChatbotWidgetComponent],
       providers: [
+        ...provideTranslateService({
+          fallbackLang: 'fr',
+          lang: 'fr',
+        }),
         { provide: ChatbotService, useValue: chatbotServiceMock },
         { provide: Router, useValue: routerMock },
       ],
     }).compileComponents();
+
+    const translateService = TestBed.inject(TranslateService);
+    translateService.setTranslation(
+      'fr',
+      {
+        chatbot: {
+          initialMessage:
+            "Je peux aider a choisir un atelier, expliquer l'inscription et repondre aux questions frequentes.",
+          starter: {
+            workshop: 'Je cherche un atelier pour 5 ans',
+            registration: "Comment se passe l'inscription ?",
+            contact: 'Quand faut-il utiliser le contact ?',
+          },
+          suggestion: {
+            workshops: 'Voir les ateliers',
+            faq: 'Consulter la FAQ',
+            account: 'Inscription / Connexion',
+          },
+          error: {
+            unavailable:
+              "Impossible d'obtenir une reponse pour le moment. Tu peux toujours utiliser le formulaire de contact.",
+          },
+        },
+      },
+      true,
+    );
+    translateService.use('fr');
   });
 
   afterEach(() => {

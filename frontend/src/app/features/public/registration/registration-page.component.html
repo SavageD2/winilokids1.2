@@ -1,15 +1,12 @@
 <section class="page-hero">
-  <p class="eyebrow">Reservation atelier</p>
-  <h1>Finalise la reservation de ton enfant depuis ton compte parent.</h1>
-  <p>
-    Le compte parent reste la base du dossier, puis tu ajoutes ici uniquement les informations
-    utiles a la reservation.
-  </p>
+  <p class="eyebrow">{{ 'registration.hero.eyebrow' | translate }}</p>
+  <h1>{{ 'registration.hero.title' | translate }}</h1>
+  <p>{{ 'registration.hero.description' | translate }}</p>
 </section>
 
 <section class="form-layout">
   <article class="info-card">
-    <h2>Compte utilise</h2>
+    <h2>{{ 'registration.info.accountTitle' | translate }}</h2>
     @if (parentAuthService.parent(); as parent) {
       <p>
         <strong>{{ parentDisplayName() }}</strong>
@@ -20,34 +17,32 @@
       }
     }
 
-    <h2>Avant de valider</h2>
+    <h2>{{ 'registration.info.beforeSubmitTitle' | translate }}</h2>
     <ul>
-      <li>Choisis l atelier qui correspond le mieux a ton enfant</li>
-      <li>Ajoute l age de l enfant pour faciliter le traitement</li>
-      <li>Precise un message si tu veux partager un besoin particulier</li>
+      <li>{{ 'registration.info.item1' | translate }}</li>
+      <li>{{ 'registration.info.item2' | translate }}</li>
+      <li>{{ 'registration.info.item3' | translate }}</li>
     </ul>
-    <p class="subtle">
-      Si tu as un doute sur un atelier, tu peux aussi utiliser le formulaire de contact.
-    </p>
-    <a class="text-link" routerLink="/contact">Contacter Winilo Kids</a>
+    <p class="subtle">{{ 'registration.info.helper' | translate }}</p>
+    <a class="text-link" routerLink="/contact">{{ 'registration.info.contact' | translate }}</a>
   </article>
 
   <form class="form-card" [formGroup]="registrationForm" (ngSubmit)="submit()">
     <div class="form-grid">
       <label>
-        <span>Prenom de l enfant</span>
-        <input type="text" formControlName="childFirstName" placeholder="Lina" />
+        <span>{{ 'registration.form.childFirstName' | translate }}</span>
+        <input type="text" formControlName="childFirstName" [placeholder]="'registration.form.childFirstNamePlaceholder' | translate" />
       </label>
 
       <label>
-        <span>Age de l enfant</span>
+        <span>{{ 'registration.form.childAge' | translate }}</span>
         <input type="number" min="0" max="17" formControlName="childAge" />
       </label>
 
       <label>
-        <span>Atelier</span>
+        <span>{{ 'registration.form.workshop' | translate }}</span>
         <select formControlName="workshopId" [disabled]="loadingWorkshops()">
-          <option [ngValue]="0">Choisir un atelier</option>
+          <option [ngValue]="0">{{ 'registration.form.chooseWorkshop' | translate }}</option>
           @for (workshop of workshops(); track workshop.id) {
             <option [ngValue]="workshop.id">{{ workshop.title }}</option>
           }
@@ -56,11 +51,11 @@
     </div>
 
     <label class="textarea-field">
-      <span>Message complementaire</span>
+      <span>{{ 'registration.form.message' | translate }}</span>
       <textarea
         rows="5"
         formControlName="message"
-        placeholder="Exemple: mon enfant prefere les activites manuelles."
+        [placeholder]="'registration.form.messagePlaceholder' | translate"
       ></textarea>
     </label>
 
@@ -78,9 +73,9 @@
       [disabled]="submitting() || loadingWorkshops()"
     >
       @if (submitting()) {
-        Envoi en cours...
+        {{ 'registration.form.submitting' | translate }}
       } @else {
-        Confirmer la reservation
+        {{ 'registration.form.submit' | translate }}
       }
     </button>
   </form>

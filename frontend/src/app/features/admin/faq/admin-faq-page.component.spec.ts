@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { AdminFaqService } from '../../../core/services/admin-faq.service';
 import { FaqEntry } from '../../../shared/models/faq.model';
@@ -33,8 +34,39 @@ describe('AdminFaqPageComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [AdminFaqPageComponent],
-      providers: [{ provide: AdminFaqService, useValue: faqServiceMock }],
+      providers: [
+        ...provideTranslateService({
+          fallbackLang: 'fr',
+          lang: 'fr',
+        }),
+        { provide: AdminFaqService, useValue: faqServiceMock },
+      ],
     }).compileComponents();
+
+    const translateService = TestBed.inject(TranslateService);
+    translateService.setTranslation(
+      'fr',
+      {
+        adminFaq: {
+          success: {
+            created: 'Réponse FAQ créée avec succès.',
+            updated: 'Réponse FAQ mise à jour avec succès.',
+            deleted: 'Réponse FAQ supprimée avec succès.',
+          },
+          errors: {
+            invalidForm: 'Le formulaire FAQ est incomplet ou invalide.',
+            load: 'Impossible de charger la FAQ admin.',
+            save: "Impossible d'enregistrer cette réponse FAQ pour le moment.",
+            delete: 'Impossible de supprimer cette réponse FAQ.',
+          },
+          delete: {
+            confirm: 'Supprimer la question FAQ "{{question}}" ?',
+          },
+        },
+      },
+      true,
+    );
+    translateService.use('fr');
   });
 
   it('loads entries and filters them from the search field', () => {
@@ -78,7 +110,7 @@ describe('AdminFaqPageComponent', () => {
       displayOrder: 20,
       isPublished: false,
     });
-    expect(component.successMessage()).toBe('Reponse FAQ creee avec succes.');
+    expect(component.successMessage()).toBe('Réponse FAQ créée avec succès.');
     expect(component.editingEntryId()).toBeNull();
     expect(component.faqForm.getRawValue()).toEqual({
       question: '',

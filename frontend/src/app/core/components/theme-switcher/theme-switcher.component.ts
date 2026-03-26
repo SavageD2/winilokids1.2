@@ -1,4 +1,5 @@
 import { Component, Input, computed, inject } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import {
   ResolvedTheme,
   ThemePreference,
@@ -9,6 +10,7 @@ let nextThemeSwitcherId = 0;
 
 @Component({
   selector: 'app-theme-switcher',
+  imports: [TranslatePipe],
   templateUrl: './theme-switcher.component.html',
   styleUrl: './theme-switcher.component.scss',
 })
@@ -23,25 +25,41 @@ export class ThemeSwitcherComponent {
   protected readonly hintId = `${this.selectId}-hint`;
   protected readonly preference = this.themeService.preference;
   protected readonly resolvedTheme = this.themeService.resolvedTheme;
-  protected readonly options: Array<{ value: ThemePreference; label: string }> = [
-    { value: 'default', label: 'Par defaut' },
-    { value: 'light', label: 'Clair' },
-    { value: 'dark', label: 'Sombre' },
-    { value: 'system', label: 'Systeme' },
+  protected readonly options: Array<{
+    value: ThemePreference;
+    labelKey: string;
+  }> = [
+    { value: 'default', labelKey: 'theme.option.default' },
+    { value: 'light', labelKey: 'theme.option.light' },
+    { value: 'dark', labelKey: 'theme.option.dark' },
+    { value: 'system', labelKey: 'theme.option.system' },
   ];
-  protected readonly hint = computed(() => {
+  protected readonly hintTranslation = computed(() => {
     const preference = this.preference();
     const resolvedTheme = this.resolvedTheme();
 
     if (preference === 'system') {
-      return `Le theme suit actuellement le systeme en mode ${this.getThemeLabel(resolvedTheme).toLowerCase()}.`;
+      return {
+        key: 'theme.hint.system',
+        params: {
+          modeKey: this.getThemeLabelKey(resolvedTheme),
+        },
+      };
     }
 
     if (preference === 'default') {
-      return "Utilise l'apparence editoriale actuelle de l'application.";
+      return {
+        key: 'theme.hint.default',
+        params: {},
+      };
     }
 
-    return `Apparence ${this.getThemeLabel(resolvedTheme).toLowerCase()} activee sur cet appareil.`;
+    return {
+      key: 'theme.hint.active',
+      params: {
+        modeKey: this.getThemeLabelKey(resolvedTheme),
+      },
+    };
   });
 
   protected updatePreference(event: Event) {
@@ -51,14 +69,14 @@ export class ThemeSwitcherComponent {
     this.themeService.setPreference(preference);
   }
 
-  private getThemeLabel(theme: ResolvedTheme) {
+  private getThemeLabelKey(theme: ResolvedTheme) {
     switch (theme) {
       case 'light':
-        return 'Clair';
+        return 'theme.option.light';
       case 'dark':
-        return 'Sombre';
+        return 'theme.option.dark';
       default:
-        return 'Par defaut';
+        return 'theme.option.default';
     }
   }
 }

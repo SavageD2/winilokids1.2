@@ -1,59 +1,56 @@
 <section class="page-hero">
-  <p class="eyebrow">Compte parent</p>
-  <h1>Connecte-toi ou cree ton compte avant de reserver un atelier.</h1>
-  <p>
-    Le compte parent permet de retrouver un parcours plus clair, de centraliser les reservations et
-    de securiser l inscription aux ateliers.
-  </p>
+  <p class="eyebrow">{{ 'account.hero.eyebrow' | translate }}</p>
+  <h1>{{ 'account.hero.title' | translate }}</h1>
+  <p>{{ 'account.hero.description' | translate }}</p>
 </section>
 
 @if (isAuthenticated() && parent(); as currentParent) {
   <section class="account-layout">
     <article class="connected-card">
-      <p class="eyebrow">Session active</p>
+      <p class="eyebrow">{{ 'account.connected.eyebrow' | translate }}</p>
       <h2>{{ connectedParentDisplayName() }}</h2>
       <p>{{ currentParent.email }}</p>
       @if (currentParent.phone) {
         <p>{{ currentParent.phone }}</p>
       }
       @if (authMethodsLabel()) {
-        <p>Methode active: {{ authMethodsLabel() }}</p>
+        <p>{{ 'account.connected.activeMethod' | translate }}: {{ authMethodsLabel() }}</p>
       }
 
       <div class="connected-actions">
         <button class="button button-primary" type="button" (click)="continuePath()">
-          Continuer
+          {{ 'account.connected.continue' | translate }}
         </button>
         <button class="button button-secondary" type="button" (click)="logout()">
-          Se deconnecter
+          {{ 'account.connected.logout' | translate }}
         </button>
       </div>
     </article>
 
     <article class="profile-card">
-      <p class="eyebrow">Mon profil</p>
-      <h2>Informations du parent</h2>
+      <p class="eyebrow">{{ 'account.profile.eyebrow' | translate }}</p>
+      <h2>{{ 'account.profile.title' | translate }}</h2>
 
       <form class="profile-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
         <div class="form-grid">
           <label>
-            <span>Prenom</span>
-            <input type="text" formControlName="firstName" placeholder="Camille" />
+            <span>{{ 'account.fields.firstName' | translate }}</span>
+            <input type="text" formControlName="firstName" [placeholder]="'account.placeholders.firstName' | translate" />
           </label>
 
           <label>
-            <span>Nom</span>
-            <input type="text" formControlName="lastName" placeholder="Martin" />
+            <span>{{ 'account.fields.lastName' | translate }}</span>
+            <input type="text" formControlName="lastName" [placeholder]="'account.placeholders.lastName' | translate" />
           </label>
 
           <label class="full-width">
-            <span>Email</span>
-            <input type="email" formControlName="email" placeholder="camille@example.com" />
+            <span>{{ 'account.fields.email' | translate }}</span>
+            <input type="email" formControlName="email" [placeholder]="'account.placeholders.email' | translate" />
           </label>
 
           <label class="full-width">
-            <span>Telephone</span>
-            <input type="tel" formControlName="phone" placeholder="0612345678" />
+            <span>{{ 'account.fields.phone' | translate }}</span>
+            <input type="tel" formControlName="phone" [placeholder]="'account.placeholders.phone' | translate" />
           </label>
         </div>
 
@@ -67,9 +64,9 @@
 
         <button class="button button-primary" type="submit" [disabled]="savingProfile()">
           @if (savingProfile()) {
-            Enregistrement...
+            {{ 'account.profile.saving' | translate }}
           } @else {
-            Mettre a jour le profil
+            {{ 'account.profile.submit' | translate }}
           }
         </button>
       </form>
@@ -77,25 +74,26 @@
 
     @if (canSetPassword()) {
       <article class="profile-card">
-        <p class="eyebrow">Connexion locale</p>
-        <h2>Ajouter un mot de passe</h2>
-        <p class="auth-note">
-          Ton compte Google est deja actif. Tu peux aussi definir un mot de passe pour te connecter
-          plus tard avec ton email.
-        </p>
+        <p class="eyebrow">{{ 'account.password.eyebrow' | translate }}</p>
+        <h2>{{ 'account.password.title' | translate }}</h2>
+        <p class="auth-note">{{ 'account.password.description' | translate }}</p>
 
         <form class="profile-form" [formGroup]="passwordForm" (ngSubmit)="setPassword()">
           <label>
-            <span>Nouveau mot de passe</span>
-            <input type="password" formControlName="password" placeholder="Au moins 8 caracteres" />
+            <span>{{ 'account.password.new' | translate }}</span>
+            <input
+              type="password"
+              formControlName="password"
+              [placeholder]="'account.password.placeholders.password' | translate"
+            />
           </label>
 
           <label>
-            <span>Confirmer le mot de passe</span>
+            <span>{{ 'account.password.confirm' | translate }}</span>
             <input
               type="password"
               formControlName="confirmPassword"
-              placeholder="Ressaisir le mot de passe"
+              [placeholder]="'account.password.placeholders.confirm' | translate"
             />
           </label>
 
@@ -109,9 +107,9 @@
 
           <button class="button button-primary" type="submit" [disabled]="settingPassword()">
             @if (settingPassword()) {
-              Activation...
+              {{ 'account.password.activating' | translate }}
             } @else {
-              Activer la connexion par mot de passe
+              {{ 'account.password.submit' | translate }}
             }
           </button>
         </form>
@@ -121,17 +119,17 @@
     <article class="reservations-card full-span">
       <div class="reservations-heading">
         <div>
-          <p class="eyebrow">Mes reservations</p>
-          <h2>Suivi des ateliers</h2>
+          <p class="eyebrow">{{ 'account.reservations.eyebrow' | translate }}</p>
+          <h2>{{ 'account.reservations.title' | translate }}</h2>
         </div>
       </div>
 
       @if (loadingReservations()) {
-        <p class="panel">Chargement des reservations...</p>
+        <p class="panel">{{ 'account.reservations.loading' | translate }}</p>
       } @else if (reservationsErrorMessage()) {
         <p class="panel panel-error">{{ reservationsErrorMessage() }}</p>
       } @else if (reservations().length === 0) {
-        <p class="panel">Aucune reservation enregistree pour le moment.</p>
+        <p class="panel">{{ 'account.reservations.empty' | translate }}</p>
       } @else {
         <div class="reservations-list">
           @for (reservation of reservations(); track reservation.id) {
@@ -140,7 +138,7 @@
                 <div>
                   <h3>{{ reservation.workshop.title }}</h3>
                   <p>
-                    {{ reservation.workshop.startAt | date: 'EEEE d MMMM' : '' : 'fr' }} ·
+                    {{ reservation.workshop.startAt | date: 'EEEE d MMMM' }} ·
                     {{ reservation.workshop.startAt | date: 'HH:mm' }} ·
                     {{ reservation.workshop.location }}
                   </p>
@@ -148,10 +146,7 @@
                 <span class="status-pill">{{ statusLabel(reservation.status) }}</span>
               </div>
 
-              <p>
-                Enfant: <strong>{{ reservation.childFirstName }}</strong> ·
-                {{ reservation.childAge }} ans
-              </p>
+              <p>{{ childSummary(reservation) }}</p>
 
               @if (reservation.message) {
                 <p class="reservation-message">{{ reservation.message }}</p>
@@ -166,9 +161,9 @@
                     (click)="cancelReservation(reservation)"
                   >
                     @if (cancellingReservationId() === reservation.id) {
-                      Annulation...
+                      {{ 'account.reservations.cancel.inProgress' | translate }}
                     } @else {
-                      Annuler la reservation
+                      {{ 'account.reservations.cancel.button' | translate }}
                     }
                   </button>
                 </div>
@@ -182,21 +177,18 @@
 } @else {
   <section class="auth-layout">
     <article class="auth-card social-auth-card full-span">
-      <p class="eyebrow">Connexion Google</p>
-      <h2>Continuer avec Google</h2>
-      <p class="auth-note">
-        Utilise le meme bouton pour creer ton compte parent ou retrouver un compte existant par
-        email. Les administrateurs continuent a se connecter uniquement sur l espace dedie.
-      </p>
+      <p class="eyebrow">{{ 'account.auth.google.eyebrow' | translate }}</p>
+      <h2>{{ 'account.auth.google.title' | translate }}</h2>
+      <p class="auth-note">{{ 'account.auth.google.description' | translate }}</p>
 
       <app-google-sign-in-button
         text="continue_with"
-        unavailableMessage="Ajoute GOOGLE_CLIENT_ID cote frontend et backend pour activer Google."
+        [unavailableMessage]="'account.auth.google.unavailable' | translate"
         (credentialReceived)="submitGoogleLogin($event)"
       />
 
       @if (googleSubmitting()) {
-        <p class="feedback">Connexion Google en cours...</p>
+        <p class="feedback">{{ 'account.auth.google.submitting' | translate }}</p>
       }
 
       @if (googleErrorMessage()) {
@@ -205,33 +197,37 @@
     </article>
 
     <form class="auth-card" [formGroup]="registerForm" (ngSubmit)="submitRegistration()">
-      <p class="eyebrow">Inscription</p>
-      <h2>Creer un compte</h2>
+      <p class="eyebrow">{{ 'account.auth.register.eyebrow' | translate }}</p>
+      <h2>{{ 'account.auth.register.title' | translate }}</h2>
 
       <div class="form-grid">
         <label>
-          <span>Prenom</span>
-          <input type="text" formControlName="firstName" placeholder="Camille" />
+          <span>{{ 'account.fields.firstName' | translate }}</span>
+          <input type="text" formControlName="firstName" [placeholder]="'account.placeholders.firstName' | translate" />
         </label>
 
         <label>
-          <span>Nom</span>
-          <input type="text" formControlName="lastName" placeholder="Martin" />
+          <span>{{ 'account.fields.lastName' | translate }}</span>
+          <input type="text" formControlName="lastName" [placeholder]="'account.placeholders.lastName' | translate" />
         </label>
 
         <label class="full-width">
-          <span>Email</span>
-          <input type="email" formControlName="email" placeholder="camille@example.com" />
+          <span>{{ 'account.fields.email' | translate }}</span>
+          <input type="email" formControlName="email" [placeholder]="'account.placeholders.email' | translate" />
         </label>
 
         <label>
-          <span>Telephone</span>
-          <input type="tel" formControlName="phone" placeholder="0612345678" />
+          <span>{{ 'account.fields.phone' | translate }}</span>
+          <input type="tel" formControlName="phone" [placeholder]="'account.placeholders.phone' | translate" />
         </label>
 
         <label>
-          <span>Mot de passe</span>
-          <input type="password" formControlName="password" placeholder="Au moins 8 caracteres" />
+          <span>{{ 'account.fields.password' | translate }}</span>
+          <input
+            type="password"
+            formControlName="password"
+            [placeholder]="'account.placeholders.password' | translate"
+          />
         </label>
       </div>
 
@@ -241,25 +237,29 @@
 
       <button class="button button-primary" type="submit" [disabled]="registerSubmitting()">
         @if (registerSubmitting()) {
-          Creation...
+          {{ 'account.auth.register.submitting' | translate }}
         } @else {
-          Creer mon compte
+          {{ 'account.auth.register.submit' | translate }}
         }
       </button>
     </form>
 
     <form class="auth-card" [formGroup]="loginForm" (ngSubmit)="submitLogin()">
-      <p class="eyebrow">Connexion</p>
-      <h2>Acceder a mon compte</h2>
+      <p class="eyebrow">{{ 'account.auth.login.eyebrow' | translate }}</p>
+      <h2>{{ 'account.auth.login.title' | translate }}</h2>
 
       <label>
-        <span>Email</span>
-        <input type="email" formControlName="email" placeholder="camille@example.com" />
+        <span>{{ 'account.fields.email' | translate }}</span>
+        <input type="email" formControlName="email" [placeholder]="'account.placeholders.email' | translate" />
       </label>
 
       <label>
-        <span>Mot de passe</span>
-        <input type="password" formControlName="password" placeholder="Votre mot de passe" />
+        <span>{{ 'account.fields.password' | translate }}</span>
+        <input
+          type="password"
+          formControlName="password"
+          [placeholder]="'account.auth.login.passwordPlaceholder' | translate"
+        />
       </label>
 
       @if (loginErrorMessage()) {
@@ -268,9 +268,9 @@
 
       <button class="button button-primary" type="submit" [disabled]="loginSubmitting()">
         @if (loginSubmitting()) {
-          Connexion...
+          {{ 'account.auth.login.submitting' | translate }}
         } @else {
-          Me connecter
+          {{ 'account.auth.login.submit' | translate }}
         }
       </button>
     </form>

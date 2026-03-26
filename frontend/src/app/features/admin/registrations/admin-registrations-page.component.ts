@@ -2,9 +2,11 @@ import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { AdminRegistrationsService } from '../../../core/services/admin-registrations.service';
 import { AdminWorkshopsService } from '../../../core/services/admin-workshops.service';
+import { I18nService } from '../../../core/services/i18n.service';
 import { RegistrationRecord, RegistrationStatus } from '../../../shared/models/registration.model';
 import { Workshop } from '../../../shared/models/workshop.model';
 
@@ -15,12 +17,13 @@ type RegistrationGroup = {
 
 @Component({
   selector: 'app-admin-registrations-page',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, TranslatePipe],
   templateUrl: './admin-registrations-page.component.html',
   styleUrl: './admin-registrations-page.component.scss',
 })
 export class AdminRegistrationsPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18nService = inject(I18nService);
   private readonly workshopsService = inject(AdminWorkshopsService);
   private readonly registrationsService = inject(AdminRegistrationsService);
   private readonly destroyRef = inject(DestroyRef);
@@ -102,7 +105,9 @@ export class AdminRegistrationsPageComponent {
           this.updatingRegistrationId.set(null);
         },
         error: () => {
-          this.error.set("Impossible de mettre a jour le statut pour le moment.");
+          this.error.set(
+            this.i18nService.translateInstant('adminRegistrations.errors.updateStatus'),
+          );
           this.updatingRegistrationId.set(null);
         },
       });
@@ -120,14 +125,40 @@ export class AdminRegistrationsPageComponent {
   protected statusLabel(status: RegistrationStatus): string {
     switch (status) {
       case 'PENDING':
-        return 'En attente';
+        return this.i18nService.translateInstant('adminRegistrations.status.pending');
       case 'CONFIRMED':
-        return 'Confirmee';
+        return this.i18nService.translateInstant('adminRegistrations.status.confirmed');
       case 'CANCELLED':
-        return 'Annulee';
+        return this.i18nService.translateInstant('adminRegistrations.status.cancelled');
       case 'ATTENDED':
-        return 'Presente';
+        return this.i18nService.translateInstant('adminRegistrations.status.attended');
     }
+  }
+
+  protected summaryLabel(count: number) {
+    return this.i18nService.translateInstant('adminRegistrations.summary.total', { count });
+  }
+
+  protected pageSummaryLabel() {
+    return this.i18nService.translateInstant('adminRegistrations.summary.page', {
+      page: this.page(),
+      totalPages: this.totalPages(),
+    });
+  }
+
+  protected registrationsCountLabel(count: number) {
+    return this.i18nService.translateInstant('adminRegistrations.group.count', { count });
+  }
+
+  protected childSummary(registration: RegistrationRecord) {
+    return this.i18nService.translateInstant('adminRegistrations.registration.child', {
+      childFirstName: registration.childFirstName,
+      childAge: registration.childAge,
+    });
+  }
+
+  protected phoneSummary(phone: string) {
+    return this.i18nService.translateInstant('adminRegistrations.registration.phone', { phone });
   }
 
   private loadWorkshops() {
@@ -139,7 +170,7 @@ export class AdminRegistrationsPageComponent {
           this.workshops.set(workshops);
         },
         error: () => {
-          this.error.set('Impossible de charger les ateliers.');
+          this.error.set(this.i18nService.translateInstant('adminRegistrations.errors.workshops'));
         },
       });
   }
@@ -166,7 +197,7 @@ export class AdminRegistrationsPageComponent {
           this.loading.set(false);
         },
         error: () => {
-          this.error.set('Impossible de charger les inscriptions.');
+          this.error.set(this.i18nService.translateInstant('adminRegistrations.errors.load'));
           this.loading.set(false);
         },
       });

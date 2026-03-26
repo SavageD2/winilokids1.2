@@ -1,5 +1,6 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { provideTranslateService } from '@ngx-translate/core';
 import { ThemeSwitcherComponent } from './theme-switcher.component';
 import { ThemeService } from '../../services/theme.service';
 
@@ -22,7 +23,13 @@ describe('ThemeSwitcherComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ThemeSwitcherComponent],
-      providers: [{ provide: ThemeService, useValue: themeServiceMock }],
+      providers: [
+        ...provideTranslateService({
+          fallbackLang: 'fr',
+          lang: 'fr',
+        }),
+        { provide: ThemeService, useValue: themeServiceMock },
+      ],
     }).compileComponents();
   });
 

@@ -22,9 +22,18 @@
 }
 
 .site-header {
+  align-items: center;
+  column-gap: 1.4rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  justify-content: initial;
   position: sticky;
   top: 0;
   z-index: 10;
+}
+
+.menu-toggle {
+  display: none;
 }
 
 .site-header::before {
@@ -46,6 +55,7 @@
   color: var(--color-ink);
   display: inline-flex;
   gap: 1rem;
+  min-width: 0;
   position: relative;
   text-decoration: none;
 }
@@ -106,20 +116,36 @@
 
 .header-actions {
   align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  justify-content: flex-end;
+  display: grid;
+  gap: 0.85rem 1.1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  justify-items: end;
+  min-width: 0;
+  width: 100%;
 }
 
 .site-nav {
   align-items: center;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.55rem;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
 }
 
-.site-nav app-theme-switcher {
+.site-tools {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  margin-left: 0.2rem;
+  white-space: nowrap;
+}
+
+.site-tools app-language-switcher,
+.site-tools app-theme-switcher {
   display: inline-flex;
 }
 
@@ -132,7 +158,8 @@
 .site-nav a {
   border-radius: 999px;
   font-weight: 700;
-  padding: 0.68rem 1rem;
+  padding: 0.64rem 0.95rem;
+  white-space: nowrap;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
@@ -175,18 +202,148 @@
   font-weight: 700;
 }
 
+@media (max-width: 1120px) {
+  .site-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 1rem;
+  }
+
+  .menu-toggle {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--theme-border-subtle);
+    border-radius: 999px;
+    color: var(--color-ink);
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.85rem;
+    justify-content: center;
+    min-height: 2.9rem;
+    padding: 0.55rem 0.95rem;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .menu-toggle:hover,
+  .menu-toggle:focus-visible,
+  .site-header-menu-open .menu-toggle {
+    background: var(--theme-gradient-tag);
+    border-color: transparent;
+    color: var(--color-accent-dark);
+    outline: none;
+  }
+
+  .menu-toggle-label {
+    font-size: 0.88rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .menu-toggle-icon {
+    display: inline-grid;
+    gap: 0.22rem;
+  }
+
+  .menu-toggle-icon span {
+    background: currentColor;
+    border-radius: 999px;
+    display: block;
+    height: 0.14rem;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+    width: 1rem;
+  }
+
+  .site-header-menu-open .menu-toggle-icon span:nth-child(1) {
+    transform: translateY(0.36rem) rotate(45deg);
+  }
+
+  .site-header-menu-open .menu-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-header-menu-open .menu-toggle-icon span:nth-child(3) {
+    transform: translateY(-0.36rem) rotate(-45deg);
+  }
+
+  .header-actions {
+    display: none;
+    gap: 0.85rem;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+    padding-top: 0.2rem;
+  }
+
+  .header-actions-open {
+    display: grid;
+  }
+
+  .site-nav {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .site-nav a {
+    padding: 0.85rem 1rem;
+    width: 100%;
+  }
+
+  .site-tools {
+    display: grid;
+    gap: 0.65rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+    margin-left: 0;
+    white-space: normal;
+    width: 100%;
+  }
+
+  .site-tools app-language-switcher,
+  .site-tools app-theme-switcher {
+    display: block;
+    width: 100%;
+  }
+}
+
 @media (max-width: 880px) {
-  .site-header,
   .site-footer {
     align-items: start;
     flex-direction: column;
   }
 
-  .header-actions {
-    width: 100%;
+  .brand {
+    max-width: min(100%, 24rem);
+  }
+
+  .brand small {
+    max-width: 18rem;
+  }
+
+  .site-header {
+    column-gap: 0.8rem;
+  }
+
+  .menu-toggle {
+    padding-inline: 0.85rem;
   }
 
   .site-header::before {
     border-radius: 1.4rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-toggle-label {
+    font-size: 0.84rem;
   }
 }

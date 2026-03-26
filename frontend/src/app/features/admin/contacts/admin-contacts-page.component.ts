@@ -2,18 +2,21 @@ import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { AdminContactsService } from '../../../core/services/admin-contacts.service';
+import { I18nService } from '../../../core/services/i18n.service';
 import { ContactRecord, ContactStatus } from '../../../shared/models/contact.model';
 
 @Component({
   selector: 'app-admin-contacts-page',
-  imports: [DatePipe, ReactiveFormsModule],
+  imports: [DatePipe, ReactiveFormsModule, TranslatePipe],
   templateUrl: './admin-contacts-page.component.html',
   styleUrl: './admin-contacts-page.component.scss',
 })
 export class AdminContactsPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18nService = inject(I18nService);
   private readonly contactsService = inject(AdminContactsService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -60,14 +63,25 @@ export class AdminContactsPageComponent {
   protected statusLabel(status: ContactStatus): string {
     switch (status) {
       case 'NEW':
-        return 'Nouveau';
+        return this.i18nService.translateInstant('adminContacts.status.new');
       case 'IN_PROGRESS':
-        return 'En cours';
+        return this.i18nService.translateInstant('adminContacts.status.inProgress');
       case 'RESOLVED':
-        return 'Traite';
+        return this.i18nService.translateInstant('adminContacts.status.resolved');
       case 'ARCHIVED':
-        return 'Archive';
+        return this.i18nService.translateInstant('adminContacts.status.archived');
     }
+  }
+
+  protected summaryLabel(count: number) {
+    return this.i18nService.translateInstant('adminContacts.summary.total', { count });
+  }
+
+  protected pageSummaryLabel() {
+    return this.i18nService.translateInstant('adminContacts.summary.page', {
+      page: this.page(),
+      totalPages: this.totalPages(),
+    });
   }
 
   protected updateStatus(contact: ContactRecord, status: string) {
@@ -88,10 +102,12 @@ export class AdminContactsPageComponent {
         next: (updatedContact) => {
           this.replaceContact(updatedContact);
           this.updatingContactId.set(null);
-          this.successMessage.set('Statut du message mis a jour.');
+          this.successMessage.set(
+            this.i18nService.translateInstant('adminContacts.success.statusUpdated'),
+          );
         },
         error: () => {
-          this.error.set("Impossible de mettre a jour ce message pour le moment.");
+          this.error.set(this.i18nService.translateInstant('adminContacts.errors.updateStatus'));
           this.updatingContactId.set(null);
         },
       });
@@ -119,10 +135,10 @@ export class AdminContactsPageComponent {
         next: (updatedContact) => {
           this.replaceContact(updatedContact);
           this.updatingContactId.set(null);
-          this.successMessage.set('Note interne enregistree.');
+          this.successMessage.set(this.i18nService.translateInstant('adminContacts.success.noteSaved'));
         },
         error: () => {
-          this.error.set("Impossible d enregistrer la note interne.");
+          this.error.set(this.i18nService.translateInstant('adminContacts.errors.saveNote'));
           this.updatingContactId.set(null);
         },
       });
@@ -161,7 +177,7 @@ export class AdminContactsPageComponent {
           this.loading.set(false);
         },
         error: () => {
-          this.error.set('Impossible de charger les messages de contact.');
+          this.error.set(this.i18nService.translateInstant('adminContacts.errors.load'));
           this.loading.set(false);
         },
       });

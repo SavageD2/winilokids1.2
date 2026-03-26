@@ -2,18 +2,21 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
+import { I18nService } from '../../../core/services/i18n.service';
 import { AdminAuthService } from '../../../core/services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-login-page',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
   templateUrl: './admin-login-page.component.html',
   styleUrl: './admin-login-page.component.scss',
 })
 export class AdminLoginPageComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AdminAuthService);
+  private readonly i18nService = inject(I18nService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
@@ -49,7 +52,9 @@ export class AdminLoginPageComponent {
           void this.router.navigateByUrl(redirectUrl);
         },
         error: () => {
-          this.errorMessage.set('Connexion impossible. Verifie l email et le mot de passe admin.');
+          this.errorMessage.set(
+            this.i18nService.translateInstant('adminLogin.error.invalidCredentials'),
+          );
         },
       });
   }
