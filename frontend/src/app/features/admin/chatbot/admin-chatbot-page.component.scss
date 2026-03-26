@@ -9,10 +9,10 @@
 .filters-card,
 .panel,
 .log-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(196, 144, 94, 0.18);
+  background: var(--theme-surface-card);
+  border: 1px solid var(--theme-border-regular);
   border-radius: 1.5rem;
-  box-shadow: 0 1rem 2.5rem rgba(62, 39, 24, 0.07);
+  box-shadow: var(--theme-shadow-soft);
 }
 
 .stat-card,
@@ -34,7 +34,7 @@
 }
 
 .stat-card-accent {
-  background: linear-gradient(135deg, rgba(240, 141, 111, 0.15) 0%, rgba(255, 255, 255, 0.9) 100%);
+  background: var(--theme-gradient-admin-highlight);
 }
 
 .filters-heading {
@@ -83,8 +83,8 @@ label span {
 
 input,
 select {
-  background: #fffaf2;
-  border: 1px solid rgba(196, 144, 94, 0.25);
+  background: var(--theme-surface-soft-alt);
+  border: 1px solid var(--theme-border-strong);
   border-radius: 1rem;
   color: var(--color-ink);
   font: inherit;
@@ -93,8 +93,8 @@ select {
 
 input:focus,
 select:focus {
-  border-color: rgba(200, 103, 65, 0.55);
-  box-shadow: 0 0 0 0.18rem rgba(200, 103, 65, 0.12);
+  border-color: var(--theme-border-focus);
+  box-shadow: 0 0 0 0.18rem var(--theme-focus-ring);
   outline: none;
 }
 
@@ -110,7 +110,7 @@ select:focus {
 }
 
 .panel-error {
-  color: #7a2b1c;
+  color: var(--theme-text-danger-strong);
 }
 
 .logs-list {
@@ -140,8 +140,8 @@ select:focus {
 }
 
 .meta-pill-warn {
-  background: #fff1eb;
-  color: #8a3c24;
+  background: var(--theme-surface-status-danger);
+  color: var(--theme-text-danger);
 }
 
 .log-content {
@@ -157,7 +157,7 @@ select:focus {
 }
 
 .content-box {
-  background: #fff7ec;
+  background: var(--theme-surface-message);
   border-radius: 1rem;
   color: var(--color-muted);
   line-height: 1.7;
@@ -174,8 +174,8 @@ select:focus {
 }
 
 .pagination-card button {
-  background: linear-gradient(180deg, #fff5d7 0%, #ffe9b1 100%);
-  border: 1px solid rgba(196, 144, 94, 0.2);
+  background: var(--theme-gradient-tag);
+  border: 1px solid var(--theme-border-regular);
   border-radius: 999px;
   color: var(--color-accent-dark);
   cursor: pointer;

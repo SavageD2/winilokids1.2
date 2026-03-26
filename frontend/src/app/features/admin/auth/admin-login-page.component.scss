@@ -15,10 +15,10 @@
 
 .login-copy,
 .login-card {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(196, 144, 94, 0.18);
+  background: var(--theme-surface-card);
+  border: 1px solid var(--theme-border-regular);
   border-radius: 1.75rem;
-  box-shadow: 0 1.2rem 2.8rem rgba(62, 39, 24, 0.08);
+  box-shadow: var(--theme-shadow-soft);
   padding: clamp(1.5rem, 3vw, 2.25rem);
 }
 
@@ -67,8 +67,8 @@ label span {
 }
 
 input {
-  background: #fffaf2;
-  border: 1px solid rgba(196, 144, 94, 0.25);
+  background: var(--theme-surface-soft-alt);
+  border: 1px solid var(--theme-border-strong);
   border-radius: 1rem;
   color: var(--color-ink);
   font: inherit;
@@ -76,8 +76,8 @@ input {
 }
 
 input:focus {
-  border-color: rgba(200, 103, 65, 0.55);
-  box-shadow: 0 0 0 0.18rem rgba(200, 103, 65, 0.12);
+  border-color: var(--theme-border-focus);
+  box-shadow: 0 0 0 0.18rem var(--theme-focus-ring);
   outline: none;
 }
 
@@ -88,8 +88,8 @@ input:focus {
 }
 
 .feedback-error {
-  background: #fff1eb;
-  color: #8a3c24;
+  background: var(--theme-surface-status-danger);
+  color: var(--theme-text-danger);
 }
 
 .button[disabled] {

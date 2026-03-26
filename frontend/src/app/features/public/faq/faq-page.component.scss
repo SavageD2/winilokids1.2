@@ -7,10 +7,10 @@
 .faq-group,
 .faq-item,
 .faq-side {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(196, 144, 94, 0.18);
+  background: var(--theme-surface-card);
+  border: 1px solid var(--theme-border-regular);
   border-radius: 1.5rem;
-  box-shadow: 0 1rem 2.5rem rgba(62, 39, 24, 0.07);
+  box-shadow: var(--theme-shadow-soft);
 }
 
 .page-hero,
@@ -53,7 +53,7 @@ h2 {
 }
 
 .panel-error {
-  color: #7a2b1c;
+  color: var(--theme-text-danger-strong);
 }
 
 .faq-layout {

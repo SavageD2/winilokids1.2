@@ -17,12 +17,12 @@ export class ParentSessionService {
 
   storeSession(session: ParentSession) {
     this.token.set(session.accessToken);
-    this.parent.set(session.parent);
+    this.parent.set(this.normalizeParent(session.parent));
     this.persistSession();
   }
 
   updateParent(parent: ParentProfile) {
-    this.parent.set(parent);
+    this.parent.set(this.normalizeParent(parent));
     this.persistSession();
   }
 
@@ -42,7 +42,7 @@ export class ParentSessionService {
     try {
       const session = JSON.parse(rawSession) as ParentSession;
       this.token.set(session.accessToken);
-      this.parent.set(session.parent);
+      this.parent.set(this.normalizeParent(session.parent));
     } catch {
       this.clearSession();
     }
@@ -64,5 +64,13 @@ export class ParentSessionService {
         parent,
       }),
     );
+  }
+
+  private normalizeParent(parent: ParentProfile): ParentProfile {
+    return {
+      ...parent,
+      hasPassword: parent.hasPassword ?? true,
+      hasGoogleAccount: parent.hasGoogleAccount ?? false,
+    };
   }
 }

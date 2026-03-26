@@ -38,15 +38,18 @@ model Admin {
 }
 
 model ParentAccount {
-  id           Int            @id @default(autoincrement())
-  email        String         @unique
-  passwordHash String
-  firstName    String
-  lastName     String
-  phone        String?
-  registrations Registration[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id                  Int            @id @default(autoincrement())
+  email               String         @unique
+  passwordHash        String?
+  googleSubject       String?        @unique
+  googleEmailVerified Boolean        @default(false)
+  googleLinkedAt      DateTime?
+  firstName           String
+  lastName            String
+  phone               String?
+  registrations       Registration[]
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
 }
 
 model Workshop {
@@ -71,20 +74,20 @@ model Workshop {
 }
 
 model Registration {
-  id             Int                @id @default(autoincrement())
-  parentName     String
-  parentEmail    String
-  parentPhone    String?
-  childFirstName String
-  childAge       Int
-  message        String?
-  status         RegistrationStatus @default(PENDING)
-  workshopId     Int
+  id              Int                @id @default(autoincrement())
+  parentName      String
+  parentEmail     String
+  parentPhone     String?
+  childFirstName  String
+  childAge        Int
+  message         String?
+  status          RegistrationStatus @default(PENDING)
+  workshopId      Int
   parentAccountId Int?
-  workshop       Workshop           @relation(fields: [workshopId], references: [id], onDelete: Cascade)
-  parentAccount  ParentAccount?     @relation(fields: [parentAccountId], references: [id], onDelete: SetNull)
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  workshop        Workshop           @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  parentAccount   ParentAccount?     @relation(fields: [parentAccountId], references: [id], onDelete: SetNull)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
 
   @@index([workshopId])
   @@index([status])
@@ -126,16 +129,16 @@ model FaqEntry {
 }
 
 model ChatbotMessageLog {
-  id                Int               @id @default(autoincrement())
-  message           String
-  normalizedMessage String
-  currentRoute      String?
-  sourceType        ChatbotSourceType
-  fallbackToContact Boolean           @default(false)
-  matchedFaqIds     Int[]
+  id                 Int               @id @default(autoincrement())
+  message            String
+  normalizedMessage  String
+  currentRoute       String?
+  sourceType         ChatbotSourceType
+  fallbackToContact  Boolean           @default(false)
+  matchedFaqIds      Int[]
   matchedWorkshopIds Int[]
-  reply             String
-  createdAt         DateTime          @default(now())
+  reply              String
+  createdAt          DateTime          @default(now())
 
   @@index([sourceType])
   @@index([fallbackToContact])

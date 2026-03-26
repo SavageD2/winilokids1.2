@@ -55,6 +55,7 @@ PORT=3000
 DATABASE_URL="postgresql://winilo_user:winilo_password@localhost:5432/winilo_kids?schema=public"
 JWT_SECRET="change-this-super-secret-key"
 JWT_EXPIRES_IN="1d"
+GOOGLE_CLIENT_ID=""
 ADMIN_EMAIL="admin@winilo-kids.fr"
 ADMIN_PASSWORD="ChangeMe123!"
 ADMIN_FIRST_NAME="Admin"
@@ -62,6 +63,14 @@ ADMIN_LAST_NAME="Winilo"
 ```
 
 Le modele de reference est dans [backend/.env.example](/home/Savage/git/win1.2/backend/.env.example).
+
+Pour activer la connexion Google parent, il faut renseigner :
+
+- `GOOGLE_CLIENT_ID` dans `backend/.env`
+- `googleClientId` dans [frontend/public/app-config.js](/home/Savage/git/win1.2/frontend/public/app-config.js) en local
+- `WINILO_GOOGLE_CLIENT_ID` dans [.env.prod.example](/home/Savage/git/win1.2/.env.prod.example) pour le deploiement Docker
+
+Si cette valeur reste vide, le bouton Google reste desactive cote frontend.
 
 ## Lancement rapide
 
@@ -147,10 +156,12 @@ Le parent peut :
 
 - creer son compte
 - se connecter
+- se connecter avec Google
 - reserver un atelier
 - voir ses reservations
 - annuler une reservation selon son statut
 - modifier son profil
+- activer un mot de passe local apres un premier login Google
 
 Comptes parents de demonstration apres `npm run seed:demo` :
 
@@ -170,8 +181,9 @@ Mot de passe commun :
 2. Aller dans `Ateliers`
 3. Consulter `FAQ`
 4. Creer un compte parent via `Inscription / Connexion`
-5. Reserver un atelier
-6. Revenir dans `Mon compte` pour verifier la reservation
+5. Verifier aussi la connexion Google si `GOOGLE_CLIENT_ID` et `googleClientId` sont renseignes
+6. Reserver un atelier
+7. Revenir dans `Mon compte` pour verifier la reservation
 
 ### Cote admin
 
@@ -249,17 +261,19 @@ docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
 
 Le projet est fonctionnel en local avec :
 
-- charte publique adaptee a l'univers Winilo Kids
-- compte parent
-- reservation d'atelier conditionnee a la connexion
+- auth admin par JWT
+- auth parent locale et Google validees sur la branche `login`
+- possibilite pour un parent cree via Google d activer ensuite un mot de passe local
+- reservation d atelier cote parent
+- suivi des reservations depuis `Mon compte`
 - annulation parent
-- FAQ dynamique cote public et cote admin
+- charte publique adaptee a l univers Winilo Kids
 - assistant conversationnel public base sur la FAQ et les ateliers publies
-- suivi admin des messages du chatbot avec stats legeres
-- suivi admin des messages de contact avec statuts et notes internes
+- back-office admin pour ateliers, inscriptions, contacts, FAQ et suivi chatbot
 - espace admin complet pour le MVP
 - base E2E Playwright pour les parcours critiques
 - configuration runtime de l URL API frontend pour le deploiement
+- builds et tests frontend/backend verts dans l environnement courant
 
 ## Notes
 

@@ -7,8 +7,7 @@
 }
 
 .hero::after {
-  background:
-    linear-gradient(90deg, #ff8b39 0%, #ffca2b 24%, #47c070 50%, #4dc0e9 74%, #ff7f3c 100%);
+  background: var(--theme-gradient-multicolor);
   border-radius: 999px;
   content: '';
   height: 0.75rem;
@@ -61,16 +60,13 @@ h1 {
 .value-card,
 .workshop-card {
   background: var(--color-card);
-  border: 2px solid rgba(242, 107, 46, 0.08);
+  border: 2px solid var(--theme-border-card);
   border-radius: 1.8rem;
   box-shadow: var(--shadow-card);
 }
 
 .hero-panel {
-  background:
-    radial-gradient(circle at top right, rgba(255, 191, 31, 0.24), transparent 20%),
-    radial-gradient(circle at top left, rgba(89, 194, 230, 0.2), transparent 18%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 249, 232, 0.96) 100%);
+  background: var(--theme-gradient-panel-warm);
   padding: 1.5rem;
   position: relative;
 }
@@ -95,16 +91,16 @@ h1 {
 }
 
 .hero-stickers span:nth-child(1) {
-  background: linear-gradient(180deg, #ffd45b 0%, #ffbf1f 100%);
+  background: var(--theme-gradient-hero);
   width: 1rem;
 }
 
 .hero-stickers span:nth-child(2) {
-  background: linear-gradient(180deg, #9ae0f5 0%, #59c2e6 100%);
+  background: var(--theme-gradient-hero-alt);
 }
 
 .hero-stickers span:nth-child(3) {
-  background: linear-gradient(90deg, #ff8b39 0%, #ffca2b 25%, #47c070 50%, #4dc0e9 75%, #ff7f3c 100%);
+  background: var(--theme-gradient-multicolor);
 }
 
 .panel-label {
@@ -142,22 +138,22 @@ h1 {
 .value-icon {
   background: var(--color-surface-soft);
   border-radius: 1rem;
-  box-shadow: inset 0 -0.28rem 0 rgba(242, 107, 46, 0.12);
+  box-shadow: inset 0 -0.28rem 0 var(--theme-border-emphasis);
   height: 3rem;
   margin: 0 0 1rem;
   width: 3rem;
 }
 
 .value-card:nth-child(1) .value-icon {
-  background: linear-gradient(180deg, #ffe9b6 0%, #ffd86f 100%);
+  background: var(--theme-gradient-value-warm);
 }
 
 .value-card:nth-child(2) .value-icon {
-  background: linear-gradient(180deg, #ffe0d4 0%, #ffb295 100%);
+  background: var(--theme-gradient-value-coral);
 }
 
 .value-card:nth-child(3) .value-icon {
-  background: linear-gradient(180deg, #dff6ff 0%, #9adff3 100%);
+  background: var(--theme-gradient-value-cool);
 }
 
 .spotlight {
@@ -187,7 +183,7 @@ h1 {
 }
 
 .workshop-card::before {
-  background: linear-gradient(90deg, #ff8b39 0%, #ffca2b 24%, #47c070 50%, #4dc0e9 74%, #ff7f3c 100%);
+  background: var(--theme-gradient-multicolor);
   border-radius: 999px;
   content: '';
   height: 0.45rem;
@@ -216,7 +212,7 @@ h1 {
 }
 
 .workshop-tags span {
-  background: linear-gradient(180deg, #fff8de 0%, #fff0c3 100%);
+  background: var(--theme-gradient-tag);
   border-radius: 999px;
   color: var(--color-ink);
   font-size: 0.9rem;
@@ -225,8 +221,8 @@ h1 {
 }
 
 .empty-state {
-  background: rgba(255, 255, 255, 0.82);
-  border: 2px dashed rgba(242, 107, 46, 0.24);
+  background: var(--theme-surface-empty);
+  border: 2px dashed var(--theme-border-emphasis);
   border-radius: 1.8rem;
   color: var(--color-muted);
   margin: 0;

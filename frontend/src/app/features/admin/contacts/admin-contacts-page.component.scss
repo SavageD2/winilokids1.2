@@ -1,10 +1,10 @@
 .filters-card,
 .panel,
 .contact-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(196, 144, 94, 0.18);
+  background: var(--theme-surface-card);
+  border: 1px solid var(--theme-border-regular);
   border-radius: 1.5rem;
-  box-shadow: 0 1rem 2.5rem rgba(62, 39, 24, 0.07);
+  box-shadow: var(--theme-shadow-soft);
 }
 
 .filters-card {
@@ -64,8 +64,8 @@ h3 {
 input,
 select,
 textarea {
-  background: #fffaf2;
-  border: 1px solid rgba(196, 144, 94, 0.25);
+  background: var(--theme-surface-soft-alt);
+  border: 1px solid var(--theme-border-strong);
   border-radius: 1rem;
   color: var(--color-ink);
   font: inherit;
@@ -80,8 +80,8 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: rgba(200, 103, 65, 0.55);
-  box-shadow: 0 0 0 0.18rem rgba(200, 103, 65, 0.12);
+  border-color: var(--theme-border-focus);
+  box-shadow: 0 0 0 0.18rem var(--theme-focus-ring);
   outline: none;
 }
 
@@ -92,11 +92,11 @@ textarea:focus {
 }
 
 .panel-error {
-  color: #7a2b1c;
+  color: var(--theme-text-danger-strong);
 }
 
 .panel-success {
-  color: #24553c;
+  color: var(--theme-text-success);
 }
 
 .contacts-list {
@@ -114,8 +114,8 @@ textarea:focus {
 }
 
 .pagination-card button {
-  background: linear-gradient(180deg, #fff5d7 0%, #ffe9b1 100%);
-  border: 1px solid rgba(196, 144, 94, 0.2);
+  background: var(--theme-gradient-tag);
+  border: 1px solid var(--theme-border-regular);
   border-radius: 999px;
   color: var(--color-accent-dark);
   cursor: pointer;
@@ -152,7 +152,7 @@ textarea:focus {
 }
 
 .status-pill {
-  background: #fff2d0;
+  background: var(--theme-surface-soft);
   border-radius: 999px;
   color: var(--color-accent-dark);
   display: inline-flex;
@@ -164,22 +164,22 @@ textarea:focus {
 }
 
 .status-pill[data-status='IN_PROGRESS'] {
-  background: #fff0cc;
-  color: #8a5300;
+  background: var(--theme-surface-status-warning);
+  color: var(--theme-text-warning);
 }
 
 .status-pill[data-status='RESOLVED'] {
-  background: #e5f7ea;
-  color: #24553c;
+  background: var(--theme-surface-status-success);
+  color: var(--theme-text-success);
 }
 
 .status-pill[data-status='ARCHIVED'] {
-  background: #ececf2;
-  color: #4a4b66;
+  background: var(--theme-surface-status-neutral);
+  color: var(--theme-text-neutral);
 }
 
 .message {
-  background: #fff7ec;
+  background: var(--theme-surface-message);
   border-radius: 1rem;
   line-height: 1.7;
   margin: 1rem 0 0;

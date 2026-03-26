@@ -37,10 +37,8 @@ h1 {
 }
 
 .catalog-card {
-  background:
-    radial-gradient(circle at top right, rgba(255, 191, 31, 0.18), transparent 18%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 236, 0.96) 100%);
-  border: 2px solid rgba(242, 107, 46, 0.08);
+  background: var(--theme-gradient-panel-warm);
+  border: 2px solid var(--theme-border-card);
   border-radius: 1.8rem;
   box-shadow: var(--shadow-card);
   display: flex;
@@ -51,7 +49,7 @@ h1 {
 }
 
 .catalog-card::before {
-  background: linear-gradient(90deg, #ff8b39 0%, #ffca2b 24%, #47c070 50%, #4dc0e9 74%, #ff7f3c 100%);
+  background: var(--theme-gradient-multicolor);
   border-radius: 999px;
   content: '';
   height: 0.45rem;
@@ -101,8 +99,8 @@ h1 {
 }
 
 .panel {
-  background: rgba(255, 255, 255, 0.86);
-  border: 2px dashed rgba(242, 107, 46, 0.22);
+  background: var(--theme-surface-empty);
+  border: 2px dashed var(--theme-border-emphasis);
   border-radius: 1.8rem;
   color: var(--color-muted);
   padding: 1rem 1.25rem;
@@ -110,7 +108,7 @@ h1 {
 
 .panel-error {
   border-style: solid;
-  color: #7a2b1c;
+  color: var(--theme-text-danger-strong);
 }
 
 @media (max-width: 960px) {

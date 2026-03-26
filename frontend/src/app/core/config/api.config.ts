@@ -1,5 +1,6 @@
 type WiniloRuntimeConfig = {
   apiBaseUrl?: string;
+  googleClientId?: string;
 };
 
 declare global {
@@ -7,6 +8,9 @@ declare global {
     __WINILO_CONFIG__?: WiniloRuntimeConfig;
   }
 }
+
+const runtimeConfig =
+  typeof window === 'undefined' ? undefined : window.__WINILO_CONFIG__;
 
 function resolveDefaultApiBaseUrl(): string {
   if (typeof window === 'undefined') {
@@ -23,4 +27,6 @@ function resolveDefaultApiBaseUrl(): string {
 }
 
 export const API_BASE_URL =
-  window.__WINILO_CONFIG__?.apiBaseUrl?.trim() || resolveDefaultApiBaseUrl();
+  runtimeConfig?.apiBaseUrl?.trim() || resolveDefaultApiBaseUrl();
+
+export const GOOGLE_CLIENT_ID = runtimeConfig?.googleClientId?.trim() || '';

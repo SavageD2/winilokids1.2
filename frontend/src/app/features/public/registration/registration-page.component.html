@@ -11,7 +11,9 @@
   <article class="info-card">
     <h2>Compte utilise</h2>
     @if (parentAuthService.parent(); as parent) {
-      <p><strong>{{ parent.firstName }} {{ parent.lastName }}</strong></p>
+      <p>
+        <strong>{{ parentDisplayName() }}</strong>
+      </p>
       <p>{{ parent.email }}</p>
       @if (parent.phone) {
         <p>{{ parent.phone }}</p>
@@ -24,7 +26,9 @@
       <li>Ajoute l age de l enfant pour faciliter le traitement</li>
       <li>Precise un message si tu veux partager un besoin particulier</li>
     </ul>
-    <p class="subtle">Si tu as un doute sur un atelier, tu peux aussi utiliser le formulaire de contact.</p>
+    <p class="subtle">
+      Si tu as un doute sur un atelier, tu peux aussi utiliser le formulaire de contact.
+    </p>
     <a class="text-link" routerLink="/contact">Contacter Winilo Kids</a>
   </article>
 
@@ -68,7 +72,11 @@
       <p class="feedback feedback-success">{{ successMessage() }}</p>
     }
 
-    <button class="button button-primary" type="submit" [disabled]="submitting() || loadingWorkshops()">
+    <button
+      class="button button-primary"
+      type="submit"
+      [disabled]="submitting() || loadingWorkshops()"
+    >
       @if (submitting()) {
         Envoi en cours...
       } @else {

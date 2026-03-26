@@ -8,10 +8,10 @@
 .editor-panel,
 .panel,
 .workshop-item {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(196, 144, 94, 0.18);
+  background: var(--theme-surface-card);
+  border: 1px solid var(--theme-border-regular);
   border-radius: 1.5rem;
-  box-shadow: 0 1rem 2.5rem rgba(62, 39, 24, 0.07);
+  box-shadow: var(--theme-shadow-soft);
 }
 
 .catalog-panel,
@@ -92,8 +92,8 @@ h3 {
 }
 
 .status-pill-live {
-  background: #edf9f0;
-  color: #29613d;
+  background: var(--theme-surface-status-success);
+  color: var(--theme-text-success);
 }
 
 .item-actions {
@@ -101,7 +101,7 @@ h3 {
 }
 
 .danger {
-  color: #8a3c24;
+  color: var(--theme-text-danger);
 }
 
 .form-grid {
@@ -126,8 +126,8 @@ label span {
 
 input,
 textarea {
-  background: #fffaf2;
-  border: 1px solid rgba(196, 144, 94, 0.25);
+  background: var(--theme-surface-soft-alt);
+  border: 1px solid var(--theme-border-strong);
   border-radius: 1rem;
   color: var(--color-ink);
   font: inherit;
@@ -136,8 +136,8 @@ textarea {
 
 input:focus,
 textarea:focus {
-  border-color: rgba(200, 103, 65, 0.55);
-  box-shadow: 0 0 0 0.18rem rgba(200, 103, 65, 0.12);
+  border-color: var(--theme-border-focus);
+  box-shadow: 0 0 0 0.18rem var(--theme-focus-ring);
   outline: none;
 }
 
@@ -159,13 +159,13 @@ textarea:focus {
 }
 
 .feedback-error {
-  background: #fff1eb;
-  color: #8a3c24;
+  background: var(--theme-surface-status-danger);
+  color: var(--theme-text-danger);
 }
 
 .feedback-success {
-  background: #edf9f0;
-  color: #29613d;
+  background: var(--theme-surface-status-success);
+  color: var(--theme-text-success);
 }
 
 .panel {

@@ -1,0 +1,34 @@
+<div class="theme-switcher" [class.theme-switcher-compact]="compact">
+  @if (!compact) {
+    <label class="theme-switcher-label" [attr.for]="selectId">{{ label }}</label>
+  }
+
+  <div class="theme-switcher-field">
+    @if (compact) {
+      <span class="theme-switcher-prefix" aria-hidden="true">{{ label }}</span>
+    }
+
+    <span
+      class="theme-switcher-preview"
+      [attr.data-theme-preview]="resolvedTheme()"
+      aria-hidden="true"
+    ></span>
+
+    <select
+      class="theme-switcher-select"
+      [id]="selectId"
+      [value]="preference()"
+      [attr.aria-label]="compact ? label : null"
+      [attr.aria-describedby]="showHint ? hintId : null"
+      (change)="updatePreference($event)"
+    >
+      @for (option of options; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+
+  @if (showHint) {
+    <p class="theme-switcher-hint" [id]="hintId">{{ hint() }}</p>
+  }
+</div>
