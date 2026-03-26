@@ -100,6 +100,54 @@ h3 {
   margin-top: 1rem;
 }
 
+.calendar-sync-block {
+  border-top: 1px solid var(--theme-border-regular);
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.calendar-sync-pill {
+  border-radius: 999px;
+  justify-self: start;
+  padding: 0.45rem 0.75rem;
+}
+
+.calendar-sync-pill-success {
+  background: var(--theme-surface-status-success);
+  color: var(--theme-text-success);
+}
+
+.calendar-sync-pill-danger {
+  background: var(--theme-surface-status-danger);
+  color: var(--theme-text-danger);
+}
+
+.calendar-sync-pill-pending {
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  color: var(--color-accent-strong, var(--color-accent));
+}
+
+.calendar-sync-pill-muted {
+  background: var(--color-surface-soft);
+  color: var(--color-muted);
+}
+
+.calendar-sync-detail,
+.calendar-sync-note {
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.calendar-sync-detail {
+  line-height: 1.6;
+}
+
+.calendar-sync-note {
+  margin-top: 1rem;
+}
+
 .danger {
   color: var(--theme-text-danger);
 }
@@ -122,6 +170,11 @@ label {
 label span {
   color: var(--color-ink);
   font-weight: 600;
+}
+
+.field-error {
+  color: var(--theme-text-danger);
+  line-height: 1.4;
 }
 
 input,

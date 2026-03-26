@@ -6,3 +6,4 @@ coverage
 backend/.env
 frontend/.env
 client_secret*.json
+win1-2-*.json
