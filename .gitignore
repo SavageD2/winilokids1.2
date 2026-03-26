@@ -2,8 +2,12 @@ backend/node_modules
 backend/dist
 frontend/node_modules
 frontend/dist
+node_modules
+/package.json
+/package-lock.json
 coverage
 backend/.env
 frontend/.env
+Capture d'écran *.png
 client_secret*.json
 win1-2-*.json
