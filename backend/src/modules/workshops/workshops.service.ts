@@ -7,6 +7,10 @@ import {
 import { RegistrationStatus, Workshop } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateWorkshopDto } from './dto/create-workshop.dto';
+import {
+  GoogleCalendarSyncService,
+  WorkshopCalendarSyncMetadata,
+} from './google-calendar-sync.service';
 import { UpdateWorkshopDto } from './dto/update-workshop.dto';
 
 type WorkshopWithRegistrationCount = Workshop & {
@@ -24,29 +28,34 @@ const ACTIVE_REGISTRATION_STATUSES: RegistrationStatus[] = [
   RegistrationStatus.ATTENDED,
 ];
 
+const workshopInclude = {
+  _count: {
+    select: {
+      registrations: true,
+    },
+  },
+  registrations: {
+    select: {
+      status: true,
+    },
+  },
+} as const;
+
 @Injectable()
 export class WorkshopsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly googleCalendarSyncService: GoogleCalendarSyncService,
+  ) {}
 
   async findPublished() {
     const workshops = await this.prisma.workshop.findMany({
       where: { isPublished: true },
       orderBy: { startAt: 'asc' },
-      include: {
-        _count: {
-          select: {
-            registrations: true,
-          },
-        },
-        registrations: {
-          select: {
-            status: true,
-          },
-        },
-      },
+      include: workshopInclude,
     });
 
-    return workshops.map((workshop) => this.serializeWorkshop(workshop));
+    return workshops.map((workshop) => this.serializeWorkshop(workshop, false));
   }
 
   async findPublishedBySlug(slug: string) {
@@ -55,69 +64,36 @@ export class WorkshopsService {
         slug,
         isPublished: true,
       },
-      include: {
-        _count: {
-          select: {
-            registrations: true,
-          },
-        },
-        registrations: {
-          select: {
-            status: true,
-          },
-        },
-      },
+      include: workshopInclude,
     });
 
     if (!workshop) {
       throw new NotFoundException('Workshop not found');
     }
 
-    return this.serializeWorkshop(workshop);
+    return this.serializeWorkshop(workshop, false);
   }
 
   async findAll() {
     const workshops = await this.prisma.workshop.findMany({
       orderBy: { startAt: 'asc' },
-      include: {
-        _count: {
-          select: {
-            registrations: true,
-          },
-        },
-        registrations: {
-          select: {
-            status: true,
-          },
-        },
-      },
+      include: workshopInclude,
     });
 
-    return workshops.map((workshop) => this.serializeWorkshop(workshop));
+    return workshops.map((workshop) => this.serializeWorkshop(workshop, true));
   }
 
   async findOne(id: number) {
     const workshop = await this.prisma.workshop.findUnique({
       where: { id },
-      include: {
-        _count: {
-          select: {
-            registrations: true,
-          },
-        },
-        registrations: {
-          select: {
-            status: true,
-          },
-        },
-      },
+      include: workshopInclude,
     });
 
     if (!workshop) {
       throw new NotFoundException('Workshop not found');
     }
 
-    return this.serializeWorkshop(workshop);
+    return this.serializeWorkshop(workshop, true);
   }
 
   async create(createWorkshopDto: CreateWorkshopDto) {
@@ -129,21 +105,12 @@ export class WorkshopsService {
         ...createWorkshopDto,
         isPublished: createWorkshopDto.isPublished ?? false,
       },
-      include: {
-        _count: {
-          select: {
-            registrations: true,
-          },
-        },
-        registrations: {
-          select: {
-            status: true,
-          },
-        },
-      },
+      include: workshopInclude,
     });
 
-    return this.serializeWorkshop(workshop);
+    const syncedWorkshop = await this.applyCalendarSync(workshop);
+
+    return this.serializeWorkshop(syncedWorkshop, true);
   }
 
   async update(id: number, updateWorkshopDto: UpdateWorkshopDto) {
@@ -157,25 +124,17 @@ export class WorkshopsService {
     const workshop = await this.prisma.workshop.update({
       where: { id },
       data: updateWorkshopDto,
-      include: {
-        _count: {
-          select: {
-            registrations: true,
-          },
-        },
-        registrations: {
-          select: {
-            status: true,
-          },
-        },
-      },
+      include: workshopInclude,
     });
 
-    return this.serializeWorkshop(workshop);
+    const syncedWorkshop = await this.applyCalendarSync(workshop);
+
+    return this.serializeWorkshop(syncedWorkshop, true);
   }
 
   async remove(id: number) {
-    await this.ensureWorkshopExists(id);
+    const workshop = await this.ensureWorkshopExists(id);
+    await this.googleCalendarSyncService.deleteWorkshopEvent(workshop);
 
     await this.prisma.workshop.delete({
       where: { id },
@@ -231,16 +190,66 @@ export class WorkshopsService {
       workshopDto.recommendedAgeMax !== undefined &&
       workshopDto.recommendedAgeMin > workshopDto.recommendedAgeMax
     ) {
-      throw new BadRequestException('recommendedAgeMin cannot be greater than recommendedAgeMax');
+      throw new BadRequestException(
+        'recommendedAgeMin cannot be greater than recommendedAgeMax',
+      );
     }
 
-    if (workshopDto.startAt && workshopDto.endAt && workshopDto.endAt <= workshopDto.startAt) {
+    if (
+      workshopDto.startAt &&
+      workshopDto.endAt &&
+      workshopDto.endAt <= workshopDto.startAt
+    ) {
       throw new BadRequestException('endAt must be after startAt');
     }
   }
 
-  private serializeWorkshop(workshop: WorkshopWithRegistrationCount) {
-    const { _count, registrations, ...workshopData } = workshop;
+  private async applyCalendarSync(workshop: WorkshopWithRegistrationCount) {
+    const syncMetadata =
+      await this.googleCalendarSyncService.synchronizeWorkshop(workshop);
+
+    if (
+      !syncMetadata ||
+      this.isCalendarMetadataUnchanged(workshop, syncMetadata)
+    ) {
+      return workshop;
+    }
+
+    return this.prisma.workshop.update({
+      where: { id: workshop.id },
+      data: syncMetadata,
+      include: workshopInclude,
+    });
+  }
+
+  private isCalendarMetadataUnchanged(
+    workshop: Workshop,
+    syncMetadata: WorkshopCalendarSyncMetadata,
+  ) {
+    const currentSyncedAt = workshop.googleCalendarSyncedAt?.getTime() ?? null;
+    const nextSyncedAt = syncMetadata.googleCalendarSyncedAt?.getTime() ?? null;
+
+    return (
+      workshop.googleCalendarEventId === syncMetadata.googleCalendarEventId &&
+      workshop.googleCalendarEventUrl === syncMetadata.googleCalendarEventUrl &&
+      currentSyncedAt === nextSyncedAt &&
+      workshop.googleCalendarSyncError === syncMetadata.googleCalendarSyncError
+    );
+  }
+
+  private serializeWorkshop(
+    workshop: WorkshopWithRegistrationCount,
+    includeCalendarMetadata: boolean,
+  ) {
+    const {
+      _count,
+      registrations,
+      googleCalendarEventId,
+      googleCalendarEventUrl,
+      googleCalendarSyncedAt,
+      googleCalendarSyncError,
+      ...workshopData
+    } = workshop;
     const registrationsCount = _count.registrations;
     const activeRegistrationsCount = registrations.filter((registration) =>
       ACTIVE_REGISTRATION_STATUSES.includes(registration.status),
@@ -250,10 +259,23 @@ export class WorkshopsService {
         ? null
         : Math.max(workshopData.capacity - activeRegistrationsCount, 0);
 
-    return {
+    const serializedWorkshop = {
       ...workshopData,
       registrationsCount,
       availablePlaces,
+    };
+
+    if (!includeCalendarMetadata) {
+      return serializedWorkshop;
+    }
+
+    return {
+      ...serializedWorkshop,
+      googleCalendarEventUrl,
+      googleCalendarSyncedAt,
+      googleCalendarSyncError,
+      googleCalendarSyncStatus:
+        this.googleCalendarSyncService.getSyncStatus(workshop),
     };
   }
 }

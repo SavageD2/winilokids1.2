@@ -22,7 +22,7 @@
               <div>
                 <h3>{{ workshop.title }}</h3>
                 <p>
-                  {{ workshop.startAt | date: 'd MMMM y':'':'fr' }} ·
+                  {{ workshop.startAt | date: 'd MMMM y' : '' : 'fr' }} ·
                   {{ workshop.startAt | date: 'HH:mm' }}
                 </p>
               </div>
@@ -44,8 +44,31 @@
               </span>
             </div>
 
+            <div class="calendar-sync-block">
+              <span [class]="'calendar-sync-pill ' + calendarSyncClass(workshop)">
+                {{ calendarSyncLabel(workshop) }}
+              </span>
+              <p class="calendar-sync-detail">{{ calendarSyncDetail(workshop) }}</p>
+              @if (
+                workshop.googleCalendarEventUrl && workshop.googleCalendarSyncStatus === 'SYNCED'
+              ) {
+                <a
+                  class="text-link"
+                  [href]="workshop.googleCalendarEventUrl"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Ouvrir dans Google Calendar
+                </a>
+              }
+            </div>
+
             <div class="item-actions">
-              <button class="button button-secondary" type="button" (click)="editWorkshop(workshop)">
+              <button
+                class="button button-secondary"
+                type="button"
+                (click)="editWorkshop(workshop)"
+              >
                 Modifier
               </button>
               <button
@@ -94,26 +117,41 @@
       <label class="full-width">
         <span>Titre</span>
         <input type="text" formControlName="title" />
+        @if (fieldErrorMessage('title'); as message) {
+          <small class="field-error">{{ message }}</small>
+        }
       </label>
 
       <label class="full-width">
         <span>Slug</span>
         <input type="text" formControlName="slug" />
+        @if (fieldErrorMessage('slug'); as message) {
+          <small class="field-error">{{ message }}</small>
+        }
       </label>
 
       <label class="full-width">
         <span>Description courte</span>
         <textarea rows="3" formControlName="shortDescription"></textarea>
+        @if (fieldErrorMessage('shortDescription'); as message) {
+          <small class="field-error">{{ message }}</small>
+        }
       </label>
 
       <label class="full-width">
         <span>Description complete</span>
         <textarea rows="5" formControlName="description"></textarea>
+        @if (fieldErrorMessage('description'); as message) {
+          <small class="field-error">{{ message }}</small>
+        }
       </label>
 
       <label>
         <span>Debut</span>
         <input type="datetime-local" formControlName="startAt" />
+        @if (fieldErrorMessage('startAt'); as message) {
+          <small class="field-error">{{ message }}</small>
+        }
       </label>
 
       <label>
@@ -124,6 +162,9 @@
       <label class="full-width">
         <span>Lieu</span>
         <input type="text" formControlName="location" />
+        @if (fieldErrorMessage('location'); as message) {
+          <small class="field-error">{{ message }}</small>
+        }
       </label>
 
       <label>
@@ -146,6 +187,11 @@
         <span>Publier cet atelier</span>
       </label>
     </div>
+
+    <p class="calendar-sync-note">
+      Les ateliers publies sont synchronises vers Google Calendar si le backend dispose d un
+      `GOOGLE_CALENDAR_ID` et d un compte de service Google valides.
+    </p>
 
     <div class="form-actions">
       <button class="button button-primary" type="submit" [disabled]="saving()">

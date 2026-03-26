@@ -72,6 +72,33 @@ Pour activer la connexion Google parent, il faut renseigner :
 
 Si cette valeur reste vide, le bouton Google reste desactive cote frontend.
 
+Pour activer la synchronisation des ateliers publies vers Google Calendar, il faut aussi renseigner :
+
+- `GOOGLE_CALENDAR_ID` : identifiant du calendrier cible
+- `GOOGLE_SERVICE_ACCOUNT_EMAIL` : email du compte de service autorise sur ce calendrier
+- `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` : cle privee du compte de service
+- ou `GOOGLE_SERVICE_ACCOUNT_KEY_FILE` : chemin vers le JSON du compte de service, plus simple en local
+- `GOOGLE_CALENDAR_TIME_ZONE` : fuseau a utiliser pour les evenements, `Europe/Paris` par defaut
+
+Le flux actuel est unidirectionnel `app -> Google Calendar` :
+
+- un atelier publie cree ou modifie est cree ou mis a jour dans Google Calendar
+- un atelier repasse en brouillon tente de retirer son evenement du calendrier
+- si l integration n est pas configuree, le CRUD atelier continue de fonctionner et le back-office affiche simplement l etat `Google Calendar non configure`
+
+En local, le plus simple est en general :
+
+```env
+GOOGLE_CALENDAR_ID="ton-calendar-id"
+GOOGLE_SERVICE_ACCOUNT_KEY_FILE="../google-service-account.json"
+GOOGLE_CALENDAR_TIME_ZONE="Europe/Paris"
+```
+
+Important :
+
+- le fichier `client_secret_...json` sert au login Google parent
+- pour la sync Calendar, il faut un JSON distinct de type `service_account`
+
 ## Lancement rapide
 
 ### 1. Demarrer PostgreSQL
@@ -263,6 +290,7 @@ Le projet est fonctionnel en local avec :
 
 - auth admin par JWT
 - auth parent locale et Google validees sur la branche `login`
+- synchronisation optionnelle des ateliers publies vers Google Calendar depuis la branche `scheduling`
 - possibilite pour un parent cree via Google d activer ensuite un mot de passe local
 - reservation d atelier cote parent
 - suivi des reservations depuis `Mon compte`

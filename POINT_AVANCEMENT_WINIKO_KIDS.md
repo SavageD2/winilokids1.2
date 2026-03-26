@@ -16,7 +16,8 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - Base de donnees: PostgreSQL 16 via Docker
 - ORM: Prisma
 - Auth admin: JWT
-- Auth parent: local JWT + Google Identity Services valides sur la branche `login`
+- Auth parent: local JWT + Google Identity Services stabilises sur la branche `login`
+- Planning: synchronisation unidirectionnelle `app -> Google Calendar` sur la branche `scheduling`
 - Documentation API: Swagger sur `/docs`
 
 ## Ce qui est deja en place
@@ -27,10 +28,11 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - listing des ateliers publies
 - page detail d'un atelier
 - page FAQ publique
-- assistant chatbot integre au layout public
+- assistant chatbot integre au layout public avec fermeture de nouveau accessible sur tous les ecrans
 - formulaire d'inscription a un atelier
 - page compte parent avec inscription locale, connexion locale, bouton Google et activation optionnelle d un mot de passe local apres premier login Google
 - formulaire de contact
+- systeme d apparence global avec modes `default`, `light`, `dark` et `system`
 - routage public propre avec layout dedie
 
 ### Frontend admin
@@ -38,6 +40,7 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - page de connexion admin
 - session admin stockee localement
 - guard d'acces et interception du token
+- systeme d apparence partage avec le site public
 - dashboard admin
 - gestion des ateliers
   - liste
@@ -87,6 +90,7 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - module ateliers
   - endpoints publics
   - endpoints admin CRUD
+  - synchronisation optionnelle des ateliers publies vers Google Calendar
 - module inscriptions
   - endpoint public de creation
   - endpoints admin de lecture et changement de statut
@@ -119,8 +123,14 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
   - `googleSubject`
   - `googleEmailVerified`
   - `googleLinkedAt`
+- extension `Workshop` ajoutee pour suivi Google Calendar :
+  - `googleCalendarEventId`
+  - `googleCalendarEventUrl`
+  - `googleCalendarSyncedAt`
+  - `googleCalendarSyncError`
 - migration initiale presente
 - migration `20260326103000_add_parent_google_auth` ajoutee et appliquee
+- migration `20260326170500_add_workshop_google_calendar_sync` ajoutee et appliquee
 - seed admin present
 - seed de demonstration enrichi present
 - seed FAQ de demonstration present
@@ -146,8 +156,16 @@ Winiko Kids est un MVP web pour presenter des ateliers enfants de facon claire e
 - verification HTTP backend : `GET /api/health` retourne `{"status":"ok","service":"winilo-kids-api"}`
 - verification HTTP frontend : reponse `200 OK`
 - validation manuelle du parcours parent local + Google sur la branche `login` : OK
+- validation du systeme de theme frontend (`default`, `light`, `dark`, `system`) : OK
+- correctif UX chatbot pour conserver un bouton de fermeture accessible : OK
+- validation reelle de la sync `app -> Google Calendar` sur la branche `scheduling` : OK
+- creation d un atelier publie via API admin avec statut `googleCalendarSyncStatus = SYNCED` : OK
+- correction UX du formulaire atelier admin avec slug auto-genere et messages de validation explicites : OK
 - installation Playwright + Chromium : OK
 - execution E2E Playwright dans cet environnement : bloquee par dependances systeme manquantes du navigateur
+- commit de cloture de la branche `login` :
+  - `2b3dcd0` `feat: add parent google auth and global theme system`
+  - `fd3226d` `login w/ OAuth 2.0 & themes`
 
 ## Apercu du rendu actuel
 
@@ -161,15 +179,18 @@ Je n'ai pas pu produire de capture d'ecran graphique directement depuis ce termi
 ## Points d'attention
 
 - pour activer Google login, il faut renseigner `GOOGLE_CLIENT_ID` cote backend et `googleClientId` cote frontend runtime local ou `WINILO_GOOGLE_CLIENT_ID` en deploiement Docker
-- la branche `login` reste volontairement separee de la future branche `scheduling`
+- pour activer la sync agenda, il faut aussi renseigner `GOOGLE_CALENDAR_ID` et un compte de service Google cote backend
+- la synchronisation planning actuelle est unidirectionnelle `app -> Google Calendar` : une creation directe dans Google Calendar ne remonte pas encore dans l app
+- la branche `login` est consideree comme stabilisee et prete a servir de base a la suite
 - le stockage de session parent reste en bearer token local pour limiter le risque de regression MVP
-- la couverture frontend couvre maintenant plusieurs parcours publics et admins, mais reste encore partielle
+- la couverture frontend couvre maintenant plusieurs parcours publics et admins, y compris le systeme de theme et la fermeture du chatbot, mais reste encore partielle
 - les E2E sont poses, mais leur execution depend encore des bibliotheques systeme requises par Chromium selon l environnement
 - il reste a valider le rendu plus finement avec davantage de cas de contenu si l on vise une preproduction
+- la cle du compte de service Google utilisee localement doit etre regeneree si elle a ete exposee hors du cadre de travail
 
 ## Prochaines suites logiques
 
-1. Reporter la configuration Google validee localement vers les variables de prod (`GOOGLE_CLIENT_ID` backend et `WINILO_GOOGLE_CLIENT_ID` frontend).
-2. Finir la validation E2E sur une machine disposant des dependances systeme Chromium.
-3. Relire la branche `login` pour un passage de nettoyage final avant merge.
-4. Une fois la branche `login` figee, ouvrir la branche `scheduling` avec une source de verite app -> Google Calendar.
+1. Reporter la configuration Google validee localement vers les variables de prod (`GOOGLE_CLIENT_ID`, `GOOGLE_CALENDAR_ID`, compte de service, `WINILO_GOOGLE_CLIENT_ID`).
+2. Decider si le planning doit rester en mode `app -> Google Calendar` ou evoluer vers une synchronisation bidirectionnelle / une source de verite Google Calendar.
+3. Finir la validation E2E sur une machine disposant des dependances systeme Chromium.
+4. A moyen terme, preparer une persistance serveur des preferences d apparence si l experience parent/admin devient multi-appareil.
